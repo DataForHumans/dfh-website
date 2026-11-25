@@ -1,0 +1,80 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Section from '../../components/Section.astro';
+import Button from '../../components/Button.astro';
+import { BOOKING_URL, EMAILS } from '../../data/site';
+---
+
+<Base
+  title="Contact"
+  description="Start with a free conversation. Tell us where your data is getting in the way, and we'll suggest a sensible next step."
+>
+  <PageHeader title="Contact">
+    <p class="lede">
+      Start with a free conversation. Tell us where your data is getting in the way, and we'll suggest a sensible next
+      step, whether or not that's working with us.
+    </p>
+  </PageHeader>
+
+  <Section rail="Call" labelledby="h-book">
+    <h2 id="h-book">Book a free 30-minute call.</h2>
+    <p>No prep needed.</p>
+    <p class="actions">
+      <Button href={BOOKING_URL} primary>Book a time</Button>
+    </p>
+  </Section>
+
+  <Section rail="Message" labelledby="h-form">
+    <!-- TODO: heading for the form section. The spec gives none; "Send a message" is the Home page's button label. -->
+    <h2 id="h-form">Send a message</h2>
+    <form
+      class="form"
+      name="contact"
+      method="POST"
+      action="/contact/thanks/"
+      data-netlify="true"
+      netlify-honeypot="company-website"
+    >
+      <input type="hidden" name="form-name" value="contact" />
+      <!-- Honeypot: hidden from everyone. Netlify drops submissions that fill it in. -->
+      <p hidden>
+        <label>Leave this field empty <input name="company-website" tabindex="-1" autocomplete="off" /></label>
+      </p>
+
+      <div class="field">
+        <label for="name">Name</label>
+        <input id="name" name="name" type="text" autocomplete="name" required />
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required />
+      </div>
+      <div class="field">
+        <label for="organization">Organization <span class="field__optional">(optional)</span></label>
+        <input id="organization" name="organization" type="text" autocomplete="organization" />
+      </div>
+      <div class="field">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="7" required></textarea>
+      </div>
+      <!-- TODO: submit button label. Not in the spec. -->
+      <button class="button" type="submit">Send message</button>
+    </form>
+  </Section>
+
+  <Section rail="Email" labelledby="h-email">
+    <h2 id="h-email" class="visually-hidden">Email</h2>
+    <ul class="plain-list" role="list">
+      {EMAILS.map((e) => <li><a href={`mailto:${e}`}>{e}</a></li>)}
+    </ul>
+  </Section>
+
+  <Section rail="Where" labelledby="h-where">
+    <h2 id="h-where">Where we are</h2>
+    <p>
+      Rochester and the Twin Cities. We work with mission-driven organizations across Minnesota and beyond, mostly
+      remotely.
+    </p>
+  </Section>
+</Base>

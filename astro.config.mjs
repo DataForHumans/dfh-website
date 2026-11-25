@@ -8,8 +8,8 @@ export default defineConfig({
   trailingSlash: 'always',
   integrations: [
     sitemap({
-      // The 404 page should not be listed for search engines.
-      filter: (page) => !page.includes('/404'),
+      // Pages that should not be listed for search engines.
+      filter: (page) => !page.includes('/404') && !page.includes('/contact/thanks/'),
     }),
   ],
 });

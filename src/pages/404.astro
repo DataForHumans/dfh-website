@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+// TODO: confirm the 404 wording. The spec only says it links to Services, Notes and Contact.
+---
+
+<Base title="Page not found" description="This page isn't here." noindex>
+  <PageHeader title="Page not found" accent>
+    <p class="lede">This page isn't here. It may have moved when we rebuilt the site.</p>
+    <ul class="plain-list" role="list">
+      <li><a href="/services/">Services</a></li>
+      <li><a href="/notes/">Notes</a></li>
+      <li><a href="/contact/">Contact</a></li>
+    </ul>
+  </PageHeader>
+</Base>
