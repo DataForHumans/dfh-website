@@ -1,0 +1,131 @@
+# Netlify redirects for data-for-humans.com
+#
+# Every URL in the Nov 25, 2026 WordPress export lands somewhere: a 301 to its
+# new home, or a 410 for files removed on purpose. Netlify uses the first rule
+# that matches, and none of these rules is forced (no "!"), so a real file or
+# page in the build always wins over a rule. `npm run check:redirects` fails
+# the build if any built page or asset matches a rule here.
+#
+# When you rename or remove a page or note, add a 301 for its old URL.
+
+# Pages
+/our-work/                              /work/                 301
+/blog/                                  /notes/                301
+/services/data-maturity-review/         /services/             301
+/parcelwise/                            /services/#products    301
+/crowded-closet-demonstration-report/   /work/                 301
+/demo-dashboard/                        /work/                 301
+/any-path-home-draft-dashboard/         /work/                 301
+/data-services/                         /services/             301
+/analyst-mentoring/                     /services/             301
+
+# Archived posts
+/2023/02/11/maximizing-impact-with-data-driven-fundraising-strategies/                          /notes/  301
+/2023/02/14/data-for-humans-proudly-joins-the-minnesota-council-of-nonprofits/                  /about/  301
+/2023/02/19/the-future-of-data-analytics-in-the-nonprofit-sector/                               /notes/  301
+/2023/03/03/4-strategies-for-building-data-capacity-in-the-social-sector/                       /notes/  301
+/2023/03/07/relieving-the-pain-of-repetitive-spreadsheet-tasks-for-social-impact-organizations/ /notes/  301
+/2024/01/07/using-qualitative-data-visualization-to-maximize-social-impact/                     /notes/  301
+/2024/01/16/rethinking-data-transformation-a-call-for-agile-data-practices/                     /notes/  301
+/2024/01/22/new-data-maturity-review-tool/                                                      /services/ 301
+/2024/02/15/no-data-strategy-no-problem-4-simple-ways-to-approach-data-with-intention/          /notes/  301
+
+# WordPress patterns
+/category/*        /notes/          301
+/tag/*             /notes/          301
+/author/*          /about/          301
+/feed/             /notes/rss.xml   301
+/2023/*            /notes/          301
+/2024/*            /notes/          301
+/2026/*            /notes/          301
+/wp-admin/*        /                301
+/wp-login.php      /                301
+
+# Attachment pages (WordPress made a page for every upload). Not in the spec's
+# list; added so every URL in the export is covered. Pages wrapping the files
+# that should never have been public return 410 like the files themselves.
+/home/*            /                301
+/about/attachment/*  /about/        301
+/about/mcn-member-badge/  /about/     301
+/about/new_portrait/      /about/     301
+/automation/                             /    301
+/bios/                                   /404  410
+/borderless_logo/                        /    301
+/borderless_round_white_logo/            /    301
+/chatgpt_generated_plot/                 /    301
+/cloud-computing/                        /    301
+/cluster-analysis/                       /    301
+/corn_tower-2/                           /    301
+/corn_tower/                             /    301
+/cropped-borderless_logo-1-png/          /    301
+/cropped-borderless_logo-png/            /    301
+/cropped-header-jpeg/                    /    301
+/cropped-open_hand_icon_sq-png/          /    301
+/cropped-round_logo-2-png/               /    301
+/cropped-round_logo-png/                 /    301
+/data-cleaning/                          /    301
+/data-collection/                        /    301
+/data-modeling/                          /    301
+/data-syncronization/                    /    301
+/decision-making/                        /    301
+/dfh_logo/                               /    301
+/dfh_logo/cropped-dfh_logo-png/          /    301
+/dfh_logo_titled/                        /    301
+/dfh_logo_titled/cropped-dfh_logo_titled-png/ /    301
+/eab_map-1/                              /    301
+/eab_map/                                /    301
+/full_logo-2/                            /    301
+/full_logo-3/                            /    301
+/full_logo-4/                            /    301
+/full_logo-5/                            /    301
+/full_logo-6/                            /    301
+/full_logo/                              /    301
+/header-2/                               /    301
+/it-department-1/                        /    301
+/it-department/                          /    301
+/logo_w_name_white/                      /    301
+/logo_w_name_white_sm/                   /    301
+/logo_w_name_white_verysm/               /    301
+/machine-learning/                       /    301
+/michael_headshot/                       /    301
+/open_hand_icon_sq/                      /    301
+/open_hand_logo/                         /    301
+/open_hand_logo_sm/                      /    301
+/open_hand_logo_titled_sm/               /    301
+/open_hand_logo_titled_xsm-2/            /    301
+/open_hand_logo_titled_xsm-3/            /    301
+/open_hand_logo_titled_xsm/              /    301
+/parcel_dashboard_city/                  /    301
+/parcel_opportunity_dashboard/           /    301
+/pexels-photo-3183150/                   /    301
+/pexels-photo-3758105/                   /    301
+/pexels-photo-3811082/                   /    301
+/pexels-photo-3861969/                   /    301
+/pexels-photo-574285/                    /    301
+/pexels-photo-6476254/                   /    301
+/pexels-photo-7173047/                   /    301
+/pexels-photo-7821515/                   /    301
+/pexels-photo-8386422/                   /    301
+/pexels-photo-9822733-2/                 /    301
+/pexels-photo-9822733-3/                 /    301
+/pexels-photo-9822733-4/                 /    301
+/photo-of-women-at-the-meeting/          /    301
+/problem-solving/                        /    301
+/pyramid/                                /    301
+/report-customization-1/                 /    301
+/report-customization-2/                 /    301
+/report-customization/                   /    301
+/round_logo-2/                           /    301
+/round_logo-3/                           /    301
+/round_logo/                             /    301
+/round_white_logo/                       /    301
+/scalability/                            /    301
+/strengthsfinder/                        /404  410
+/tethered-drones-landscape-sample/       /404  410
+/user-analysis/                          /    301
+
+# Removed files: gone on purpose.
+# Scoped to the old WordPress uploads folder only. New assets are served from
+# /_astro/, /fonts/ and the site root, never from /wp-content/, so this rule
+# can't catch them, and it is not forced, so it never hides a real file.
+/wp-content/uploads/*   /404   410
