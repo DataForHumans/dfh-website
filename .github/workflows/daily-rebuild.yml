@@ -1,0 +1,70 @@
+name: Daily rebuild
+
+# Rebuilds the live site each morning so an event moves from "upcoming" to
+# "past" (and off the home page) the day after it happens. "Upcoming" is
+# decided at build time, so without a rebuild a finished event stays listed.
+#
+# It calls a Netlify build hook. The hook URL lives in the repository secret
+# NETLIFY_BUILD_HOOK_URL and never in this file: anyone with the URL can
+# trigger builds.
+#
+# Schedule: GitHub cron runs in UTC and ignores daylight saving time.
+#   5:17 am Central Daylight Time (UTC-5, March to November) = 10:17 UTC
+#   5:17 am Central Standard Time (UTC-6, November to March) = 11:17 UTC
+# We use 10:17 UTC: 5:17 am in summer and 4:17 am in winter, so the rebuild
+# is never later than 5:17 am local time. GitHub can start scheduled runs a
+# few minutes late, and it pauses schedules in a public repo after 60 days
+# with no commits (it emails the repo owner; re-enable under Actions).
+on:
+  schedule:
+    - cron: '17 10 * * *'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Rebuild even if no event ended yesterday
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+env:
+  # Each production deploy costs 15 Netlify credits (Personal plan: 1,000 a
+  # month), so a daily rebuild uses about 450 a month. Set this to 'true' to
+  # rebuild only on the morning after an event, which is the only time the
+  # schedule changes what the site shows.
+  ONLY_AFTER_EVENTS: 'false'
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Decide whether to rebuild
+        id: decide
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.force }}" = "true" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          elif [ "$ONLY_AFTER_EVENTS" != "true" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=$(node scripts/event-ended-yesterday.mjs)" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Trigger Netlify build hook
+        if: steps.decide.outputs.run == 'true'
+        env:
+          HOOK: ${{ secrets.NETLIFY_BUILD_HOOK_URL }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "::error::Repository secret NETLIFY_BUILD_HOOK_URL is not set."
+            exit 1
+          fi
+          curl --fail --silent --show-error -X POST -d '{}' "$HOOK" > /dev/null
+          echo "Netlify rebuild triggered."
+
+      - name: Skipped
+        if: steps.decide.outputs.run != 'true'
+        run: echo "No event ended yesterday; no rebuild needed."
