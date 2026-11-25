@@ -1,0 +1,13 @@
+{
+  "recurse": true,
+  "checkFragments": true,
+  "timeout": 20000,
+  "retry": true,
+  "retryErrors": true,
+  "retryErrorsCount": 2,
+  "concurrency": 10,
+  "skip": [
+    "^https://data-for-humans\\.com/",
+    "^https://www\\.linkedin\\.com/"
+  ]
+}
