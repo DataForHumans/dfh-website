@@ -10,7 +10,12 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "check:copy": "node scripts/check-copy.mjs",
+    "check:redirects": "node scripts/check-redirects.mjs",
+    "check:links": "linkinator dist --config linkinator.config.json",
+    "test:a11y": "playwright test",
+    "test": "npm run check && npm run build && npm run check:copy && npm run check:redirects && npm run check:links && npm run test:a11y"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",
@@ -21,6 +26,7 @@
     "@astrojs/check": "^0.9.12",
     "@axe-core/playwright": "^4.14.1",
     "@playwright/test": "^1.65.1",
+    "linkinator": "^8.1.0",
     "typescript": "^6.0.3"
   }
 }
