@@ -1,0 +1,58 @@
+name: Checks
+
+# Runs on every pull request and on pushes to main. Make "Checks / checks" a
+# required status check in branch protection so a PR can't merge while it fails.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - name: Types and content schemas (astro check)
+        run: npm run check
+
+      - name: Build
+        run: npm run build
+
+      - name: Voice rules (dashes and banned phrases)
+        run: npm run check:copy
+
+      - name: Redirects (no built path blocked, all targets exist)
+        run: npm run check:redirects
+
+      - name: Links (internal, anchors and external)
+        run: npm run check:links
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Accessibility (axe, WCAG 2.1 AA) and behavior tests
+        run: npm run test:a11y
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
