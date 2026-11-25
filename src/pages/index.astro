@@ -1,11 +1,114 @@
 ---
-// Phase 1 placeholder. The real home page is built in Phase 2 from the spec's copy.
 import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import Button from '../components/Button.astro';
+import NoteList from '../components/NoteList.astro';
+import EventItem from '../components/EventItem.astro';
+import { BOOKING_URL, TAGLINE, SITE_NAME } from '../data/site';
+import { getNotes, getUpcomingEvents, getWork, outcomeOf } from '../lib/content';
+
+const [nextEvent] = await getUpcomingEvents();
+const latestNotes = (await getNotes()).slice(0, 2);
+const recentWork = await getWork(true);
+const quoted = recentWork.find((w) => w.id === 'crowded-closet');
+
+const figures = [
+  { value: '85+', label: "organizations' data brought together" },
+  { value: '25+', label: 'years of combined experience' },
+  { value: '100+', label: 'organizations reached by one planning tool' },
+  { value: '4', label: 'weeks to a roadmap' },
+];
 ---
 
-<Base title="Data for Humans" description="Data and AI for mission-driven organizations">
-  <main>
-    <h1>Data for Humans</h1>
-    <p>Data and AI for mission-driven organizations</p>
-  </main>
+<Base title={SITE_NAME} description={`${TAGLINE}. We help nonprofits, public agencies and cities make better decisions with the records they already keep.`}>
+  <header class="page-header home-hero">
+    <div class="section__rail"></div>
+    <div class="section__body">
+      <p class="eyebrow mono">Rochester and the Twin Cities · Working nationally</p>
+      <h1>Your mission runs on data. Let's make it work for you.</h1>
+      <p class="lede">
+        We help nonprofits, public agencies and cities make better decisions with the records they already keep, without
+        hiring a full-time data team.
+      </p>
+      <p class="actions">
+        <Button href={BOOKING_URL} primary>Book a free call</Button>
+        <Button href="/work/">See our work</Button>
+      </p>
+    </div>
+  </header>
+
+  <section class="figures" aria-label="Key figures">
+    <div class="section__rail"></div>
+    <dl class="figures__list section__body">
+      {
+        figures.map((f) => (
+          <div class="figures__item">
+            <dt class="mono figures__value">{f.value}</dt>
+            <dd class="figures__label">{f.label}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <Section rail="01" labelledby="h-start">
+    <h2 id="h-start">Where most work starts</h2>
+    <p>
+      The Data Roadmap is four weeks and a fixed fee. We look at your systems, talk with the people who use them, and hand
+      you a plan in order of what to fix first. You own it, whoever builds it, and you are free to stop there.
+    </p>
+  </Section>
+
+  <Section rail="02" labelledby="h-after">
+    <h2 id="h-after">What we do after that</h2>
+    <p>
+      Shared dashboards for coalitions, connected and cleaned-up records, research and evaluation for funders and boards,
+      and practical help putting AI to work safely.
+    </p>
+    <p><a href="/services/">All services</a></p>
+  </Section>
+
+  <Section rail="03" labelledby="h-work">
+    <h2 id="h-work">Recent work</h2>
+    <ul class="entry-list" role="list">
+      {
+        recentWork.map((w) => (
+          <li class="entry">
+            <p class="entry__meta mono">
+              {w.data.service} · {w.data.sector}
+            </p>
+            <h3 class="entry__title">
+              <a href={`/work/#${w.id}`}>{w.data.title}</a>
+            </h3>
+            <p>{outcomeOf(w)}</p>
+          </li>
+        ))
+      }
+    </ul>
+    {
+      quoted?.data.quote && (
+        <figure class="pull-quote">
+          <blockquote>
+            <p>“{quoted.data.quote}”</p>
+          </blockquote>
+          <figcaption>{quoted.data.quoteSource}</figcaption>
+        </figure>
+      )
+    }
+  </Section>
+
+  <Section rail="04" labelledby="h-next">
+    <h2 id="h-next">Next up</h2>
+    {nextEvent && <EventItem event={nextEvent} headingLevel={3} />}
+    <NoteList notes={latestNotes} headingLevel={3} />
+  </Section>
+
+  <Section class="closing" labelledby="h-closing">
+    <h2 id="h-closing">Start with a free 30-minute call.</h2>
+    <p>You'll leave with a suggested next step, whether or not you hire us.</p>
+    <p class="actions">
+      <Button href={BOOKING_URL}>Book a free call</Button>
+      <Button href="/contact/">Send a message</Button>
+    </p>
+  </Section>
 </Base>

@@ -1,0 +1,52 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Section from '../../components/Section.astro';
+import { getWork } from '../../lib/content';
+
+const entries = await Promise.all(
+  (await getWork()).map(async (entry) => ({ entry, Content: (await render(entry)).Content })),
+);
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+
+<Base
+  title="Our work"
+  description="Here is what changed for mission-driven organizations once their data started working for them."
+>
+  <PageHeader title="Our work" accent>
+    <p class="lede">Here is what changed for mission-driven organizations once their data started working for them.</p>
+  </PageHeader>
+
+  {
+    entries.map(({ entry, Content }, i) => (
+      <Section rail={pad(i + 1)} id={entry.id} labelledby={`h-${entry.id}`} class="work-entry">
+        <p class="entry__meta mono">
+          {entry.data.service} · {entry.data.sector}
+        </p>
+        <h2 id={`h-${entry.id}`}>{entry.data.title}</h2>
+        {entry.data.logo && entry.data.logoAlt && (
+          <Image class="work-entry__logo" src={entry.data.logo} alt={entry.data.logoAlt} width={240} />
+        )}
+        <div class="prose">
+          <Content />
+        </div>
+        {entry.data.quote && (
+          <figure class="pull-quote">
+            <blockquote>
+              <p>“{entry.data.quote}”</p>
+            </blockquote>
+            <figcaption>{entry.data.quoteSource}</figcaption>
+          </figure>
+        )}
+        {entry.data.link && (
+          <p>
+            <a href={entry.data.link}>{entry.data.linkLabel}</a>
+          </p>
+        )}
+      </Section>
+    ))
+  }
+</Base>

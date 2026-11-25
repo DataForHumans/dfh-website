@@ -1,0 +1,204 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Section from '../../components/Section.astro';
+import Button from '../../components/Button.astro';
+import { BOOKING_URL } from '../../data/site';
+
+/*
+ * The Data Roadmap section keeps the current site's text, with dashes replaced
+ * by colons, commas or parentheses (spec). Nothing else was changed.
+ */
+const weeks = [
+  {
+    n: '01',
+    title: 'Inventory',
+    text: 'We interview four to six people across your organization (leadership, the staff entering the data, whoever builds the reports today) and catalog every system, export, and spreadsheet in play. Including the ones nobody calls a system.',
+  },
+  {
+    n: '02',
+    title: 'Diagnosis',
+    text: 'Where the pipeline breaks, where staff hours disappear into manual assembly, and the gap between what you collect and what your funders and board keep asking for.',
+  },
+  {
+    n: '03',
+    title: 'Opportunity mapping',
+    text: 'Every opportunity we found, sorted into three horizons (quick wins, build-outs, and foundational work) and sized by effort and expected value so you can actually choose between them.',
+  },
+  {
+    n: '04',
+    title: 'The handoff',
+    text: 'A written roadmap plus a live walkthrough with your leadership or board. Not a slide dump: a document that survives the meeting and still makes sense six months later.',
+  },
+];
+
+const deliverables = [
+  'A map of your data systems as they actually work today',
+  'A prioritized list of opportunities, each sized by effort and value',
+  'The written roadmap, with the reasoning behind the sequence',
+  'A walkthrough presentation for leadership or the board',
+];
+---
+
+<Base
+  title="Services"
+  description="Every engagement starts with a plan: a four-week Data Roadmap. Then dashboards, records and integration, research and evaluation, AI policy and training, and part-time data leadership."
+>
+  <PageHeader title="Every engagement starts with a plan.">
+    <p class="lede">
+      Most organizations don't need a big new system. They need to know which problem to solve first, so nearly every
+      engagement begins with a four-week Data Roadmap. From there, we tailor the work to your budget, your tools and your
+      team.
+    </p>
+  </PageHeader>
+
+  <Section rail="Start here" id="data-roadmap" labelledby="h-roadmap">
+    <h2 id="h-roadmap">The Data Roadmap: four weeks to a clear plan.</h2>
+    <p>
+      We map what your data can do for you, what it would take to get there, and in what order. You end up with a written
+      plan that's clear enough to hand to anyone: to us, to a different vendor, to a new internal hire, or to your board,
+      and they'd know exactly what to do next.
+    </p>
+    <ul class="facts mono" role="list">
+      <li>4 weeks, start to finish</li>
+      <li>Fixed fee, fixed scope</li>
+      <li>No obligation to continue</li>
+    </ul>
+
+    <ol class="ledger" role="list">
+      {
+        weeks.map((w) => (
+          <li class="ledger__row">
+            <p class="ledger__num mono">Week {w.n}</p>
+            <div class="ledger__body">
+              <h3>{w.title}</h3>
+              <p>{w.text}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+
+    <h3>What you walk away with</h3>
+    <ul class="plain-list">
+      {deliverables.map((d) => <li>{d}</li>)}
+    </ul>
+
+    <h3>Scope &amp; fit</h3>
+    <p>
+      One organization, up to six interviews, up to three source systems examined in depth. Anything larger, we'll quote
+      separately.
+    </p>
+    <p>
+      The roadmap is yours either way. If the right next step is something we're not the best people to build, we'll tell
+      you that, and the plan still works.
+    </p>
+    <p class="actions">
+      <Button href={BOOKING_URL} primary>Talk through a roadmap</Button>
+    </p>
+  </Section>
+
+  <Section rail="Services" labelledby="h-after">
+    <h2 id="h-after">After the roadmap</h2>
+    <p>You can also come to us for any of these directly.</p>
+
+    <ol class="ledger" role="list">
+      <li class="ledger__row" id="collective-impact-dashboards">
+        <p class="ledger__num mono">01</p>
+        <div class="ledger__body">
+          <h3>Collective impact dashboards</h3>
+          <p>
+            When several agencies work toward one goal, someone has to build the shared picture and protect the people
+            behind it. We have worked inside multi-agency data systems, so we handle both the technical side and the
+            agreements between partners. You get a live dashboard your partners and the public can read, a governed way for
+            each agency to contribute, and the setup to keep it current. Any Path Home in Olmsted County is one we built.
+          </p>
+        </div>
+      </li>
+      <li class="ledger__row" id="records-integration">
+        <p class="ledger__num mono">02</p>
+        <div class="ledger__body">
+          <h3>Records and integration</h3>
+          <p>
+            The same person shows up three ways in three systems, and someone spends Monday copying between them. We match
+            and clean those records, connect the systems where we can, and automate the reports that eat staff time. For a
+            volunteer-run thrift shop, that meant cleanup lists ordered by who had served this year and a clear view of who
+            keeps the shop running.
+          </p>
+        </div>
+      </li>
+      <li class="ledger__row" id="research-evaluation">
+        <p class="ledger__num mono">03</p>
+        <div class="ledger__body">
+          <h3>Research and evaluation</h3>
+          <p>
+            Some answers sit in your data and some sit with the people who do the work. We analyze program records, run
+            interviews and surveys, and map how a coalition or team actually works together. Findings come back written for
+            your board and funders, with the methods behind them.
+          </p>
+        </div>
+      </li>
+      <li class="ledger__row" id="ai-policy-training">
+        <p class="ledger__num mono">04</p>
+        <div class="ledger__body">
+          <h3>AI policy and training</h3>
+          <p>
+            Staff are often using AI tools already, with no guidance on what data is safe to share. We help you decide where
+            AI fits, write a plain-language use policy, train your team, and set up one tool at a time for a slow process.
+            Our next public session is listed on the <a href="/events/">Events page</a>.
+          </p>
+        </div>
+      </li>
+      <li class="ledger__row" id="data-leadership">
+        <p class="ledger__num mono">05</p>
+        <div class="ledger__body">
+          <h3>Part-time data leadership</h3>
+          <p>
+            When data should guide how you operate but a full-time senior hire isn't realistic, we can serve as your data
+            lead a few days a month.
+          </p>
+        </div>
+      </li>
+    </ol>
+  </Section>
+
+  <Section rail="Products" id="products" labelledby="h-products">
+    <h2 id="h-products">Products from our practice</h2>
+    <p>Three problems came up often enough that we built tools for them.</p>
+    <ul class="ledger" role="list">
+      <li class="ledger__row">
+        <div class="ledger__body">
+          <h3>Donor Overlap</h3>
+          <p>Links donor, volunteer and event records so you can see who gives time, money or both.</p>
+          <p><a href="https://donoroverlap.com/">donoroverlap.com</a></p>
+        </div>
+      </li>
+      <li class="ledger__row">
+        <div class="ledger__body">
+          <h3>Footprint Review</h3>
+          <p>
+            Gathers what your organization knows and has achieved, from staff interviews and the documents you already
+            have, so you can find it and tell your story.
+          </p>
+          <p><a href="https://footprintreview.com/">footprintreview.com</a></p>
+        </div>
+      </li>
+      <li class="ledger__row">
+        <div class="ledger__body">
+          <h3>Parcelwise</h3>
+          <p>
+            Scores every parcel in a city or county against zoning, land value and vacancy data, for economic development
+            teams. In development; <a href="/contact/">ask us about early access</a>.
+          </p>
+        </div>
+      </li>
+    </ul>
+  </Section>
+
+  <Section class="closing">
+    <p class="closing__line">Not sure where to start? That's what the roadmap is for.</p>
+    <p class="actions">
+      <Button href={BOOKING_URL}>Book a free call</Button>
+    </p>
+  </Section>
+</Base>
