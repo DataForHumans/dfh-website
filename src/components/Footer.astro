@@ -9,8 +9,8 @@ import { FOOTER_LINE, LINKEDIN_URL, PRODUCTS, RELAYERED, SITE_NAME, TAGLINE } fr
       <p class="site-footer__tagline">{TAGLINE}</p>
       <p class="site-footer__line">{FOOTER_LINE}</p>
     </div>
-    <nav aria-label="Footer">
-      <ul class="site-footer__links">
+    <nav class="site-footer__links" aria-label="Footer">
+      <ul role="list">
         {
           LINKEDIN_URL && (
             <li>
@@ -20,6 +20,8 @@ import { FOOTER_LINE, LINKEDIN_URL, PRODUCTS, RELAYERED, SITE_NAME, TAGLINE } fr
         }
         <li><a href="/events/">Talks and events</a></li>
         <li><a href="/notes/rss.xml">RSS</a></li>
+      </ul>
+      <ul role="list">
         <li>Fabrication:&nbsp;{RELAYERED.live ? <a href={RELAYERED.url}>{RELAYERED.name}</a> : RELAYERED.name}</li>
         {
           Object.values(PRODUCTS).map((p) => <li>{p.live ? <a href={p.url}>{p.name}</a> : p.name}</li>)

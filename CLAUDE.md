@@ -66,7 +66,7 @@ Every page has a skip link, a visible focus ring, landmarks (`header`, `nav`, `m
 
 | Route | Page | Built from |
 | --- | --- | --- |
-| `/` | Home | `src/pages/index.astro`, featured work, the next event and the two latest notes |
+| `/` | Home | `src/pages/index.astro`, selected work, services and the Roadmap, and the next event when scheduled |
 | `/services/` | Services | `src/pages/services/index.astro`. Each service has an anchor, e.g. `/services/#records-integration`; products are at `#products` |
 | `/work/` | Our work | `work` collection, in `order` |
 | `/notes/` | Notes | `notes` collection, newest first, with links to the type pages |
@@ -158,7 +158,7 @@ People are referenced by their `id` in `team.yaml` (for example `chris-roberts`,
    sector: Homelessness
    service: Collective impact
    order: 1                       # position on /work/, lowest first
-   featured: true                 # show in "Recent work" on the home page (keep it to three)
+   featured: true                 # show in "Selected work" on the home page (keep it to three)
    link: https://anypathhome.org/ # optional
    linkLabel: View the live dashboard on anypathhome.org   # required if link is set
    quote: "..."                   # optional, only a real, approved quote
