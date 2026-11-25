@@ -6,7 +6,11 @@
 # `photoAlt` is required whenever `photo` is set.
 
 - id: chris-roberts
+  photo: ../assets/team/chris-roberts.jpg
+  photoAlt: Portrait of Christopher Roberts
+  linkedin: https://www.linkedin.com/in/christopher-j-roberts/
   name: Christopher Roberts
+  knownAs: Chris Roberts
   credentials: MS
   role: Founder and CTO
   order: 1
@@ -24,6 +28,9 @@
     Mathematics from St. Olaf.
 
 - id: michael-soto
+  photo: ../assets/team/michael-soto.jpg
+  photoAlt: Portrait of Michael Soto
+  linkedin: https://www.linkedin.com/in/misoca/
   name: Michael Soto
   credentials: PhD
   role: Chief Strategy Officer
@@ -39,6 +46,8 @@
     analytics.
 
 - id: sean-horan
+  photo: ../assets/team/sean-horan.jpg
+  photoAlt: Portrait of Sean Horan
   name: Sean Horan
   credentials: PhD
   role: Modeling Lead
@@ -55,6 +64,8 @@
     University.
 
 - id: eishna-ranganathan
+  photo: ../assets/team/eishna-ranganathan.jpg
+  photoAlt: Portrait of Eishna Ranganathan
   name: Eishna Ranganathan
   role: Analyst
   order: 4

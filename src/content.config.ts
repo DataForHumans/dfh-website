@@ -23,6 +23,8 @@ const team = defineCollection({
       .object({
         id: z.string(),
         name: z.string(),
+        /** Shorter name for bylines and speaker lines, e.g. "Chris Roberts". Falls back to name. */
+        knownAs: z.string().optional(),
         credentials: z.string().optional(),
         role: z.string(),
         order: z.number().int(),
@@ -50,6 +52,8 @@ const notes = defineCollection({
         tags: z.array(z.string()).default([]),
         summary: z.string().max(300),
         service: z.enum(SERVICE_SLUGS).optional(),
+        /** Optional outside page the note is about, such as a press article. */
+        url: z.url().optional(),
         image: image().optional(),
         imageAlt: z.string().optional(),
       })
@@ -67,6 +71,7 @@ const events = defineCollection({
     date: z.coerce.date(),
     time: z.string(),
     venue: z.string(),
+    /** Written as it reads after "Hosted by", e.g. "the Rochester Nonprofit Consortium". */
     host: z.string(),
     speakers: z.array(reference('team')).default([]),
     url: z.url().optional(),
