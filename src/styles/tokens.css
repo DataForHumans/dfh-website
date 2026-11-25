@@ -1,0 +1,57 @@
+/*
+ * Design tokens for data-for-humans.com.
+ * Colors and contrast are from the build spec, checked against --cream.
+ *
+ * TEXT RULE: text on cream uses only --ink, --sage-text or --ochre-text.
+ * --sage (4.3:1) is for large headings, rules and fills only.
+ * --ochre (2.7:1) is for rules and button fills with --ink text (5.7:1) only.
+ * One ochre accent per page at most.
+ */
+:root {
+  /* Color */
+  --ink: #1a1a18;        /* 15.5:1  body text, headings */
+  --sage-text: #4e6e52;  /* 5.1:1   links and small text in sage */
+  --sage: #5a7a5e;       /* 4.3:1   large headings, rules, fills only */
+  --ochre-text: #8a5a1f; /* 5.2:1   ochre text if ever needed */
+  --ochre: #c4863a;      /* 2.7:1   rules and button fill with ink text only */
+  --cream: #f5f1ea;      /* page background */
+
+  /* Derived, for hairlines. Not for text. */
+  --rule: color-mix(in srgb, var(--ink) 22%, var(--cream));
+
+  /* Type families */
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Space Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  /* Type scale. Body is 18px with 1.6 line height (spec). */
+  --text-body: 1.125rem;
+  --leading-body: 1.6;
+  --text-small: 1rem;
+  --text-mono: 0.8125rem;
+  --tracking-mono: 0.06em;
+  --text-h1: clamp(2.5rem, 1.6rem + 4vw, 4.5rem);
+  --text-h2: clamp(1.75rem, 1.3rem + 2vw, 2.5rem);
+  --text-h3: clamp(1.375rem, 1.2rem + 0.8vw, 1.625rem);
+  --leading-display: 1.1;
+
+  /* Layout */
+  --measure: 40rem;      /* reading column */
+  --rail: 9rem;          /* left rail for section numbers and dates */
+  --gutter: clamp(1.25rem, 4vw, 3rem);
+  --page-max: calc(var(--rail) + var(--gutter) + var(--measure));
+
+  /* Space */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2.5rem;
+  --space-6: 4rem;
+  --space-7: 6rem;
+
+  /* Interaction */
+  --focus-ring: 3px solid var(--ink);
+  --focus-offset: 3px;
+  --touch-target: 44px;
+}
