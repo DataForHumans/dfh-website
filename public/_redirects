@@ -40,6 +40,7 @@
 /2026/*            /notes/          301
 /wp-admin/*        /                301
 /wp-login.php      /                301
+/sitemap.xml       /sitemap-index.xml  301
 
 # Attachment pages (WordPress made a page for every upload). Not in the spec's
 # list; added so every URL in the export is covered. Pages wrapping the files

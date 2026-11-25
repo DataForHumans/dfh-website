@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://data-for-humans.com/sitemap-index.xml
