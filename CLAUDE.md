@@ -14,6 +14,13 @@ Use Node 24 (`nvm use`, which reads `.nvmrc`).
 | `npm run build` | Production build into `dist/` |
 | `npm run preview` | Serve the built site |
 | `npm run check` | `astro check`: types and content schemas |
+| `npm run check:copy` | Voice rules on the built site: dashes, banned words, question headings, bold lead-ins |
+| `npm run check:redirects` | No built page or asset is caught by `_redirects`, and every redirect target exists |
+| `npm run check:links` | Every internal link and anchor, and external links (linkinator) |
+| `npm run test:a11y` | axe (WCAG 2.1 AA) on every built page at desktop and mobile sizes, plus skip link, focus, touch targets, reduced motion and the contact form |
+| `npm test` | All of the above, in order. CI runs the same steps on every PR |
+
+`check:copy`, `check:redirects`, `check:links` and `test:a11y` read `dist/`, so build first. The first time, run `npx playwright install chromium`.
 
 The build fails if a note, event or work entry has bad frontmatter, an unknown author or speaker, or an image without alt text. Read the error, fix the file, and build again.
 
@@ -74,7 +81,7 @@ Every page has a skip link, a visible focus ring, landmarks (`header`, `nav`, `m
 
 Note slugs and type pages share `/notes/<x>/`, so a note can't be named `project.md`, `article.md` or `news.md`. The build stops with an error if one is.
 
-Site-wide links (booking URL, emails, LinkedIn, products, nav) live in `src/data/site.ts`.
+Site-wide links (booking URL, emails, LinkedIn, products, Relayered Design, nav) live in `src/data/site.ts`. Outside sites have a `live` flag: while it is `false`, the name shows as plain text instead of a link, so the site never ships a dead link. Flip it to `true` once the site loads, and `npm run check:links` will confirm it.
 
 ## Content model
 
@@ -166,4 +173,6 @@ People are referenced by their `id` in `team.yaml` (for example `chris-roberts`,
 
 ## Redirects
 
-`public/_redirects` maps every old WordPress URL to its new home. If you rename or remove a page or note, add a 301 for its old URL. Never put new files under `/wp-content/`, because that path returns 410 Gone.
+`public/_redirects` maps every old WordPress URL to its new home: 301s for pages, posts and attachment pages, and 410 Gone for the old `/wp-content/uploads/` files. If you rename or remove a page or note, add a 301 for its old URL. Never put new files under `/wp-content/`. No rule is forced (no `!`), so a real file always wins, and `npm run check:redirects` fails if any built page or asset matches a rule.
+
+When the rewritten "Rethinking data transformation" article goes up, point `/2024/01/16/rethinking-data-transformation-a-call-for-agile-data-practices/` at the new note instead of `/notes/`.
