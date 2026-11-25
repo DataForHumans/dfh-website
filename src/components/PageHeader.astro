@@ -1,0 +1,24 @@
+---
+/**
+ * The top of every page: optional eyebrow, the page's single h1, and an
+ * optional lede in the slot. `accent` draws the ochre rule under the title.
+ * Use it only on pages without an ochre primary button (one accent per page).
+ */
+interface Props {
+  title: string;
+  eyebrow?: string;
+  accent?: boolean;
+}
+const { title, eyebrow, accent = false } = Astro.props;
+---
+
+<header class:list={['page-header', { 'page-header--accent': accent }]}>
+  <div class="section__rail"></div>
+  <div class="section__body">
+    {eyebrow && <p class="eyebrow mono">{eyebrow}</p>}
+    <h1>{title}</h1>
+    <div class="page-header__lede">
+      <slot />
+    </div>
+  </div>
+</header>

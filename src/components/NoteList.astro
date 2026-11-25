@@ -1,0 +1,33 @@
+---
+import { formatDate, isoDate } from '../lib/dates';
+import { getPerson, type Note } from '../lib/content';
+import { NOTE_TYPES } from '../data/site';
+
+interface Props {
+  notes: Note[];
+  /** Heading level for note titles inside the list. */
+  headingLevel?: 2 | 3;
+}
+const { notes, headingLevel = 2 } = Astro.props;
+const Heading = `h${headingLevel}` as 'h2' | 'h3';
+const items = await Promise.all(notes.map(async (note) => ({ note, author: await getPerson(note.data.author) })));
+---
+
+<ol class="entry-list" role="list">
+  {
+    items.map(({ note, author }) => (
+      <li class="entry">
+        <p class="entry__meta mono">
+          <time datetime={isoDate(note.data.date)}>{formatDate(note.data.date)}</time>
+          <span aria-hidden="true"> · </span>
+          <span>{NOTE_TYPES[note.data.type].label}</span>
+        </p>
+        <Heading class="entry__title">
+          <a href={`/notes/${note.id}/`}>{note.data.title}</a>
+        </Heading>
+        <p class="entry__summary">{note.data.summary}</p>
+        <p class="entry__byline">{author.data.knownAs ?? author.data.name}</p>
+      </li>
+    ))
+  }
+</ol>

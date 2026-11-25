@@ -1,0 +1,41 @@
+---
+/** Shared body of /notes/ and the type pages /notes/<type>/. */
+import PageHeader from './PageHeader.astro';
+import Section from './Section.astro';
+import NoteList from './NoteList.astro';
+import { NOTE_TYPES, type NoteType } from '../data/site';
+import type { Note } from '../lib/content';
+
+interface Props {
+  title: string;
+  notes: Note[];
+  /** Types that have at least one note. Only these get a filter link. */
+  types: NoteType[];
+  current?: NoteType;
+}
+const { title, notes, types, current } = Astro.props;
+---
+
+<PageHeader title={title} accent>
+  <p class="lede">
+    Projects, talks and practical thinking on data and AI for mission-driven work, from the Data for Humans team.
+  </p>
+  <nav class="type-filter" aria-label="Filter notes by type">
+    <ul role="list">
+      <li><a href="/notes/" aria-current={!current ? 'page' : undefined}>All</a></li>
+      {
+        types.map((t) => (
+          <li>
+            <a href={`/notes/${t}/`} aria-current={current === t ? 'page' : undefined}>
+              {NOTE_TYPES[t].plural}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</PageHeader>
+
+<Section>
+  <NoteList notes={notes} headingLevel={2} />
+</Section>

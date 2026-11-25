@@ -1,0 +1,35 @@
+---
+import { render } from 'astro:content';
+import { formatDate, isoDate } from '../lib/dates';
+import { getPerson, type Event } from '../lib/content';
+
+interface Props {
+  event: Event;
+  headingLevel?: 2 | 3;
+}
+const { event, headingLevel = 3 } = Astro.props;
+const Heading = `h${headingLevel}` as 'h2' | 'h3';
+const { Content } = await render(event);
+const speakers = await Promise.all(event.data.speakers.map(getPerson));
+const names = speakers.map((s) => s.data.knownAs ?? s.data.name);
+const withLine =
+  names.length === 0 ? '' : names.length === 1 ? names[0] : `${names.slice(0, -1).join(', ')} and ${names.at(-1)}`;
+---
+
+<article class="event">
+  <p class="entry__meta mono">
+    <time datetime={isoDate(event.data.date)}>{formatDate(event.data.date)}</time>
+    <span aria-hidden="true"> · </span>
+    <span>{event.data.time}</span>
+  </p>
+  <Heading class="entry__title">{event.data.title}</Heading>
+  <p class="event__where">{event.data.venue}</p>
+  <p class="event__host">
+    Hosted by {event.data.host}{withLine && <>; with {withLine}</>}.
+  </p>
+  <div class="prose"><Content /></div>
+  <p class="event__links">
+    {event.data.url && <a href={event.data.url}>Event page<span class="visually-hidden">: {event.data.title}</span></a>}
+    {event.data.recap && <a href={`/notes/${event.data.recap.id}/`}>Read the recap</a>}
+  </p>
+</article>

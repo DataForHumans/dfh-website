@@ -1,0 +1,22 @@
+---
+/**
+ * A report section: a thin rule above, a narrow left rail (section number or
+ * date) and the reading column. Put the section's h2 inside the slot.
+ */
+interface Props {
+  /** Rail text, e.g. "01" or "Dec 15, 2026". */
+  rail?: string;
+  id?: string;
+  /** Accessible name for the section, by id of its heading. */
+  labelledby?: string;
+  class?: string;
+}
+const { rail, id, labelledby, class: className } = Astro.props;
+---
+
+<section class:list={['section', className]} id={id} aria-labelledby={labelledby}>
+  <div class="section__rail">{rail && <span class="mono">{rail}</span>}</div>
+  <div class="section__body">
+    <slot />
+  </div>
+</section>

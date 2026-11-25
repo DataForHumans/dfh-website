@@ -1,0 +1,30 @@
+---
+import { Image } from 'astro:assets';
+import mark from '../assets/brand/dfh-mark.png';
+import { NAV, SITE_NAME } from '../data/site';
+
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => path === href || path.startsWith(href);
+---
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="site-logo" href="/" aria-label={`${SITE_NAME}, home`}>
+      <Image src={mark} alt="" width={40} height={40} loading="eager" />
+      <span class="site-logo__name" aria-hidden="true">{SITE_NAME}</span>
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        {
+          NAV.map((item) => (
+            <li>
+              <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
