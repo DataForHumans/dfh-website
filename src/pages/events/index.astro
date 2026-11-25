@@ -1,0 +1,49 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Section from '../../components/Section.astro';
+import EventItem from '../../components/EventItem.astro';
+import { getPastEvents, getUpcomingEvents } from '../../lib/content';
+
+const upcoming = await getUpcomingEvents();
+const past = await getPastEvents();
+---
+
+<Base title="Talks and events" description="Where to find the Data for Humans team in person.">
+  <PageHeader title="Talks and events" accent>
+    <p class="lede">Where to find us in person.</p>
+  </PageHeader>
+
+  <Section rail="Upcoming" labelledby="h-upcoming">
+    <h2 id="h-upcoming" class="visually-hidden">Upcoming</h2>
+    {
+      upcoming.length > 0 ? (
+        <ul class="entry-list" role="list">
+          {upcoming.map((event) => (
+            <li class="entry">
+              <EventItem event={event} headingLevel={3} />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        // TODO: copy for when nothing is scheduled. Not in the spec.
+        <p>Nothing scheduled right now.</p>
+      )
+    }
+  </Section>
+
+  {
+    past.length > 0 && (
+      <Section rail="Past" labelledby="h-past">
+        <h2 id="h-past" class="visually-hidden">Past</h2>
+        <ul class="entry-list" role="list">
+          {past.map((event) => (
+            <li class="entry">
+              <EventItem event={event} headingLevel={3} />
+            </li>
+          ))}
+        </ul>
+      </Section>
+    )
+  }
+</Base>
