@@ -141,7 +141,7 @@ People are referenced by their `id` in `team.yaml` (for example `chris-roberts`,
    ```
 
 3. The body is optional, one short paragraph at most.
-4. `/events/` lists upcoming events first, then past ones. The home page shows only the next upcoming event, and it hides that slot when none is scheduled. "Upcoming" is decided when the site builds, so an event moves to past on the first build after its day.
+4. `/events/` lists upcoming events first, then past ones. The home page shows only the next upcoming event, and it hides that slot when none is scheduled. "Upcoming" is decided when the site builds, so an event moves to past on the first build after its day. The scheduled rebuild in `.github/workflows/daily-rebuild.yml` takes care of that (see `LAUNCH.md`).
 5. After the event, write a recap note if you like and set `recap:` to its slug.
 
 ### Add a work entry
