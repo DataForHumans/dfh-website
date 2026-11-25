@@ -55,12 +55,33 @@ The look is a printed report, not a SaaS landing page.
 
 Every page has a skip link, a visible focus ring, landmarks (`header`, `nav`, `main`, `footer`) and exactly one `h1`. Every image has alt text, and the build enforces it. Every form field has a label and error text. Touch targets are at least 44px. Motion respects `prefers-reduced-motion`. CI runs axe on every PR.
 
+## Site map
+
+| Route | Page | Built from |
+| --- | --- | --- |
+| `/` | Home | `src/pages/index.astro`, featured work, the next event and the two latest notes |
+| `/services/` | Services | `src/pages/services/index.astro`. Each service has an anchor, e.g. `/services/#records-integration`; products are at `#products` |
+| `/work/` | Our work | `work` collection, in `order` |
+| `/notes/` | Notes | `notes` collection, newest first, with links to the type pages |
+| `/notes/project/`, `/notes/article/`, `/notes/news/` | Notes of one type | Built only when that type has at least one note, so a type with no notes has no page and no filter link |
+| `/notes/<slug>/` | One note | `notes` collection |
+| `/notes/rss.xml` | RSS feed for notes | `src/pages/notes/rss.xml.ts` |
+| `/events/` | Talks and events | `events` collection: upcoming, then past |
+| `/about/` | About and team | `src/pages/about/index.astro` plus `team.yaml` |
+| `/contact/` | Contact | Netlify form plus booking link |
+| `/contact/thanks/` | Form thank-you page | Not in the sitemap |
+| `/404` | Not found | Links to Services, Notes and Contact |
+
+Note slugs and type pages share `/notes/<x>/`, so a note can't be named `project.md`, `article.md` or `news.md`. The build stops with an error if one is.
+
+Site-wide links (booking URL, emails, LinkedIn, products, nav) live in `src/data/site.ts`.
+
 ## Content model
 
 ```
 src/
   content.config.ts      schemas for every collection (source of truth for fields)
-  data/team.yaml         people: id, name, credentials, role, order, bio, photo, photoAlt
+  data/team.yaml         people: id, name, knownAs, credentials, role, order, bio, photo, photoAlt, linkedin
   content/notes/*.md     notes: projects, articles and news
   content/events/*.md    talks and events
   content/work/*.md      Our Work entries
@@ -68,7 +89,7 @@ src/
 archive/                 retired WordPress posts as Markdown. Not built.
 ```
 
-People are referenced by their `id` in `team.yaml` (for example `chris-roberts`, `michael-soto`). Service slugs are listed in `SERVICE_SLUGS` in `src/content.config.ts`. Dates are written `YYYY-MM-DD` and display exactly as written.
+People are referenced by their `id` in `team.yaml` (for example `chris-roberts`, `michael-soto`). Bylines and speaker lines use `knownAs` ("Chris Roberts") when it is set, and `name` otherwise. Service slugs are listed in `SERVICE_SLUGS` in `src/content.config.ts`. Dates are written `YYYY-MM-DD` and display exactly as written.
 
 ### Add a note
 
@@ -86,6 +107,7 @@ People are referenced by their `id` in `team.yaml` (for example `chris-roberts`,
    service: records-integration  # optional: a slug from SERVICE_SLUGS, for the closing link
    image: ../../assets/notes/crowded-closet.jpg   # optional
    imageAlt: "Describe what the image shows"      # required if image is set
+   url: https://example.org/article/              # optional: an outside page the note is about
    ---
    ```
 
@@ -104,7 +126,7 @@ People are referenced by their `id` in `team.yaml` (for example `chris-roberts`,
    date: 2026-12-15
    time: "12:00 to 1:00 pm CT"
    venue: Rochester Area Foundation, 12 Elton Hills Dr NW, Rochester
-   host: Rochester Nonprofit Consortium
+   host: the Rochester Nonprofit Consortium  # written as it reads after "Hosted by"
    speakers: [chris-roberts, michael-soto]   # ids from team.yaml
    url: https://example.org/event-page/      # optional: the host's event page
    recap:                                    # optional: slug of a note written afterward
@@ -138,7 +160,7 @@ People are referenced by their `id` in `team.yaml` (for example `chris-roberts`,
    ---
    ```
 
-3. The body is short and has three parts in this order: the challenge, what we did, the outcome. Lead with what changed for the client.
+3. The body is short: one paragraph each for the challenge, what we did and the outcome, in that order. The home page shows the last paragraph (the outcome) under featured entries, so make it stand on its own.
 4. Anonymized entries carry no client name or identifying details, in the frontmatter or in the body.
 5. Only publish a client's name, logo or quote once they have approved it.
 
