@@ -1,119 +1,115 @@
 ---
 import { Image } from 'astro:assets';
 import mark from '../assets/brand/dfh-mark.png';
-
-const sequence = [
-  ['Now', 'Standardize program reporting fields and document their definitions.'],
-  ['Next', 'Automate recurring reporting and reduce manual reconciliation.'],
-  ['Later', 'Build shared reporting views once the data foundations are stable.'],
-];
+import { opportunities, phases, quadrants, sources, sourcePaths, systems } from '../data/roadmap';
+import '../styles/roadmap.css';
 ---
+
 <section class="sample-report" aria-labelledby="sample-roadmap-title">
-  <header>
+  <header class="sample-report__header">
     <Image src={mark} alt="" width={42} height={42} />
     <div>
       <p class="mono">Illustrative sample deliverable</p>
       <h3 id="sample-roadmap-title">Community Resource Network</h3>
       <p>A fictional organization, with sample systems and recommendations.</p>
-      <p class="sample-report__contents">Systems map, priorities and implementation sequence</p>
     </div>
   </header>
+
   <details class="sample-report__disclosure">
-    <summary>Full sample report</summary>
-    <div class="sample-report__grid">
-      <section aria-labelledby="sample-map">
-        <h4 id="sample-map">Current systems</h4>
-        <div class="sample-report__systems" role="group" aria-label="Three systems feed manual reconciliation before grant reporting">
-          <ul role="list">
-            <li>Program records</li>
-            <li>Donor CRM</li>
-            <li>Volunteer system</li>
-          </ul>
-          <svg viewBox="0 0 260 33" preserveAspectRatio="none" aria-hidden="true">
-            <path d="M43 1C44 17 94 18 130 31m0-30v30m87-30c-1 16-51 17-87 30" fill="none" stroke="var(--sage-text)" stroke-width="1.5"/>
-            <circle cx="130" cy="30" r="3" fill="var(--ochre-text)"/>
+    <summary>Explore the systems map, priorities and sequence</summary>
+    <div class="roadmap-exhibit" data-roadmap-exhibit>
+      <p class="roadmap-exhibit__hint">Focus or point to preview relationships. Select to keep them highlighted.</p>
+      <nav class="roadmap-exhibit__jump" aria-label="Roadmap views">
+        <a href="#roadmap-systems">Systems</a>
+        <a href="#roadmap-matrix">Matrix</a>
+        <a href="#roadmap-sequence">Sequence</a>
+        <a href="#roadmap-selection-details">Selection details</a>
+      </nav>
+      <p class="visually-hidden" role="status"></p>
+
+      <div class="roadmap-exhibit__panels">
+        <section class="roadmap-panel roadmap-panel--systems" aria-labelledby="roadmap-systems">
+          <h4 id="roadmap-systems" tabindex="-1"><span aria-hidden="true">01</span> Systems map</h4>
+          <p class="visually-hidden">Program records, the donor CRM, and the volunteer system feed manual reconciliation before grant reporting.</p>
+          <div class="roadmap-sources">
+            {sources.map((id) => <button type="button" data-system={id} disabled>{systems[id].name}</button>)}
+          </div>
+          <svg class="roadmap-connectors" viewBox="0 0 300 42" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            {sources.map((id, index) => <path d={sourcePaths[index]} data-from={id} data-to="reconciliation" />)}
           </svg>
-          <p>Manual reconciliation</p>
-          <span aria-hidden="true">↓</span>
-          <p>Grant reporting</p>
+          <button type="button" class="roadmap-system-wide" data-system="reconciliation" disabled>{systems.reconciliation.name}</button>
+          <svg class="roadmap-connectors roadmap-connectors--short" viewBox="0 0 300 27" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            <path d="M150 0v25m-5-5 5 5 5-5" data-from="reconciliation" data-to="grants" />
+          </svg>
+          <button type="button" class="roadmap-system-wide" data-system="grants" disabled>{systems.grants.name}</button>
+        </section>
+
+        <section class="roadmap-panel" aria-labelledby="roadmap-matrix">
+          <h4 id="roadmap-matrix" tabindex="-1"><span aria-hidden="true">02</span> Prioritization matrix</h4>
+          <p class="roadmap-axis">Expected value <span>Low to high ↑</span></p>
+          <div class="roadmap-matrix">
+            {quadrants.map((quadrant) => (
+              <div class="roadmap-quadrant">
+                <p>{quadrant.name}</p>
+                <div>
+                  {opportunities.filter(({ effort, value }) => effort === quadrant.effort && value === quadrant.value).map((item) => (
+                    <button
+                      type="button"
+                      class="roadmap-marker"
+                      data-opportunity={item.id}
+                      aria-label={`Opportunity ${item.id}: ${item.name}, ${quadrant.name}`}
+                      disabled
+                    ><span>{item.id}</span></button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+          <p class="roadmap-axis">Implementation effort <span>Low to high →</span></p>
+          <p class="roadmap-panel__note">Illustrative placements, without measured scores.</p>
+        </section>
+
+        <section class="roadmap-panel" aria-labelledby="roadmap-sequence">
+          <h4 id="roadmap-sequence" tabindex="-1"><span aria-hidden="true">03</span> Implementation sequence</h4>
+          {phases.map((phase) => (
+            <div class="roadmap-phase">
+              <h5 class="mono">{phase}</h5>
+              <ul role="list">
+                {opportunities.filter((item) => item.phase === phase).map((item) => (
+                  <li>
+                    <button type="button" class="roadmap-step" data-opportunity={item.id} disabled>
+                      <span class="roadmap-step__number" aria-hidden="true">{item.id}</span>
+                      {item.name}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </section>
+      </div>
+
+      <div class="roadmap-exhibit__detail" id="roadmap-selection-details" tabindex="-1">
+        <div>
+          <p class="mono" data-detail-label>Explore the roadmap</p>
+          <h4 data-detail-title>Connect systems to decisions</h4>
+          <p data-detail-copy>Follow the numbered opportunities from the effort and value matrix into the implementation sequence.</p>
         </div>
-      </section>
-      <section aria-labelledby="sample-matrix">
-        <h4 id="sample-matrix">Where to start</h4>
-        <p class="sample-report__axis">Higher value ↑</p>
-        <dl class="sample-report__matrix" aria-label="Illustrative effort versus value matrix">
-          <div><dt>Quick wins</dt><dd>Agree on field definitions</dd></div>
-          <div><dt>Strategic builds</dt><dd>Connect recurring reports</dd></div>
-          <div><dt>Lower priority</dt><dd>Refresh internal templates</dd></div>
-          <div><dt>Reconsider</dt><dd>Replace every system at once</dd></div>
-        </dl>
-        <p class="sample-report__axis sample-report__axis--effort">Higher effort →</p>
-        <p class="sample-report__note">Placements illustrate tradeoffs without measured scores.</p>
-      </section>
-      <section aria-labelledby="sample-sequence">
-        <h4 id="sample-sequence">Implementation sequence</h4>
-        <dl class="sample-report__sequence">
-          {sequence.map(([term, detail]) => <div><dt class="mono">{term}</dt><dd>{detail}</dd></div>)}
-        </dl>
-      </section>
+        <button type="button" class="button roadmap-exhibit__reset" data-reset hidden>Clear selection</button>
+      </div>
+      <p class="roadmap-exhibit__first"><span class="mono">First action</span> Assign a reporting owner and agree on the definitions the team will use.</p>
+      <div class="roadmap-exhibit__fallback">
+        <p>The numbers connect the matrix to the sequence. These are the related systems for each opportunity.</p>
+        <ol>
+          {opportunities.map((item) => (
+            <li>{item.name}: {item.systems.map((id) => systems[id].name).join(', ')}.</li>
+          ))}
+        </ol>
+      </div>
     </div>
-    <p class="sample-report__first"><span class="mono">First action</span> Assign a reporting owner and agree on the definitions the team will use.</p>
   </details>
 </section>
 
 <script>
-  if (window.matchMedia('(min-width: 52rem)').matches) {
-    const sample = document.querySelector<HTMLDetailsElement>('.sample-report__disclosure');
-    if (sample) sample.open = true;
-  }
+  import '../scripts/roadmap';
 </script>
-
-<style>
-  .sample-report {
-    background: var(--cream);
-    border: 1px solid var(--rule);
-    border-top: 4px solid var(--sage-deep);
-    box-shadow: 0 3px 0 var(--rule);
-    padding: clamp(0.8rem, 2.5vw, 2rem);
-    font-size: 0.95rem;
-    line-height: 1.45;
-  }
-  header { display: flex; align-items: start; gap: 0.8rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--rule); }
-  header img { flex: none; }
-  header .mono { color: var(--sage-text); margin-bottom: 0.3rem; }
-  header h3, header p, h4, dl, dd { margin: 0; }
-  header h3 { font-size: clamp(1.4rem, 1.15rem + 1vw, 2.05rem); }
-  .sample-report__contents { color: var(--sage-text); margin-top: 0.35rem; }
-  summary {
-    display: list-item;
-    width: fit-content;
-    min-height: var(--touch-target);
-    padding-top: 0.65rem;
-    color: var(--sage-deep);
-    cursor: pointer;
-    text-decoration: underline;
-    text-underline-offset: 0.18em;
-  }
-  .sample-report__disclosure[open] summary { border-bottom: 1px solid var(--rule); }
-  .sample-report__grid { display: grid; gap: 1.1rem; padding-block: 1rem; }
-  h4 { font: 400 1.22rem / 1.2 var(--font-display); margin-bottom: 0.55rem; }
-  .sample-report__systems { text-align: center; }
-  .sample-report__systems ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.3rem; list-style: none; padding: 0; margin: 0; }
-  .sample-report__systems li { border: 1px solid var(--rule); padding: 0.25rem 0.15rem; overflow-wrap: break-word; }
-  .sample-report__systems svg { display: block; width: 100%; height: 2rem; }
-  .sample-report__systems p { margin: 0; padding: 0.35rem 0.2rem; background: var(--sage-wash); }
-  .sample-report__axis { margin: 0.2rem 0; font-size: 0.85rem; color: var(--sage-text); }
-  .sample-report__axis--effort { text-align: right; }
-  .sample-report__matrix { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid var(--rule); gap: 1px; background: var(--rule); background-clip: padding-box; }
-  .sample-report__matrix div { padding: 0.45rem; background: var(--cream); }
-  .sample-report__matrix div:first-child { background: var(--sage-wash); }
-  .sample-report__matrix dt { color: var(--sage-deep); font-weight: 700; }
-  .sample-report__note { color: var(--sage-text); font-size: 0.85rem; margin: 0; }
-  .sample-report__sequence div { padding-block: 0.35rem; border-top: 1px solid var(--rule); }
-  .sample-report__sequence dt { color: var(--sage-text); }
-  .sample-report__first { border-top: 1px solid var(--rule); margin: 0; padding-top: 0.75rem; }
-  .sample-report__first .mono { color: var(--ochre-text); margin-right: 0.5rem; }
-  @media (min-width: 52rem) {
-    .sample-report__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(0.8rem, 2vw, 1.8rem); }
-  }
-</style>
