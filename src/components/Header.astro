@@ -18,7 +18,11 @@ const isCurrent = (href: string) => path === href || path.startsWith(href);
         {
           NAV.map((item) => (
             <li>
-              <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+              <a
+                class:list={{ 'site-nav__contact': item.href === '/contact/' }}
+                href={item.href}
+                aria-current={isCurrent(item.href) ? 'page' : undefined}
+              >
                 {item.label}
               </a>
             </li>

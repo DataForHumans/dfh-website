@@ -1,15 +1,19 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Section from '../components/Section.astro';
 import Button from '../components/Button.astro';
 import NoteList from '../components/NoteList.astro';
 import EventItem from '../components/EventItem.astro';
+import SystemsGraphic from '../components/SystemsGraphic.astro';
 import { BOOKING_URL, TAGLINE, SITE_NAME } from '../data/site';
-import { getNotes, getUpcomingEvents, getWork, outcomeOf } from '../lib/content';
+import { getNotes, getUpcomingEvents, getWork, outcomeOf, workAnchor, workLink } from '../lib/content';
 
 const [nextEvent] = await getUpcomingEvents();
 const latestNotes = (await getNotes()).slice(0, 2);
 const recentWork = await getWork(true);
+const leadProject = recentWork.find((w) => w.id === 'any-path-home');
+const dashboardLink = leadProject ? await workLink(leadProject) : undefined;
 const quoted = recentWork.find((w) => w.id === 'crowded-closet');
 
 const figures = [
@@ -21,11 +25,10 @@ const figures = [
 ---
 
 <Base title={SITE_NAME} description={`${TAGLINE}. We help nonprofits, public agencies and cities make better decisions with the records they already keep.`}>
-  <header class="page-header home-hero">
-    <div class="section__rail"></div>
-    <div class="section__body">
+  <header class="editorial-frame editorial-grid home-hero">
+    <div class="home-hero__copy">
       <p class="eyebrow mono">Rochester and the Twin Cities · Working nationally</p>
-      <h1>Your mission runs on data. Let's make it work for you.</h1>
+      <h1>Your mission runs on data. <span>Let's make it work for you.</span></h1>
       <p class="lede">
         We help nonprofits, public agencies and cities make better decisions with the records they already keep, without
         hiring a full-time data team.
@@ -35,20 +38,46 @@ const figures = [
         <Button href="/work/">See our work</Button>
       </p>
     </div>
+    <SystemsGraphic />
   </header>
 
-  <section class="figures" aria-label="Key figures">
-    <dl class="figures__list">
-      {
-        figures.map((f) => (
-          <div class="figures__item">
-            <dt class="mono figures__value">{f.value}</dt>
-            <dd class="figures__label">{f.label}</dd>
-          </div>
-        ))
-      }
-    </dl>
+  <section class="figures" aria-labelledby="h-figures">
+    <div class="editorial-frame figures__inner">
+      <h2 id="h-figures" class="mono">Key figures</h2>
+      <dl class="figures__list">
+        {
+          figures.map((f) => (
+            <div class="figures__item">
+              <dt class="mono figures__value">{f.value}</dt>
+              <dd class="figures__label">{f.label}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
   </section>
+
+  {leadProject && (
+    <section class="editorial-frame editorial-grid project-feature" aria-labelledby="h-feature">
+      <div class="project-feature__copy">
+        <p class="eyebrow mono">Featured project · {leadProject.data.service}</p>
+        <h2 id="h-feature">{leadProject.data.title}</h2>
+        <p class="project-feature__summary">A public dashboard for a coalition working to end homelessness.</p>
+        <p>Partners and the public can see collective progress in one view. Individual records stay out of the public dashboard.</p>
+        <div class="project-feature__links">
+          <Button href={`/work/#${workAnchor(leadProject)}`}>Read about the project</Button>
+          {dashboardLink && <a href={dashboardLink}>{leadProject.data.linkLabel}</a>}
+        </div>
+      </div>
+      {leadProject.data.logo && leadProject.data.logoAlt && (
+        <div class="project-feature__art">
+          <div class="project-feature__mark">
+            <Image src={leadProject.data.logo} alt={leadProject.data.logoAlt} width={480} />
+          </div>
+        </div>
+      )}
+    </section>
+  )}
 
   <Section num={1} label="Start" labelledby="h-start">
     <h2 id="h-start">Where most work starts</h2>
@@ -71,7 +100,7 @@ const figures = [
     <h2 id="h-work">Recent work</h2>
     <ul class="entry-list" role="list">
       {
-        recentWork.map((w) => (
+        recentWork.filter((w) => w.id !== leadProject?.id).map((w) => (
           <li class="entry">
             <p class="entry__meta mono">
               {w.data.service} · {w.data.sector}

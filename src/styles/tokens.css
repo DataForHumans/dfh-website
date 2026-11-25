@@ -1,11 +1,7 @@
 /*
  * Design tokens for data-for-humans.com.
- * Colors and contrast are from the build spec, checked against --cream.
- *
- * TEXT RULE: text on cream uses only --ink, --sage-text or --ochre-text.
- * --sage (4.3:1) is for large headings, rules and fills only.
- * --ochre (2.7:1) is for rules and button fills with --ink text (5.7:1) only.
- * One ochre accent per page at most.
+ * Use ink or sage text on light surfaces, cream on sage-deep,
+ * and ink on ochre controls. Diagram colors are for illustration.
  */
 :root {
   /* Color */
@@ -15,6 +11,10 @@
   --ochre-text: #8a5a1f; /* 5.2:1   ochre text if ever needed */
   --ochre: #c4863a;      /* 2.7:1   rules and button fill with ink text only */
   --cream: #f5f1ea;      /* page background */
+  --sage-deep: #263c2f;  /* dark surfaces */
+  --sage-wash: #e1e7dc;  /* light surfaces */
+  --diagram-soft: #b9c9b4;
+  --diagram-rule: #526957;
 
   /* Derived, for hairlines. Not for text. */
   --rule: color-mix(in srgb, var(--ink) 22%, var(--cream));
@@ -40,6 +40,9 @@
   --rail: 9rem;          /* left rail for section numbers and dates */
   --gutter: clamp(1.25rem, 4vw, 3rem);
   --page-max: calc(var(--rail) + var(--gutter) + var(--measure));
+  --editorial-max: 82rem;
+  --editorial-gap: clamp(1.5rem, 4vw, 4.5rem);
+  --editorial-space: clamp(2.75rem, 6vw, 6.5rem);
 
   /* Space */
   --space-1: 0.25rem;
