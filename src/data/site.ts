@@ -7,9 +7,8 @@ export const BOOKING_URL = 'https://calendar.app.google/ohQmbuZoB2KJomYH7';
 
 export const EMAILS = ['chris@data-for-humans.com', 'michael@data-for-humans.com'];
 
-// TODO: company LinkedIn page URL. Not in the WordPress export or the spec.
-// The footer hides the LinkedIn link until this is set.
-export const LINKEDIN_URL = '';
+/** Company LinkedIn page, the only social link (spec). */
+export const LINKEDIN_URL = 'https://www.linkedin.com/company/data-for-humans/';
 
 export const RELAYERED_URL = 'https://relayered.design/';
 
