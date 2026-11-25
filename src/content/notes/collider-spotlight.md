@@ -1,11 +1,9 @@
 ---
-# TODO: title. The spec calls this note "Collider spotlight" but gives no final title.
-title: "Collider spotlight"
+title: "Collider profiles Chris Roberts and Data for Humans"
 date: 2026-11-30
 author: chris-roberts
 type: news
 tags: [press]
-# TODO: confirm summary. It reuses the note's first sentence.
 summary: "Collider, the Rochester organization that supports local entrepreneurs, published a profile of Chris Roberts and Data for Humans on November 9."
 url: https://www.collider.mn/articles/2026/11/9/putting-data-to-work-for-good-how-chris-roberts-is-helping-nonprofits-make-a-bigger-impact
 ---
