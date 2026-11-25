@@ -1,5 +1,5 @@
 import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
-import { isUpcoming } from './dates';
+import { isPublished, isUpcoming } from './dates';
 import type { NoteType } from '../data/site';
 
 export type Note = CollectionEntry<'notes'>;
@@ -7,9 +7,25 @@ export type Event = CollectionEntry<'events'>;
 export type Work = CollectionEntry<'work'>;
 export type Person = CollectionEntry<'team'>;
 
-/** All notes, newest first. */
+/**
+ * Scheduled notes (dated after today) are left out of the live site, so a
+ * note can be merged ahead of time and the first build on or after its date
+ * publishes it. Deploy previews, branch deploys and `npm run dev` show them,
+ * so reviewers can read a scheduled note before it goes live. Netlify sets
+ * CONTEXT; SHOW_SCHEDULED=true does the same for a local build.
+ */
+const SHOW_SCHEDULED =
+  import.meta.env.DEV ||
+  process.env.SHOW_SCHEDULED === 'true' ||
+  process.env.CONTEXT === 'deploy-preview' ||
+  process.env.CONTEXT === 'branch-deploy';
+
+/** True if this note appears on the site being built. */
+export const isLive = (note: Note) => SHOW_SCHEDULED || isPublished(note.data.date);
+
+/** Published notes, newest first. */
 export async function getNotes(type?: NoteType): Promise<Note[]> {
-  const notes = await getCollection('notes', (n) => !type || n.data.type === type);
+  const notes = await getCollection('notes', (n) => isLive(n) && (!type || n.data.type === type));
   return notes.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 }
 
@@ -55,6 +71,19 @@ export function outcomeOf(entry: Work): string {
     .filter(Boolean);
   const last = paragraphs.at(-1) ?? '';
   return last.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
+}
+
+/**
+ * A work entry's link, or undefined while it points at a scheduled note
+ * (`/notes/<id>/` dated after the build), so the live site never links to a
+ * page it hasn't published yet.
+ */
+export async function workLink(entry: Work): Promise<string | undefined> {
+  const link = entry.data.link;
+  const noteId = link?.match(/^\/notes\/([^/]+)\/$/)?.[1];
+  if (!noteId) return link;
+  const note = await getEntry('notes', noteId);
+  return note && isLive(note) ? link : undefined;
 }
 
 /** Anchor id for a work entry on /work/. */

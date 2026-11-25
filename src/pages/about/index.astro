@@ -4,11 +4,12 @@ import { getEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import Section from '../../components/Section.astro';
-import { getTeam } from '../../lib/content';
+import { getTeam, isLive } from '../../lib/content';
 
 const team = await getTeam();
 const collider = await getEntry('notes', 'collider-spotlight');
 if (!collider?.data.url) throw new Error('About page needs the collider-spotlight note with a url.');
+const colliderLive = isLive(collider);
 ---
 
 <Base
@@ -119,7 +120,7 @@ if (!collider?.data.url) throw new Error('About page needs the collider-spotligh
     <p>
       Collider: <a href={collider.data.url}
         >“Putting Data to Work for Good: How Chris Roberts Is Helping Nonprofits Make a Bigger Impact,”</a
-      > Nov 9, 2026. <a href={`/notes/${collider.id}/`}>Our note</a>.
+      > Nov 9, 2026.{colliderLive && <> <a href={`/notes/${collider.id}/`}>Our note</a>.</>}
     </p>
   </Section>
 </Base>

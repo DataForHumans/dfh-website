@@ -42,3 +42,8 @@ export function todayInMinnesota(now: Date = new Date()): Date {
 export function isUpcoming(date: Date, now: Date = new Date()): boolean {
   return date.getTime() >= todayInMinnesota(now).getTime();
 }
+
+/** True if a note's date is today or earlier (Minnesota time). */
+export function isPublished(date: Date, now: Date = new Date()): boolean {
+  return date.getTime() <= todayInMinnesota(now).getTime();
+}

@@ -4,10 +4,14 @@ import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import Section from '../../components/Section.astro';
-import { getWork } from '../../lib/content';
+import { getWork, workLink } from '../../lib/content';
 
 const entries = await Promise.all(
-  (await getWork()).map(async (entry) => ({ entry, Content: (await render(entry)).Content })),
+  (await getWork()).map(async (entry) => ({
+    entry,
+    Content: (await render(entry)).Content,
+    link: await workLink(entry),
+  })),
 );
 ---
 
@@ -20,7 +24,7 @@ const entries = await Promise.all(
   </PageHeader>
 
   {
-    entries.map(({ entry, Content }, i) => (
+    entries.map(({ entry, Content, link }, i) => (
       <Section num={i + 1} id={entry.id} labelledby={`h-${entry.id}`} class="work-entry">
         <p class="entry__meta mono">
           {entry.data.service} · {entry.data.sector}
@@ -40,9 +44,9 @@ const entries = await Promise.all(
             <figcaption>{entry.data.quoteSource}</figcaption>
           </figure>
         )}
-        {entry.data.link && (
+        {link && (
           <p>
-            <a href={entry.data.link}>{entry.data.linkLabel}</a>
+            <a href={link}>{entry.data.linkLabel}</a>
           </p>
         )}
       </Section>

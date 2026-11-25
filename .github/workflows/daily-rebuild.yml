@@ -1,8 +1,9 @@
 name: Daily rebuild
 
-# Rebuilds the live site each morning so an event moves from "upcoming" to
-# "past" (and off the home page) the day after it happens. "Upcoming" is
-# decided at build time, so without a rebuild a finished event stays listed.
+# Rebuilds the live site in the morning so an event moves from "upcoming" to
+# "past" (and off the home page) the day after it happens, and a scheduled
+# note goes live on its date. Both are decided at build time, so without a
+# rebuild a finished event stays listed and a scheduled note stays hidden.
 #
 # It calls a Netlify build hook. The hook URL lives in the repository secret
 # NETLIFY_BUILD_HOOK_URL and never in this file: anyone with the URL can
@@ -21,7 +22,7 @@ on:
   workflow_dispatch:
     inputs:
       force:
-        description: Rebuild even if no event ended yesterday
+        description: Rebuild even if nothing changes today
         type: boolean
         default: true
 
@@ -32,9 +33,10 @@ env:
   # Each production deploy costs 15 Netlify credits (Personal plan: 1,000 a
   # month), so rebuilding every day would use about 450 a month. With 'true',
   # the job still runs daily but calls the hook only on the morning after an
-  # event, which is the only time the schedule changes what the site shows.
-  # Set 'false' to rebuild every day. Run workflow by hand always rebuilds.
-  ONLY_AFTER_EVENTS: 'true'
+  # event or on a scheduled note's date, the only times the schedule changes
+  # what the site shows (scripts/needs-rebuild.mjs decides). Set 'false' to
+  # rebuild every day. Run workflow by hand always rebuilds.
+  ONLY_WHEN_NEEDED: 'true'
 
 jobs:
   rebuild:
@@ -48,10 +50,10 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.force }}" = "true" ]; then
             echo "run=true" >> "$GITHUB_OUTPUT"
-          elif [ "$ONLY_AFTER_EVENTS" != "true" ]; then
+          elif [ "$ONLY_WHEN_NEEDED" != "true" ]; then
             echo "run=true" >> "$GITHUB_OUTPUT"
           else
-            echo "run=$(node scripts/event-ended-yesterday.mjs)" >> "$GITHUB_OUTPUT"
+            echo "run=$(node scripts/needs-rebuild.mjs)" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Trigger Netlify build hook
@@ -68,4 +70,4 @@ jobs:
 
       - name: Skipped
         if: steps.decide.outputs.run != 'true'
-        run: echo "No event ended yesterday; no rebuild needed."
+        run: echo "No event ended yesterday and no note goes live today; no rebuild needed."

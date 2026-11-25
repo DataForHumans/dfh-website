@@ -121,6 +121,7 @@ People are referenced by their `id` in `team.yaml` (for example `chris-roberts`,
 3. Write the body in Markdown. Use `##` for section headings, never `#`, because the title is the page's only `h1`.
 4. Follow the voice rules. Check for dashes before you commit.
 5. Run `npm run build`, open a PR, and share the deploy preview. Post the note on the company LinkedIn page the same week it goes live.
+6. To schedule a note, give it a future `date` and merge it whenever it's ready. The live site leaves out any note dated after the day it was built, along with its RSS item, sitemap entry and any links to it (the About page's "Our note", an event's recap link). The daily rebuild publishes it on the morning of its date (Minnesota time). Deploy previews, branch deploys and `npm run dev` show scheduled notes so they can be reviewed; for a local production build with them, run `SHOW_SCHEDULED=true npm run build`.
 
 ### Add an event
 

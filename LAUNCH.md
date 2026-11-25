@@ -59,7 +59,7 @@ Deploy previews are free. Each production deploy (every merge to `main`) costs 1
 
 ### Daily rebuild hook
 
-The site decides which events are upcoming when it builds. A scheduled rebuild moves an event to "past" the morning after it happens.
+The site decides which events are upcoming, and which notes are published, when it builds. A scheduled rebuild moves an event to "past" the morning after it happens and publishes a scheduled note on its date.
 
 1. In Netlify: **Project configuration** > **Build & deploy** > **Continuous deployment** > **Build hooks** > **Add build hook**. Name: `Daily rebuild`. Branch: `main`. Save, then copy the URL.
 2. In GitHub: **Settings** > **Secrets and variables** > **Actions** > **New repository secret**. Name: `NETLIFY_BUILD_HOOK_URL`. Secret: paste the URL. Click **Add secret**. Don't paste the URL anywhere else, because anyone with it can trigger builds.
@@ -74,7 +74,7 @@ The schedule is in `.github/workflows/daily-rebuild.yml`. GitHub cron runs in UT
 
 The workflow uses **10:17 UTC**: 5:17 am in summer and 4:17 am in winter, so the rebuild is never later than 5:17 am local time.
 
-The job runs every morning but rebuilds only on the morning after an event (`ONLY_AFTER_EVENTS: 'true'` in the workflow file), the only time the schedule changes what the site shows. Rebuilding every day would cost about 450 credits a month. On other days the run ends with "No event ended yesterday; no rebuild needed." Running it by hand from the Actions tab always rebuilds. GitHub also pauses schedules in a public repo after 60 days with no commits. It emails the owner, and you turn it back on under **Actions**.
+The job runs every morning but rebuilds only on the morning after an event or on a scheduled note's date (`ONLY_WHEN_NEEDED: 'true'` in the workflow file), the only times the schedule changes what the site shows. Rebuilding every day would cost about 450 credits a month. On other days the run ends with "No event ended yesterday and no note goes live today; no rebuild needed." Running it by hand from the Actions tab always rebuilds. GitHub also pauses schedules in a public repo after 60 days with no commits. It emails the owner, and you turn it back on under **Actions**.
 
 ### Before DNS
 

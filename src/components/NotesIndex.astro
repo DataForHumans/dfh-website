@@ -2,6 +2,7 @@
 /** Shared body of /notes/ and the type pages /notes/<type>/. */
 import PageHeader from './PageHeader.astro';
 import NoteList from './NoteList.astro';
+import Section from './Section.astro';
 import { NOTE_TYPES, type NoteType } from '../data/site';
 import type { Note } from '../lib/content';
 
@@ -19,6 +20,7 @@ const { title, notes, types, current } = Astro.props;
   <p class="lede">
     Projects, talks and practical thinking on data and AI for mission-driven work, from the Data for Humans team.
   </p>
+  {notes.length > 0 && (
   <nav class="type-filter" aria-label="Filter notes by type">
     <ul role="list">
       <li><a href="/notes/" aria-current={!current ? 'page' : undefined}>All</a></li>
@@ -33,6 +35,15 @@ const { title, notes, types, current } = Astro.props;
       }
     </ul>
   </nav>
+  )}
 </PageHeader>
 
-<NoteList notes={notes} headingLevel={2} layout="rail" />
+{
+  notes.length > 0 ? (
+    <NoteList notes={notes} headingLevel={2} layout="rail" />
+  ) : (
+    <Section>
+      <p>The first notes are coming soon.</p>
+    </Section>
+  )
+}
