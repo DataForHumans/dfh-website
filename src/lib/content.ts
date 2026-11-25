@@ -41,9 +41,9 @@ export async function getPastEvents(): Promise<Event[]> {
   return events.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 }
 
-/** Work entries in `order`. */
+/** Public work entries in `order`. */
 export async function getWork(featuredOnly = false): Promise<Work[]> {
-  const work = await getCollection('work', (w) => !featuredOnly || w.data.featured);
+  const work = await getCollection('work', (w) => w.data.public && (!featuredOnly || w.data.featured));
   return work.sort((a, b) => a.data.order - b.data.order);
 }
 

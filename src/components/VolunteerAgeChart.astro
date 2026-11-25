@@ -1,0 +1,43 @@
+---
+interface Props { preview?: boolean }
+const { preview = false } = Astro.props;
+---
+<figure class="age-chart">
+  <div class="age-chart__panel">
+    {!preview && <p class="age-chart__heading">Older volunteers are more prominent among those active in 2026</p>}
+    <ul class="age-chart__legend" role="list">
+      <li>All volunteer records</li>
+      <li>Volunteers active in 2026</li>
+    </ul>
+    <svg viewBox="0 0 500 218" role="img" aria-label="Relative concentration by age. Both curves show younger and older concentrations. The older concentration is more pronounced among volunteers active in 2026.">
+      <g fill="none" stroke="var(--rule)">
+        <path d="M56 41h418M56 80h418M56 119h418"/>
+        <path d="M56 27v131h418" stroke="var(--sage-text)"/>
+      </g>
+      <path d="M57 143C77 138 85 50 114 46S151 119 195 132 276 119 312 90 360 46 384 57 425 131 473 148" fill="none" stroke="var(--ochre-text)" stroke-width="3.5" stroke-dasharray="8 5"/>
+      <path d="M57 150C78 150 92 105 117 104S153 139 190 146 273 141 310 102 350 33 381 35 429 129 473 150" fill="none" stroke="var(--sage-deep)" stroke-width="4"/>
+      <path d="M282 48q29-34 80-24m-12-10 12 10-14 5" fill="none" stroke="var(--sage-deep)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <g fill="var(--ink)" font-family="var(--font-body)" font-size="19">
+        <text x="56" y="20">Relative concentration</text>
+        <text x="110" y="182" text-anchor="middle">20</text>
+        <text x="222" y="182" text-anchor="middle">40</text>
+        <text x="334" y="182" text-anchor="middle">60</text>
+        <text x="446" y="182" text-anchor="middle">80</text>
+        <text x="265" y="209" text-anchor="middle">Age</text>
+      </g>
+    </svg>
+  </div>
+  <figcaption>Illustrative reconstruction of the observed age distributions. Curves are approximate and do not represent exact underlying counts.</figcaption>
+</figure>
+
+<style>
+  .age-chart { margin: 0; }
+  .age-chart__panel { padding: clamp(0.65rem, 2vw, 1.35rem); border: 1px solid var(--rule); background: var(--cream); }
+  .age-chart__heading { margin: 0 0 0.55rem; font: 400 var(--text-h3) / 1.15 var(--font-display); }
+  .age-chart__legend { display: flex; flex-wrap: wrap; gap: 0.2rem 1rem; padding: 0; margin: 0 0 0.35rem; list-style: none; font-size: 0.9rem; }
+  .age-chart__legend li { display: flex; align-items: center; gap: 0.4rem; }
+  .age-chart__legend li::before { content: ''; width: 1.25rem; border-top: 3px dashed var(--ochre-text); }
+  .age-chart__legend li + li::before { border-top: 3px solid var(--sage-deep); }
+  svg { display: block; width: 100%; height: auto; }
+  figcaption { margin-top: 0.45rem; font-size: 0.9rem; line-height: 1.4; }
+</style>

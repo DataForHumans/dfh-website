@@ -1,6 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
 import Button from '../components/Button.astro';
+import PublicDashboard from '../components/PublicDashboard.astro';
+import VolunteerAgeChart from '../components/VolunteerAgeChart.astro';
 import SystemsGraphic from '../components/SystemsGraphic.astro';
 import { SERVICE_SLUGS } from '../content.config';
 import { BOOKING_URL, SERVICE_NAMES, TAGLINE, SITE_NAME } from '../data/site';
@@ -18,10 +20,6 @@ const projectCopy: Record<string, { headline: string; summary: string }> = {
   'crowded-closet': {
     headline: 'Volunteer records sharpen recruitment',
     summary: 'The analysis helped the shop focus recruiting on older volunteers, who provided much of its steady service.',
-  },
-  'hunger-relief-network': {
-    headline: 'Food relief budgets under pressure',
-    summary: 'One calculator helps organizations estimate their exposure to federal funding changes.',
   },
 };
 
@@ -79,6 +77,8 @@ const figures = [
           <h3><a href={`/work/#${workAnchor(entry)}`}><span>{copy?.headline ?? entry.data.title}</span><span aria-hidden="true">↗</span></a></h3>
           {copy && <p class="mono selected-work__client">{entry.data.title}</p>}
           <p>{copy?.summary ?? outcomeOf(entry)}</p>
+          {entry.id === 'any-path-home' && <PublicDashboard preview />}
+          {entry.id === 'crowded-closet' && <VolunteerAgeChart preview />}
           {externalLink && <a class="selected-work__source" href={externalLink}>{entry.data.linkLabel}</a>}
         </li>
       ))}

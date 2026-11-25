@@ -107,8 +107,7 @@
 .roadmap__readout {
   display: grid;
   gap: var(--space-4);
-  padding: clamp(0.9rem, 2.5vw, 2rem);
-  background: var(--cream);
+  padding-top: var(--space-4);
 }
 
 .roadmap__readout ul {
@@ -117,7 +116,7 @@
 
 .capability-section {
   display: grid;
-  gap: 0 var(--editorial-gap);
+  gap: var(--space-2);
 }
 
 .capability-list li,
@@ -154,8 +153,10 @@
     gap: var(--editorial-gap);
   }
 
-  .capability-section {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  .capability-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--editorial-gap);
   }
 }
 
@@ -212,44 +213,24 @@
   min-height: var(--touch-target);
 }
 
-.case-process,
 .case-quote {
-  margin: 0;
-  padding: clamp(1rem, 3vw, 2.5rem);
+  margin: var(--space-4) 0 0;
+  max-width: 73ch;
+  padding: clamp(0.75rem, 2vw, 1.4rem);
+  border-inline-start: 2px solid var(--sage-text);
   background: var(--sage-wash);
 }
 
-.case-process--dark {
-  color: var(--cream);
-  background: var(--sage-deep);
+.work-contact {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  border-top: 1px solid var(--rule);
 }
 
-.case-process ol {
-  list-style: none;
-  margin: var(--space-3) 0 0;
-  padding: 0;
-}
-
-.case-process li {
-  position: relative;
-  padding: var(--space-2) 0 var(--space-2) var(--space-4);
-  border-left: 1px solid currentColor;
-}
-
-.case-process li::before {
-  content: '';
-  position: absolute;
-  top: 1.1rem;
-  left: -0.32rem;
-  width: 0.56rem;
-  height: 0.56rem;
-  background: var(--sage-text);
-  border-radius: 50%;
-}
-
-.case-process--dark li::before {
-  background: var(--ochre);
-}
+.work-contact h2 { margin: 0; }
 
 .case-quote blockquote {
   margin: 0 0 var(--space-3);
@@ -265,38 +246,6 @@
   font-size: var(--text-small);
 }
 
-.case-study__logo {
-  width: min(100%, 7.5rem);
-  margin-top: var(--space-3);
-}
-
-.case-study--ongoing {
-  padding-inline: clamp(1rem, 3vw, 3rem);
-  background: var(--sage-wash);
-}
-
-@media (max-width: 47.99rem) {
-  .case-study__header {
-    margin-bottom: var(--space-2);
-  }
-
-  .case-process ol {
-    margin-top: var(--space-2);
-  }
-
-  .case-study__body {
-    gap: var(--space-3);
-  }
-
-  .case-process li {
-    padding-block: var(--space-1);
-  }
-
-  .case-process li::before {
-    top: 0.9rem;
-  }
-}
-
 @media (min-width: 48rem) {
   .work-intro {
     grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
@@ -306,12 +255,9 @@
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
   }
 
-  .case-study--ongoing {
-    display: grid;
-    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1fr);
-    align-items: start;
-    gap: var(--editorial-gap);
-  }
+  .case-study--alternate .case-study__evidence { grid-area: 1 / 1; }
+  .case-study--alternate .case-study__story { grid-area: 1 / 2; }
+
 }
 
 /* About uses a portrait-led grid and keeps full bios available on demand. */
@@ -332,8 +278,12 @@
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
+  object-position: 50% 33%;
   background: var(--sage-wash);
 }
+
+#eishna-ranganathan .portrait-grid__photo { object-position: 50% 19%; }
+#sean-horan .portrait-grid__photo { object-position: 50% 28%; }
 
 .portrait-grid h3 {
   margin: var(--space-2) 0 var(--space-1);

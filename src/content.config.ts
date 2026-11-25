@@ -91,7 +91,9 @@ const work = defineCollection({
         sector: z.string(),
         service: z.string(),
         order: z.number().int(),
-        /** Show this entry in "Recent work" on the home page. */
+        /** Keep an entry in the collection while withholding it from the public portfolio. */
+        public: z.boolean().default(true),
+        /** Show this public entry in "Selected work" on the home page. */
         featured: z.boolean().default(false),
         link: z.string().optional(),
         linkLabel: z.string().optional(),

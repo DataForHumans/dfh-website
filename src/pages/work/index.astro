@@ -1,30 +1,21 @@
 ---
-import { Image } from 'astro:assets';
+import Button from '../../components/Button.astro';
+import PublicDashboard from '../../components/PublicDashboard.astro';
+import VolunteerAgeChart from '../../components/VolunteerAgeChart.astro';
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import { getWork, workAnchor, workLink } from '../../lib/content';
 import '../../styles/core.css';
 
-const projects: Record<string, { headline: string; process?: string[]; ongoing?: boolean }> = {
-  'any-path-home': {
-    headline: 'One view of progress on homelessness',
-    process: ['Separate agency exports', 'Combine progress data and exclude individual records from public view', 'A shared public dashboard'],
-  },
-  'crowded-closet': { headline: 'Volunteer records sharpen recruitment' },
-  'hunger-relief-network': {
-    headline: 'A shared tool for uncertain food relief budgets',
-    process: ['Enter local funding data', 'Estimate exposure to federal changes', 'Use the estimate in budget discussions'],
-  },
-  'university-recruitment': {
-    headline: 'Tracing the path from first contact to enrollment',
-    ongoing: true,
-  },
+const headlines: Record<string, string> = {
+  'any-path-home': 'One view of progress on homelessness',
+  'crowded-closet': 'Volunteer records sharpen recruitment',
 };
 
 const entries = await Promise.all(
   (await getWork()).map(async (entry) => ({
     entry,
-    project: projects[entry.id],
+    headline: headlines[entry.id],
     Content: (await render(entry)).Content,
     link: await workLink(entry),
   })),
@@ -50,40 +41,35 @@ const entries = await Promise.all(
     </nav>
   </header>
 
-  {entries.map(({ entry, project, Content, link }) => (
-    <section class:list={['editorial-frame core-section case-study', { 'case-study--ongoing': project?.ongoing }]} id={workAnchor(entry)} aria-labelledby={`h-${entry.id}`}>
+  {entries.map(({ entry, headline, Content, link }) => (
+    <section class:list={['editorial-frame core-section case-study', { 'case-study--alternate': entry.id === 'crowded-closet' }]} id={workAnchor(entry)} aria-labelledby={`h-${entry.id}`}>
       <div class="case-study__header">
-        <p class="eyebrow mono">{project?.ongoing ? 'In progress' : entry.data.service + ' · ' + entry.data.sector}</p>
-        <h2 id={`h-${entry.id}`}>{project?.headline ?? entry.data.title}</h2>
-        {project && <p class="case-study__client">{entry.data.title}</p>}
+        <p class="eyebrow mono">{entry.data.service + ' · ' + entry.data.sector}</p>
+        <h2 id={`h-${entry.id}`}>{headline ?? entry.data.title}</h2>
+        {headline && <p class="case-study__client">{entry.data.title}</p>}
       </div>
       <div class="case-study__body">
         <div class="case-study__story">
           <Content />
           {link && <a class="case-study__link" href={link}>{entry.data.linkLabel}</a>}
         </div>
-        {(project?.process || entry.data.quote || entry.data.logo) && (
-          <aside class="case-study__evidence" aria-label={`Project evidence for ${entry.data.title}`}>
-            {project?.process && (
-              <figure class:list={['case-process', { 'case-process--dark': entry.id === 'any-path-home' }]}>
-                <figcaption class="mono">Project process · Conceptual diagram</figcaption>
-                <ol role="list">
-                  {project.process.map((step) => <li>{step}</li>)}
-                </ol>
-              </figure>
-            )}
-            {entry.data.quote && (
-              <figure class="case-quote">
-                <blockquote><p>“{entry.data.quote}”</p></blockquote>
-                <figcaption>{entry.data.quoteSource}</figcaption>
-              </figure>
-            )}
-            {entry.data.logo && entry.data.logoAlt && (
-              <Image class="case-study__logo" src={entry.data.logo} alt={entry.data.logoAlt} width={152} />
-            )}
-          </aside>
+        {headline && (
+          <div class="case-study__evidence">
+            {entry.id === 'any-path-home' && <PublicDashboard />}
+            {entry.id === 'crowded-closet' && <VolunteerAgeChart />}
+          </div>
         )}
       </div>
+      {entry.data.quote && (
+        <figure class="case-quote">
+          <blockquote><p>“{entry.data.quote}”</p></blockquote>
+          <figcaption>{entry.data.quoteSource}</figcaption>
+        </figure>
+      )}
     </section>
   ))}
+  <section class="editorial-frame core-section work-contact" aria-labelledby="work-contact-heading">
+    <h2 id="work-contact-heading">Talk through a similar data challenge</h2>
+    <Button href="/contact/">Contact the team</Button>
+  </section>
 </Base>

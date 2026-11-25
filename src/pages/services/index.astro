@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import RoadmapSample from '../../components/RoadmapSample.astro';
 import Button from '../../components/Button.astro';
 import { SERVICE_SLUGS } from '../../content.config';
 import { BOOKING_URL, PRODUCTS, SERVICE_NAMES } from '../../data/site';
@@ -43,7 +44,7 @@ const offerings = {
   <header class="editorial-frame core-intro editorial-grid services-intro">
     <div>
       <p class="eyebrow mono">Services</p>
-      <h1>Every engagement starts with a plan.</h1>
+      <h1>From better questions to better systems</h1>
       <p class="lede">Nearly every engagement begins with a four-week Data Roadmap. We tailor the work to your budget, tools and team.</p>
     </div>
     <nav class="core-index" aria-label="On this page">
@@ -70,6 +71,7 @@ const offerings = {
         </li>
       ))}
     </ol>
+    <RoadmapSample />
     <div class="roadmap__readout">
       <div>
         <h3>What you receive</h3>

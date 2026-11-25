@@ -434,6 +434,11 @@ a:hover {
   margin: var(--space-1) 0 var(--space-2);
 }
 
+.selected-work__item figure {
+  max-width: 27rem;
+  margin-block: var(--space-2) var(--space-3);
+}
+
 .selected-work__item > :last-child {
   margin-bottom: 0;
 }
@@ -519,7 +524,7 @@ a:hover {
 
 @media (min-width: 48rem) {
   .selected-work__list {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 

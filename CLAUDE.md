@@ -158,7 +158,8 @@ People are referenced by their `id` in `team.yaml` (for example `chris-roberts`,
    sector: Homelessness
    service: Collective impact
    order: 1                       # position on /work/, lowest first
-   featured: true                 # show in "Selected work" on the home page (keep it to three)
+   public: true                   # default; false keeps the source out of the public portfolio
+   featured: true                 # show this public entry in "Selected work" on the home page
    link: https://anypathhome.org/ # optional
    linkLabel: View the live dashboard on anypathhome.org   # required if link is set
    quote: "..."                   # optional, only a real, approved quote

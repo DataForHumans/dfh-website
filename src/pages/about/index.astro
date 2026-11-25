@@ -42,7 +42,7 @@ const principles = [
       {team.map((person) => (
         <li id={person.id}>
           {person.data.photo && person.data.photoAlt && (
-            <Image class="portrait-grid__photo" src={person.data.photo} alt={person.data.photoAlt} width={480} height={360} />
+            <Image class="portrait-grid__photo" src={person.data.photo} alt={person.data.photoAlt} width={480} />
           )}
           <h3>{person.data.name}{person.data.credentials && <>, {person.data.credentials}</>}</h3>
           <p class="mono portrait-grid__role">{person.data.role}</p>
