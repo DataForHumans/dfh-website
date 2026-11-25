@@ -43,11 +43,20 @@ import { BOOKING_URL, EMAILS } from '../../data/site';
 
       <div class="field">
         <label for="name">Name</label>
-        <input id="name" name="name" type="text" autocomplete="name" required />
+        <input id="name" name="name" type="text" autocomplete="name" required data-error="Enter your name." />
+        <p class="field__error" id="name-error" hidden></p>
       </div>
       <div class="field">
         <label for="email">Email</label>
-        <input id="email" name="email" type="email" autocomplete="email" required />
+        <input
+          id="email"
+          name="email"
+          type="email"
+          autocomplete="email"
+          required
+          data-error="Enter your email address, like name@example.org."
+        />
+        <p class="field__error" id="email-error" hidden></p>
       </div>
       <div class="field">
         <label for="organization">Organization <span class="field__optional">(optional)</span></label>
@@ -55,11 +64,54 @@ import { BOOKING_URL, EMAILS } from '../../data/site';
       </div>
       <div class="field">
         <label for="message">Message</label>
-        <textarea id="message" name="message" rows="7" required></textarea>
+        <textarea id="message" name="message" rows="7" required data-error="Enter a message."></textarea>
+        <p class="field__error" id="message-error" hidden></p>
       </div>
       <button class="button" type="submit">Send message</button>
     </form>
   </Section>
+
+  <script>
+    // Inline error text for the contact form. Without JavaScript the browser's
+    // own validation still runs; with it, each error is written next to its
+    // field, tied to it with aria-describedby, and focus moves to the first one.
+    const form = document.querySelector<HTMLFormElement>('form[name="contact"]');
+    if (form) {
+      form.noValidate = true;
+      const fields = [...form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[data-error]')];
+
+      const show = (field: HTMLInputElement | HTMLTextAreaElement) => {
+        const error = document.getElementById(`${field.id}-error`);
+        if (!error) return;
+        const valid = field.checkValidity();
+        error.textContent = valid ? '' : (field.dataset.error ?? '');
+        error.hidden = valid;
+        if (valid) {
+          field.removeAttribute('aria-invalid');
+          field.removeAttribute('aria-describedby');
+        } else {
+          field.setAttribute('aria-invalid', 'true');
+          field.setAttribute('aria-describedby', error.id);
+        }
+        return valid;
+      };
+
+      form.addEventListener('submit', (event) => {
+        const invalid = fields.filter((f) => !show(f));
+        if (invalid.length > 0) {
+          event.preventDefault();
+          invalid[0].focus();
+        }
+      });
+
+      // Clear an error as soon as the field is fixed.
+      for (const field of fields) {
+        field.addEventListener('input', () => {
+          if (field.getAttribute('aria-invalid') === 'true') show(field);
+        });
+      }
+    }
+  </script>
 
   <Section num={3} label="Email" labelledby="h-email">
     <h2 id="h-email" class="visually-hidden">Email</h2>

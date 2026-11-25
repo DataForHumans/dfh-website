@@ -700,3 +700,17 @@ a:hover {
   align-items: center;
   min-height: var(--touch-target);
 }
+
+.field__error {
+  margin: 0;
+  color: var(--ink);
+  font-weight: 600;
+}
+.field__error::before {
+  content: 'Error: ';
+}
+.field input[aria-invalid='true'],
+.field textarea[aria-invalid='true'] {
+  border-width: 2px;
+  border-color: var(--ink);
+}
