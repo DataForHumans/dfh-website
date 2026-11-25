@@ -1,8 +1,7 @@
 ---
 /** Shared body of /notes/ and the type pages /notes/<type>/. */
-import PageHeader from './PageHeader.astro';
+import SupportHeader from './SupportHeader.astro';
 import NoteList from './NoteList.astro';
-import Section from './Section.astro';
 import { NOTE_TYPES, type NoteType } from '../data/site';
 import type { Note } from '../lib/content';
 
@@ -16,34 +15,37 @@ interface Props {
 const { title, notes, types, current } = Astro.props;
 ---
 
-<PageHeader title={title} accent>
+<SupportHeader title={title} eyebrow={current ? 'Notes' : undefined}>
   <p class="lede">
     Projects, talks and practical thinking on data and AI for mission-driven work, from the Data for Humans team.
   </p>
-  {notes.length > 0 && (
-  <nav class="type-filter" aria-label="Filter notes by type">
-    <ul role="list">
-      <li><a href="/notes/" aria-current={!current ? 'page' : undefined}>All</a></li>
-      {
-        types.map((t) => (
-          <li>
-            <a href={`/notes/${t}/`} aria-current={current === t ? 'page' : undefined}>
-              {NOTE_TYPES[t].plural}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-  </nav>
-  )}
-</PageHeader>
+</SupportHeader>
 
-{
-  notes.length > 0 ? (
-    <NoteList notes={notes} headingLevel={2} layout="rail" />
+<div class="editorial-frame notes-index">
+  <div class="notes-index__tools">
+    {types.length > 0 && (
+      <nav aria-label="Filter notes by type">
+        <ul class="notes-index__filters" role="list">
+          <li><a href="/notes/" aria-current={!current ? 'page' : undefined}>All</a></li>
+          {types.map((type) => (
+            <li>
+              <a href={`/notes/${type}/`} aria-current={current === type ? 'page' : undefined}>
+                {NOTE_TYPES[type].plural}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    )}
+    <a class="notes-index__rss" href="/notes/rss.xml">RSS feed</a>
+  </div>
+
+  {notes.length > 0 ? (
+    <NoteList notes={notes} />
   ) : (
-    <Section>
-      <p>The first notes are coming soon.</p>
-    </Section>
-  )
-}
+    <div class="notes-index__empty">
+      <p>{current ? 'No notes in this category yet.' : 'The first notes are coming soon.'}</p>
+      {current && <a href="/notes/">Browse all notes</a>}
+    </div>
+  )}
+</div>
