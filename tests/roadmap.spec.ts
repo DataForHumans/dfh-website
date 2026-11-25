@@ -61,6 +61,40 @@ test('keyboard previews, activation and reset preserve clear accessible state', 
   await expect(exhibit(page).getByRole('status')).toHaveText('Roadmap selection cleared.');
 });
 
+test('network nodes remain reachable without overlapping at narrow widths', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 800 });
+  await openRoadmap(page);
+  const geometry = await map(page).locator('.roadmap-map').evaluate((stage) => {
+    const bounds = stage.getBoundingClientRect();
+    return [...stage.querySelectorAll('button')].map((button) => {
+      const rect = button.getBoundingClientRect();
+      return {
+        width: rect.width, height: rect.height,
+        left: rect.left - bounds.left, right: rect.right - bounds.left,
+        top: rect.top - bounds.top, bottom: rect.bottom - bounds.top,
+        stageWidth: bounds.width, stageHeight: bounds.height,
+      };
+    });
+  });
+  expect(geometry).toHaveLength(5);
+  for (const [index, box] of geometry.entries()) {
+    expect(box.width).toBeGreaterThanOrEqual(44);
+    expect(box.height).toBeGreaterThanOrEqual(44);
+    expect(box.left).toBeGreaterThanOrEqual(-0.1);
+    expect(box.top).toBeGreaterThanOrEqual(0);
+    expect(box.right).toBeLessThanOrEqual(box.stageWidth + 0.1);
+    expect(box.bottom).toBeLessThanOrEqual(box.stageHeight);
+    for (const other of geometry.slice(index + 1)) {
+      expect(box.left < other.right && box.right > other.left && box.top < other.bottom && box.bottom > other.top).toBe(false);
+    }
+  }
+  const readout = exhibit(page).locator('.roadmap-exhibit__detail');
+  const before = await readout.evaluate((node) => node.getBoundingClientRect().height);
+  await map(page).getByRole('button', { name: 'Manual reconciliation' }).click();
+  await expect(detail(page)).toHaveText('Manual reconciliation');
+  expect(await readout.evaluate((node) => node.getBoundingClientRect().height)).toBe(before);
+});
+
 test('a newer keyboard preview takes precedence over a stationary pointer', async ({ page }, info) => {
   test.skip(info.project.name === 'mobile', 'Mouse hover requires the desktop project');
   await openRoadmap(page);

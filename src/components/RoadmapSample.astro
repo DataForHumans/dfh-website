@@ -1,8 +1,23 @@
 ---
 import { Image } from 'astro:assets';
 import mark from '../assets/brand/dfh-mark.png';
-import { opportunities, phases, quadrants, sources, sourcePaths, systems } from '../data/roadmap';
+import { opportunities, phases, quadrants, systems, type SystemId } from '../data/roadmap';
 import '../styles/roadmap.css';
+
+const nodes = [
+  { id: 'program', x: 48, y: 39 },
+  { id: 'donor', x: 147, y: 23 },
+  { id: 'volunteer', x: 252, y: 47 },
+  { id: 'reconciliation', x: 144, y: 127 },
+  { id: 'grants', x: 211, y: 196 },
+] as const satisfies readonly { id: SystemId; x: number; y: number }[];
+
+const edges = [
+  { from: 'program', to: 'reconciliation', path: 'M48 39C13 49 12 77 23 95S91 115 144 127' },
+  { from: 'donor', to: 'reconciliation', path: 'M147 23C111 45 116 65 123 80S146 104 144 127' },
+  { from: 'volunteer', to: 'reconciliation', path: 'M252 47C283 46 294 76 284 99S214 112 144 127' },
+  { from: 'reconciliation', to: 'grants', path: 'M144 127C168 134 224 131 218 163S210 183 211 196' },
+] as const satisfies readonly { from: SystemId; to: SystemId; path: string }[];
 ---
 
 <section class="sample-report" aria-labelledby="sample-roadmap-title">
@@ -18,7 +33,7 @@ import '../styles/roadmap.css';
   <details class="sample-report__disclosure">
     <summary>Explore the systems map, priorities and sequence</summary>
     <div class="roadmap-exhibit" data-roadmap-exhibit>
-      <p class="roadmap-exhibit__hint">Focus or point to preview relationships. Select to keep them highlighted.</p>
+      <p class="roadmap-exhibit__hint">Select a system or numbered opportunity to see how the pieces connect. Focus or point to preview.</p>
       <nav class="roadmap-exhibit__jump" aria-label="Roadmap views">
         <a href="#roadmap-systems">Systems</a>
         <a href="#roadmap-matrix">Matrix</a>
@@ -31,17 +46,29 @@ import '../styles/roadmap.css';
         <section class="roadmap-panel roadmap-panel--systems" aria-labelledby="roadmap-systems">
           <h4 id="roadmap-systems" tabindex="-1"><span aria-hidden="true">01</span> Systems map</h4>
           <p class="visually-hidden">Program records, the donor CRM, and the volunteer system feed manual reconciliation before grant reporting.</p>
-          <div class="roadmap-sources">
-            {sources.map((id) => <button type="button" data-system={id} disabled>{systems[id].name}</button>)}
+          <div class="roadmap-map">
+            <svg class="roadmap-connectors" viewBox="0 0 300 248" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              {edges.map(({ from, to, path }) => <path d={path} data-from={from} data-to={to} />)}
+              <g class="roadmap-map__satellites">
+                <circle cx="18" cy="88" r="2" /><circle cx="85" cy="18" r="2" />
+                <circle cx="102" cy="105" r="2.5" /><circle cx="198" cy="74" r="2" />
+                <circle cx="267" cy="113" r="2.2" /><circle cx="112" cy="177" r="2.5" />
+                <circle cx="251" cy="184" r="3" /><circle cx="275" cy="210" r="1.6" />
+              </g>
+            </svg>
+            {nodes.map(({ id, x, y }) => (
+              <button
+                type="button"
+                class="roadmap-node"
+                data-system={id}
+                style={`--node-x:${x / 3}%;--node-y:${(y / 248) * 100}%`}
+                disabled
+              >
+                <span class="roadmap-node__point" aria-hidden="true"></span>
+                <span class="roadmap-node__label">{systems[id].name}</span>
+              </button>
+            ))}
           </div>
-          <svg class="roadmap-connectors" viewBox="0 0 300 42" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-            {sources.map((id, index) => <path d={sourcePaths[index]} data-from={id} data-to="reconciliation" />)}
-          </svg>
-          <button type="button" class="roadmap-system-wide" data-system="reconciliation" disabled>{systems.reconciliation.name}</button>
-          <svg class="roadmap-connectors roadmap-connectors--short" viewBox="0 0 300 27" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-            <path d="M150 0v25m-5-5 5 5 5-5" data-from="reconciliation" data-to="grants" />
-          </svg>
-          <button type="button" class="roadmap-system-wide" data-system="grants" disabled>{systems.grants.name}</button>
         </section>
 
         <section class="roadmap-panel" aria-labelledby="roadmap-matrix">
@@ -71,21 +98,23 @@ import '../styles/roadmap.css';
 
         <section class="roadmap-panel" aria-labelledby="roadmap-sequence">
           <h4 id="roadmap-sequence" tabindex="-1"><span aria-hidden="true">03</span> Implementation sequence</h4>
-          {phases.map((phase) => (
-            <div class="roadmap-phase">
-              <h5 class="mono">{phase}</h5>
-              <ul role="list">
-                {opportunities.filter((item) => item.phase === phase).map((item) => (
-                  <li>
-                    <button type="button" class="roadmap-step" data-opportunity={item.id} disabled>
-                      <span class="roadmap-step__number" aria-hidden="true">{item.id}</span>
-                      {item.name}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          <div class="roadmap-timeline">
+            {phases.map((phase) => (
+              <div class="roadmap-phase">
+                <h5 class="mono">{phase}</h5>
+                <ul role="list">
+                  {opportunities.filter((item) => item.phase === phase).map((item) => (
+                    <li>
+                      <button type="button" class="roadmap-step" data-opportunity={item.id} disabled>
+                        <span class="roadmap-step__number" aria-hidden="true">{item.id}</span>
+                        {item.name}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </section>
       </div>
 

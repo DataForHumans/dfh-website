@@ -53,10 +53,3 @@ export const opportunities: readonly Opportunity[] = [
     systems: ['reconciliation'], effort: 'lower', value: 'lower', phase: 'Later',
   },
 ];
-
-export const sources = ['program', 'donor', 'volunteer'] as const satisfies readonly SystemId[];
-export const sourcePaths = [
-  'M50 1 C50 28 109 26 150 41',
-  'M150 1 V41',
-  'M250 1 C250 27 190 28 150 41',
-] as const;
