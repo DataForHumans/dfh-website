@@ -1,0 +1,68 @@
+# The Data for Humans team. Shown on /about/ in `order`, and referenced by
+# slug (`id`) from notes (`author`) and events (`speakers`).
+#
+# Photos live in src/assets/team/ and are added in the `photo` field as a path
+# relative to this file, e.g. ../assets/team/eishna-ranganathan.jpg.
+# `photoAlt` is required whenever `photo` is set.
+
+- id: chris-roberts
+  name: Christopher Roberts
+  credentials: MS
+  role: Founder and CTO
+  order: 1
+  # Confirm: Chris to approve this bio before launch (spec open item).
+  bio: >-
+    Chris has built data systems in industry, research publishing and county
+    government. At 3M he analyzed patents and competitive intelligence,
+    including topic models across more than 10 million documents, and he later
+    worked at Digital Science. In county government he contributed to an
+    integrated data system drawing on more than 40 sources, work recognized
+    with two NACo Achievement Awards in 2024. He specializes in matching records
+    for the same person or organization across systems, and he is a founding
+    organizer of the Rochester Area Data Enthusiasts Network. He holds an M.S.
+    in Chemistry from the University of Minnesota and a B.A. in Chemistry and
+    Mathematics from St. Olaf.
+
+- id: michael-soto
+  name: Michael Soto
+  credentials: PhD
+  role: Chief Strategy Officer
+  order: 2
+  bio: >-
+    Michael has spent about two decades at the intersection of data, equity and
+    public impact, including senior roles in Hennepin and Ramsey County
+    government and work at S&P Global. His doctoral research on peace processes
+    relied mainly on in-depth interviews, and that practice now anchors our
+    research and footprint reviews. He co-developed Randomised Coffee Trials at
+    Nesta and co-founded Spark Collaboration. He specializes in
+    collective-impact data, integrated data systems and equity-informed
+    analytics.
+
+- id: sean-horan
+  name: Sean Horan
+  credentials: PhD
+  role: Modeling Lead
+  order: 3
+  # Placeholder bio until Sean replies (spec). LinkedIn photo for now.
+  bio: >-
+    Sean brings a mathematician's rigor to our modeling and analysis. He spent
+    four years developing and validating predictive algorithms under
+    FDA-regulated standards, where every change is peer reviewed, tested and
+    documented, and algorithms he designed are in commercial products today. He
+    anchors our code review and validation practice, so the models behind every
+    engagement hold up before a client relies on them. Sean holds a PhD in
+    mathematics from UC Irvine and teaches mathematics at Metropolitan State
+    University.
+
+- id: eishna-ranganathan
+  name: Eishna Ranganathan
+  role: Analyst
+  order: 4
+  # Her own words, with the dash changed to a comma (spec).
+  bio: >-
+    Eishna is a mission-driven data scientist who cares about thoughtful,
+    responsible model building. Her experience with data spans a wide range of
+    domains, including higher education and human resources. She often
+    describes herself as a humanist-technologist, partly as a nod to her alma
+    maters, Swarthmore and MIT, and partly to reflect the ethical consciousness
+    and commitment to the common good she brings to her work.
