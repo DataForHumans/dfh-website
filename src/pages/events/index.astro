@@ -14,7 +14,7 @@ const past = await getPastEvents();
     <p class="lede">Where to find us in person.</p>
   </PageHeader>
 
-  <Section rail="Upcoming" labelledby="h-upcoming">
+  <Section num={1} label="Upcoming" labelledby="h-upcoming">
     <h2 id="h-upcoming" class="visually-hidden">Upcoming</h2>
     {
       upcoming.length > 0 ? (
@@ -33,7 +33,7 @@ const past = await getPastEvents();
 
   {
     past.length > 0 && (
-      <Section rail="Past" labelledby="h-past">
+      <Section num={2} label="Past" labelledby="h-past">
         <h2 id="h-past" class="visually-hidden">Past</h2>
         <ul class="entry-list" role="list">
           {past.map((event) => (

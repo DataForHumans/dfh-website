@@ -26,7 +26,7 @@ if (!collider?.data.url) throw new Error('About page needs the collider-spotligh
     </p>
   </PageHeader>
 
-  <Section rail="Team" labelledby="h-team">
+  <Section num={1} label="Team" labelledby="h-team">
     <h2 id="h-team" class="visually-hidden">Team</h2>
     <ul class="team" role="list">
       {
@@ -56,7 +56,7 @@ if (!collider?.data.url) throw new Error('About page needs the collider-spotligh
     </ul>
   </Section>
 
-  <Section rail="Roots" labelledby="h-roots">
+  <Section num={2} label="Roots" labelledby="h-roots">
     <h2 id="h-roots">Where we come from</h2>
     <!-- Current site text, rewritten without dashes (spec). -->
     <p>
@@ -77,7 +77,7 @@ if (!collider?.data.url) throw new Error('About page needs the collider-spotligh
     </p>
   </Section>
 
-  <Section rail="Method" labelledby="h-how">
+  <Section num={3} label="Method" labelledby="h-how">
     <h2 id="h-how">How we work</h2>
     <ol class="ledger" role="list">
       <li class="ledger__row">
@@ -114,7 +114,7 @@ if (!collider?.data.url) throw new Error('About page needs the collider-spotligh
     </ol>
   </Section>
 
-  <Section rail="Press" labelledby="h-news">
+  <Section num={4} label="Press" labelledby="h-news">
     <h2 id="h-news">In the news</h2>
     <p>
       Collider: <a href={collider.data.url}

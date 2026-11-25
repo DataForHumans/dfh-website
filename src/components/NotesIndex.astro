@@ -1,7 +1,6 @@
 ---
 /** Shared body of /notes/ and the type pages /notes/<type>/. */
 import PageHeader from './PageHeader.astro';
-import Section from './Section.astro';
 import NoteList from './NoteList.astro';
 import { NOTE_TYPES, type NoteType } from '../data/site';
 import type { Note } from '../lib/content';
@@ -36,6 +35,4 @@ const { title, notes, types, current } = Astro.props;
   </nav>
 </PageHeader>
 
-<Section>
-  <NoteList notes={notes} headingLevel={2} />
-</Section>
+<NoteList notes={notes} headingLevel={2} layout="rail" />

@@ -13,7 +13,7 @@ const { title, eyebrow, accent = false } = Astro.props;
 ---
 
 <header class:list={['page-header', { 'page-header--accent': accent }]}>
-  <div class="section__rail"></div>
+  <div class="section__rail"><slot name="rail" /></div>
   <div class="section__body">
     {eyebrow && <p class="eyebrow mono">{eyebrow}</p>}
     <h1>{title}</h1>

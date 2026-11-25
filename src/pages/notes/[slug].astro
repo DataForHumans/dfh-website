@@ -62,9 +62,10 @@ if (props.kind === 'note') {
     <Base title={props.note.data.title} description={props.note.data.summary} ogType="article">
       <article>
         <PageHeader title={props.note.data.title} accent>
-          <p class="entry__meta mono">
+          <p slot="rail" class="rail-label mono">
             <time datetime={isoDate(props.note.data.date)}>{formatDate(props.note.data.date)}</time>
-            <span aria-hidden="true"> · </span>
+          </p>
+          <p class="entry__meta mono">
             <a href={`/notes/${props.note.data.type}/`}>{NOTE_TYPES[props.note.data.type].label}</a>
             <span aria-hidden="true"> · </span>
             <span>{authorName}</span>

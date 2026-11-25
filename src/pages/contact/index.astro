@@ -17,7 +17,7 @@ import { BOOKING_URL, EMAILS } from '../../data/site';
     </p>
   </PageHeader>
 
-  <Section rail="Call" labelledby="h-book">
+  <Section num={1} label="Call" labelledby="h-book">
     <h2 id="h-book">Book a free 30-minute call.</h2>
     <p>No prep needed.</p>
     <p class="actions">
@@ -25,7 +25,7 @@ import { BOOKING_URL, EMAILS } from '../../data/site';
     </p>
   </Section>
 
-  <Section rail="Message" labelledby="h-form">
+  <Section num={2} label="Message" labelledby="h-form">
     <h2 id="h-form">Send a message</h2>
     <form
       class="form"
@@ -61,14 +61,14 @@ import { BOOKING_URL, EMAILS } from '../../data/site';
     </form>
   </Section>
 
-  <Section rail="Email" labelledby="h-email">
+  <Section num={3} label="Email" labelledby="h-email">
     <h2 id="h-email" class="visually-hidden">Email</h2>
     <ul class="plain-list" role="list">
       {EMAILS.map((e) => <li><a href={`mailto:${e}`}>{e}</a></li>)}
     </ul>
   </Section>
 
-  <Section rail="Where" labelledby="h-where">
+  <Section num={4} label="Where" labelledby="h-where">
     <h2 id="h-where">Where we are</h2>
     <p>
       Rochester and the Twin Cities. We work with mission-driven organizations across Minnesota and beyond, mostly

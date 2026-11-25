@@ -9,7 +9,6 @@ import { getWork } from '../../lib/content';
 const entries = await Promise.all(
   (await getWork()).map(async (entry) => ({ entry, Content: (await render(entry)).Content })),
 );
-const pad = (n: number) => String(n).padStart(2, '0');
 ---
 
 <Base
@@ -22,7 +21,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
   {
     entries.map(({ entry, Content }, i) => (
-      <Section rail={pad(i + 1)} id={entry.id} labelledby={`h-${entry.id}`} class="work-entry">
+      <Section num={i + 1} id={entry.id} labelledby={`h-${entry.id}`} class="work-entry">
         <p class="entry__meta mono">
           {entry.data.service} · {entry.data.sector}
         </p>

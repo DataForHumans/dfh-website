@@ -38,8 +38,7 @@ const figures = [
   </header>
 
   <section class="figures" aria-label="Key figures">
-    <div class="section__rail"></div>
-    <dl class="figures__list section__body">
+    <dl class="figures__list">
       {
         figures.map((f) => (
           <div class="figures__item">
@@ -51,7 +50,7 @@ const figures = [
     </dl>
   </section>
 
-  <Section rail="01" labelledby="h-start">
+  <Section num={1} label="Start" labelledby="h-start">
     <h2 id="h-start">Where most work starts</h2>
     <p>
       The Data Roadmap is four weeks and a fixed fee. We look at your systems, talk with the people who use them, and hand
@@ -59,7 +58,7 @@ const figures = [
     </p>
   </Section>
 
-  <Section rail="02" labelledby="h-after">
+  <Section num={2} label="Services" labelledby="h-after">
     <h2 id="h-after">What we do after that</h2>
     <p>
       Shared dashboards for coalitions, connected and cleaned-up records, research and evaluation for funders and boards,
@@ -68,7 +67,7 @@ const figures = [
     <p><a href="/services/">All services</a></p>
   </Section>
 
-  <Section rail="03" labelledby="h-work">
+  <Section num={3} label="Work" labelledby="h-work">
     <h2 id="h-work">Recent work</h2>
     <ul class="entry-list" role="list">
       {
@@ -97,7 +96,7 @@ const figures = [
     }
   </Section>
 
-  <Section rail="04" labelledby="h-next">
+  <Section num={4} label="Next up" labelledby="h-next">
     <h2 id="h-next">Next up</h2>
     {nextEvent && <EventItem event={nextEvent} headingLevel={3} />}
     <NoteList notes={latestNotes} headingLevel={3} />

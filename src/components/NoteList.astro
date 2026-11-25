@@ -7,27 +7,43 @@ interface Props {
   notes: Note[];
   /** Heading level for note titles inside the list. */
   headingLevel?: 2 | 3;
+  /**
+   * "rail": each note is a full-width row with its date in the left rail
+   * (the Notes pages). "compact": the date sits in the meta line (inside a section).
+   */
+  layout?: 'rail' | 'compact';
 }
-const { notes, headingLevel = 2 } = Astro.props;
+const { notes, headingLevel = 2, layout = 'compact' } = Astro.props;
 const Heading = `h${headingLevel}` as 'h2' | 'h3';
 const items = await Promise.all(notes.map(async (note) => ({ note, author: await getPerson(note.data.author) })));
 ---
 
-<ol class="entry-list" role="list">
+<ol class:list={['entry-list', { rows: layout === 'rail' }]} role="list">
   {
-    items.map(({ note, author }) => (
-      <li class="entry">
-        <p class="entry__meta mono">
-          <time datetime={isoDate(note.data.date)}>{formatDate(note.data.date)}</time>
-          <span aria-hidden="true"> · </span>
-          <span>{NOTE_TYPES[note.data.type].label}</span>
-        </p>
-        <Heading class="entry__title">
-          <a href={`/notes/${note.id}/`}>{note.data.title}</a>
-        </Heading>
-        <p class="entry__summary">{note.data.summary}</p>
-        <p class="entry__byline">{author.data.knownAs ?? author.data.name}</p>
-      </li>
-    ))
+    items.map(({ note, author }) => {
+      const date = <time datetime={isoDate(note.data.date)}>{formatDate(note.data.date)}</time>;
+      return (
+        <li class:list={['entry', { row: layout === 'rail' }]}>
+          {layout === 'rail' && <p class="section__rail rail-label mono">{date}</p>}
+          <div class={layout === 'rail' ? 'section__body' : undefined}>
+            <p class="entry__meta mono">
+              {layout === 'compact' && (
+                <>
+                  {date}
+                  <span aria-hidden="true"> · </span>
+                </>
+              )}
+              <span>{NOTE_TYPES[note.data.type].label}</span>
+              <span aria-hidden="true"> · </span>
+              <span>{author.data.knownAs ?? author.data.name}</span>
+            </p>
+            <Heading class="entry__title">
+              <a href={`/notes/${note.id}/`}>{note.data.title}</a>
+            </Heading>
+            <p class="entry__summary">{note.data.summary}</p>
+          </div>
+        </li>
+      );
+    })
   }
 </ol>

@@ -1,21 +1,26 @@
 ---
 /**
- * A report section: a thin rule above, a narrow left rail (section number or
- * date) and the reading column. Put the section's h2 inside the slot.
+ * A report section: a thin rule above, a narrow left rail and the reading
+ * column. The rail shows "01 / Label" (Space Mono, small caps). Put the
+ * section's h2 inside the slot.
  */
 interface Props {
-  /** Rail text, e.g. "01" or "Dec 15, 2026". */
-  rail?: string;
+  /** Section number, e.g. 1 becomes "01". */
+  num?: number;
+  /** Short rail label, e.g. "Start here". */
+  label?: string;
   id?: string;
   /** Accessible name for the section, by id of its heading. */
   labelledby?: string;
   class?: string;
 }
-const { rail, id, labelledby, class: className } = Astro.props;
+const { num, label, id, labelledby, class: className } = Astro.props;
+const n = num !== undefined ? String(num).padStart(2, '0') : undefined;
+const rail = [n, label].filter(Boolean).join(' / ');
 ---
 
 <section class:list={['section', className]} id={id} aria-labelledby={labelledby}>
-  <div class="section__rail">{rail && <span class="mono">{rail}</span>}</div>
+  <div class="section__rail">{rail && <p class="rail-label mono" aria-hidden={labelledby ? 'true' : undefined}>{rail}</p>}</div>
   <div class="section__body">
     <slot />
   </div>
