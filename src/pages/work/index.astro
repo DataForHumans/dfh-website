@@ -2,13 +2,29 @@
 import { Image } from 'astro:assets';
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import PageHeader from '../../components/PageHeader.astro';
-import Section from '../../components/Section.astro';
-import { getWork, workLink } from '../../lib/content';
+import { getWork, workAnchor, workLink } from '../../lib/content';
+import '../../styles/core.css';
+
+const projects: Record<string, { headline: string; process?: string[]; ongoing?: boolean }> = {
+  'any-path-home': {
+    headline: 'One view of progress on homelessness',
+    process: ['Separate agency exports', 'Combine progress data and exclude individual records from public view', 'A shared public dashboard'],
+  },
+  'crowded-closet': { headline: 'Volunteer records sharpen recruitment' },
+  'hunger-relief-network': {
+    headline: 'A shared tool for uncertain food relief budgets',
+    process: ['Enter local funding data', 'Estimate exposure to federal changes', 'Use the estimate in budget discussions'],
+  },
+  'university-recruitment': {
+    headline: 'Tracing the path from first contact to enrollment',
+    ongoing: true,
+  },
+};
 
 const entries = await Promise.all(
   (await getWork()).map(async (entry) => ({
     entry,
+    project: projects[entry.id],
     Content: (await render(entry)).Content,
     link: await workLink(entry),
   })),
@@ -19,37 +35,55 @@ const entries = await Promise.all(
   title="Our work"
   description="Here is what changed for mission-driven organizations once their data started working for them."
 >
-  <PageHeader title="Our work" accent>
-    <p class="lede">Here is what changed for mission-driven organizations once their data started working for them.</p>
-  </PageHeader>
+  <header class="editorial-frame core-intro work-intro">
+    <div>
+      <p class="eyebrow mono">Portfolio</p>
+      <h1>Our work</h1>
+      <p class="lede">How nonprofits, public agencies and their partners use data to see progress, make decisions and plan for change.</p>
+    </div>
+    <nav class="core-index" aria-label="Jump to a project">
+      <ul role="list">
+        {entries.map(({ entry }) => (
+          <li><a href={`#${workAnchor(entry)}`}>{entry.data.title} <span aria-hidden="true">↓</span></a></li>
+        ))}
+      </ul>
+    </nav>
+  </header>
 
-  {
-    entries.map(({ entry, Content, link }, i) => (
-      <Section num={i + 1} id={entry.id} labelledby={`h-${entry.id}`} class="work-entry">
-        <p class="entry__meta mono">
-          {entry.data.service} · {entry.data.sector}
-        </p>
-        <h2 id={`h-${entry.id}`}>{entry.data.title}</h2>
-        {entry.data.logo && entry.data.logoAlt && (
-          <Image class="work-entry__logo" src={entry.data.logo} alt={entry.data.logoAlt} width={240} />
-        )}
-        <div class="prose">
+  {entries.map(({ entry, project, Content, link }) => (
+    <section class:list={['editorial-frame core-section case-study', { 'case-study--ongoing': project?.ongoing }]} id={workAnchor(entry)} aria-labelledby={`h-${entry.id}`}>
+      <div class="case-study__header">
+        <p class="eyebrow mono">{project?.ongoing ? 'In progress' : entry.data.service + ' · ' + entry.data.sector}</p>
+        <h2 id={`h-${entry.id}`}>{project?.headline ?? entry.data.title}</h2>
+        {project && <p class="case-study__client">{entry.data.title}</p>}
+      </div>
+      <div class="case-study__body">
+        <div class="case-study__story">
           <Content />
+          {link && <a class="case-study__link" href={link}>{entry.data.linkLabel}</a>}
         </div>
-        {entry.data.quote && (
-          <figure class="pull-quote">
-            <blockquote>
-              <p>“{entry.data.quote}”</p>
-            </blockquote>
-            <figcaption>{entry.data.quoteSource}</figcaption>
-          </figure>
+        {(project?.process || entry.data.quote || entry.data.logo) && (
+          <aside class="case-study__evidence" aria-label={`Project evidence for ${entry.data.title}`}>
+            {project?.process && (
+              <figure class:list={['case-process', { 'case-process--dark': entry.id === 'any-path-home' }]}>
+                <figcaption class="mono">Project process · Conceptual diagram</figcaption>
+                <ol role="list">
+                  {project.process.map((step) => <li>{step}</li>)}
+                </ol>
+              </figure>
+            )}
+            {entry.data.quote && (
+              <figure class="case-quote">
+                <blockquote><p>“{entry.data.quote}”</p></blockquote>
+                <figcaption>{entry.data.quoteSource}</figcaption>
+              </figure>
+            )}
+            {entry.data.logo && entry.data.logoAlt && (
+              <Image class="case-study__logo" src={entry.data.logo} alt={entry.data.logoAlt} width={152} />
+            )}
+          </aside>
         )}
-        {link && (
-          <p>
-            <a href={link}>{entry.data.linkLabel}</a>
-          </p>
-        )}
-      </Section>
-    ))
-  }
+      </div>
+    </section>
+  ))}
 </Base>

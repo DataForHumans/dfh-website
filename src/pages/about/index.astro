@@ -2,125 +2,88 @@
 import { Image } from 'astro:assets';
 import { getEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import PageHeader from '../../components/PageHeader.astro';
-import Section from '../../components/Section.astro';
+import Button from '../../components/Button.astro';
 import { getTeam, isLive } from '../../lib/content';
+import '../../styles/core.css';
 
 const team = await getTeam();
 const collider = await getEntry('notes', 'collider-spotlight');
 if (!collider?.data.url) throw new Error('About page needs the collider-spotlight note with a url.');
 const colliderLive = isLive(collider);
+
+const expertise: Record<string, string> = {
+  'chris-roberts': 'Data pipelines and reporting systems',
+  'michael-soto': 'Collective impact and public data systems',
+  'sean-horan': 'Mathematical modeling and validation',
+  'eishna-ranganathan': 'Responsible modeling and data science',
+};
+
+const principles = [
+  { title: 'Listen to the people doing the work', text: 'We start with conversations because staff know things the data does not capture.' },
+  { title: 'Work with the tools you have', text: 'We fit the work to the systems your team already uses, your budget and your capacity.' },
+  { title: 'Protect the people behind the data', text: 'When agencies share data, we design around what partners and the public need to see.' },
+  { title: 'Leave work your team can use', text: 'We explain the work in plain language and build for the people who will maintain it.' },
+];
 ---
 
 <Base
   title="About"
   description="Data for Humans is a small team that helps mission-driven organizations make sense of their data and of what their people know. Rochester and the Twin Cities, working nationally."
 >
-  <PageHeader eyebrow="Minnesota roots · Working nationally" title="A small team you work with directly." accent>
-    <p class="lede">
-      Data for Humans is a small team that helps mission-driven organizations make sense of their data and of what their
-      people know. Chris Roberts founded the firm in 2021 to grow data capacity in the nonprofit and public sectors.
-    </p>
-    <p>
-      We work from Rochester and the Twin Cities, remotely by default and on site when a project needs it. You work
-      directly with the people doing the work.
-    </p>
-  </PageHeader>
+  <header class="editorial-frame core-intro about-intro">
+    <p class="eyebrow mono">About Data for Humans</p>
+    <h1>A small team you work with directly.</h1>
+    <p class="lede">We help nonprofits and public agencies make sense of their data and of what their people know. Chris Roberts founded Data for Humans in 2021 to build data capacity in those sectors.</p>
+  </header>
 
-  <Section num={1} label="Team" labelledby="h-team">
-    <h2 id="h-team" class="visually-hidden">Team</h2>
-    <ul class="team" role="list">
-      {
-        team.map((p) => (
-          <li class="person" id={p.id}>
-            {p.data.photo && p.data.photoAlt && (
-              <Image class="person__photo" src={p.data.photo} alt={p.data.photoAlt} width={240} height={240} />
+  <section class="editorial-frame core-section about-team" aria-labelledby="h-team">
+    <h2 id="h-team">Meet the team</h2>
+    <ul class="portrait-grid" role="list">
+      {team.map((person) => (
+        <li id={person.id}>
+          {person.data.photo && person.data.photoAlt && (
+            <Image class="portrait-grid__photo" src={person.data.photo} alt={person.data.photoAlt} width={480} height={360} />
+          )}
+          <h3>{person.data.name}{person.data.credentials && <>, {person.data.credentials}</>}</h3>
+          <p class="mono portrait-grid__role">{person.data.role}</p>
+          {expertise[person.id] && <p class="portrait-grid__expertise">{expertise[person.id]}</p>}
+          <details>
+            <summary>Full bio<span class="visually-hidden"> for {person.data.name}</span></summary>
+            {person.data.bio.split(/\n+/).map((paragraph) => <p>{paragraph}</p>)}
+            {person.data.linkedin && (
+              <a href={person.data.linkedin}>LinkedIn<span class="visually-hidden"> for {person.data.name}</span></a>
             )}
-            <div class="person__text">
-              <h3 class="person__name">
-                {p.data.name}
-                {p.data.credentials && <>, {p.data.credentials}</>}
-              </h3>
-              <p class="person__role mono">{p.data.role}</p>
-              {p.data.bio.split(/\n+/).map((para) => <p>{para}</p>)}
-              {p.data.linkedin && (
-                <p>
-                  <a href={p.data.linkedin}>
-                    LinkedIn<span class="visually-hidden">: {p.data.name}</span>
-                  </a>
-                </p>
-              )}
-            </div>
-          </li>
-        ))
-      }
+          </details>
+        </li>
+      ))}
     </ul>
-  </Section>
+  </section>
 
-  <Section num={2} label="Roots" labelledby="h-roots">
-    <h2 id="h-roots">Where we come from</h2>
-    <!-- Current site text, rewritten without dashes (spec). -->
-    <p>
-      Our roots run through both ends of Minnesota: the Twin Cities, where Michael spent two decades building public data
-      systems at Hennepin and Ramsey Counties, and Rochester, where Chris has built dashboards and reporting
-      infrastructure for county initiatives and regional nonprofits. That's where we learned this work, and it's still
-      where a good share of it happens.
-    </p>
-    <p>
-      But the problems don't stop at a state line. A coalition trying to see itself in one picture, a program officer
-      asking for evidence you can't easily produce, a client tracked in three systems that don't talk: we've seen the same
-      knots everywhere we've worked. What matters most is knowing how funders, public agencies and multi-agency
-      initiatives actually operate, and what a small team can realistically maintain after we're gone.
-    </p>
-    <p>
-      So we work wherever the need is. Engagements run remotely by default, with on-site time when a project genuinely
-      calls for it, and we'll tell you plainly when it does.
-    </p>
-  </Section>
-
-  <Section num={3} label="Method" labelledby="h-how">
+  <section class="editorial-frame core-section about-method" aria-labelledby="h-how">
     <h2 id="h-how">How we work</h2>
-    <ol class="ledger" role="list">
-      <li class="ledger__row">
-        <p class="ledger__num mono">01</p>
-        <div class="ledger__body">
-          <h3>Plain language, always</h3>
-          <p>No jargon and no black boxes. If your team can't understand and use what we build, we haven't finished the job.</p>
-        </div>
-      </li>
-      <li class="ledger__row">
-        <p class="ledger__num mono">02</p>
-        <div class="ledger__body">
-          <h3>Your tools, your way</h3>
-          <p>We work with the systems you already run and the way your team already operates.</p>
-        </div>
-      </li>
-      <li class="ledger__row">
-        <p class="ledger__num mono">03</p>
-        <div class="ledger__body">
-          <h3>Tailored to reality</h3>
-          <p>We size the work to your actual budget and capacity.</p>
-        </div>
-      </li>
-      <li class="ledger__row">
-        <p class="ledger__num mono">04</p>
-        <div class="ledger__body">
-          <h3>Listen first</h3>
-          <p>
-            Every project starts with conversations with the people who do the work, because they know things the data
-            doesn't.
-          </p>
-        </div>
-      </li>
-    </ol>
-  </Section>
+    <ul role="list">
+      {principles.map((principle) => (
+        <li>
+          <h3>{principle.title}</h3>
+          <p>{principle.text}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
 
-  <Section num={4} label="Press" labelledby="h-news">
-    <h2 id="h-news">In the news</h2>
-    <p>
-      Collider: <a href={collider.data.url}
-        >“Putting Data to Work for Good: How Chris Roberts Is Helping Nonprofits Make a Bigger Impact,”</a
-      > Nov 9, 2026.{colliderLive && <> <a href={`/notes/${collider.id}/`}>Our note</a>.</>}
-    </p>
-  </Section>
+  <section class="editorial-frame core-section about-roots" aria-labelledby="h-roots">
+    <div>
+      <h2 id="h-roots">Minnesota roots, national reach</h2>
+      <p>Our roots are in local government and nonprofit work in Rochester and the Twin Cities. We work nationally, remotely by default and on site when the project calls for it.</p>
+      <Button href="/contact/">Contact the team</Button>
+    </div>
+    <div>
+      <h3 id="h-news">In the news</h3>
+      <p>
+        Collider: <a href={collider.data.url}
+          >“Putting Data to Work for Good: How Chris Roberts Is Helping Nonprofits Make a Bigger Impact,”</a
+        > Nov 9, 2026.{colliderLive && <> <a href={`/notes/${collider.id}/`}>Our note</a>.</>}
+      </p>
+    </div>
+  </section>
 </Base>

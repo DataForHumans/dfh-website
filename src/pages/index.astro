@@ -76,7 +76,7 @@ const figures = [
     <ul class="selected-work__list" role="list">
       {projects.map(({ entry, copy, externalLink }) => (
         <li class="selected-work__item">
-          <h3><a href={`/work/#${workAnchor(entry)}`}>{copy?.headline ?? entry.data.title}</a></h3>
+          <h3><a href={`/work/#${workAnchor(entry)}`}><span>{copy?.headline ?? entry.data.title}</span><span aria-hidden="true">↗</span></a></h3>
           {copy && <p class="mono selected-work__client">{entry.data.title}</p>}
           <p>{copy?.summary ?? outcomeOf(entry)}</p>
           {externalLink && <a class="selected-work__source" href={externalLink}>{entry.data.linkLabel}</a>}
@@ -121,7 +121,7 @@ const figures = [
       <p>You'll leave with a suggested next step, whether or not you hire us.</p>
     </div>
     <p class="actions">
-      <Button href={BOOKING_URL}>Book a free call</Button>
+      <Button href={BOOKING_URL} primary>Book a free call</Button>
       <Button href="/contact/">Send a message</Button>
     </p>
   </section>

@@ -21,12 +21,15 @@ import { FOOTER_LINE, LINKEDIN_URL, PRODUCTS, RELAYERED, SITE_NAME, TAGLINE } fr
         <li><a href="/events/">Talks and events</a></li>
         <li><a href="/notes/rss.xml">RSS</a></li>
       </ul>
-      <ul role="list">
-        <li>Fabrication:&nbsp;{RELAYERED.live ? <a href={RELAYERED.url}>{RELAYERED.name}</a> : RELAYERED.name}</li>
-        {
-          Object.values(PRODUCTS).map((p) => <li>{p.live ? <a href={p.url}>{p.name}</a> : p.name}</li>)
-        }
-      </ul>
+      <div>
+        <p class="mono site-footer__ventures" id="footer-ventures">Related ventures</p>
+        <ul role="list" aria-labelledby="footer-ventures">
+          <li>Fabrication:&nbsp;{RELAYERED.live ? <a href={RELAYERED.url}>{RELAYERED.name}</a> : RELAYERED.name}</li>
+          {
+            Object.values(PRODUCTS).map((p) => <li>{p.live ? <a href={p.url}>{p.name}</a> : p.name}</li>)
+          }
+        </ul>
+      </div>
     </nav>
   </div>
 </footer>
