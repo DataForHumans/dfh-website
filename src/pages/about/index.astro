@@ -41,7 +41,7 @@ if (!collider?.data.url) throw new Error('About page needs the collider-spotligh
                 {p.data.credentials && <>, {p.data.credentials}</>}
               </h3>
               <p class="person__role mono">{p.data.role}</p>
-              <p>{p.data.bio}</p>
+              {p.data.bio.split(/\n+/).map((para) => <p>{para}</p>)}
               {p.data.linkedin && (
                 <p>
                   <a href={p.data.linkedin}>

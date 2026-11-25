@@ -3,6 +3,7 @@
 #
 # Photos live in src/assets/team/ and are added in the `photo` field as a path
 # relative to this file, e.g. ../assets/team/eishna-ranganathan.jpg.
+# In a bio, a blank line starts a new paragraph.
 # `photoAlt` is required whenever `photo` is set.
 
 - id: chris-roberts
@@ -14,18 +15,20 @@
   credentials: MS
   role: Founder and CTO
   order: 1
-  # Confirm: Chris to approve this bio before launch (spec open item).
+  # From the WordPress About page, with dashes replaced (Nov 25, 2026).
+  # Blank lines separate paragraphs.
   bio: >-
-    Chris has built data systems in industry, research publishing and county
-    government. At 3M he analyzed patents and competitive intelligence,
-    including topic models across more than 10 million documents, and he later
-    worked at Digital Science. In county government he contributed to an
-    integrated data system drawing on more than 40 sources, work recognized
-    with two NACo Achievement Awards in 2024. He specializes in matching records
-    for the same person or organization across systems, and he is a founding
-    organizer of the Rochester Area Data Enthusiasts Network. He holds an M.S.
-    in Chemistry from the University of Minnesota and a B.A. in Chemistry and
-    Mathematics from St. Olaf.
+    Chris brings a decade of experience across the corporate and government
+    sectors, building data pipelines, reporting systems, and the analysis that
+    turns raw numbers into decisions. He founded Data for Humans in 2021 with a
+    single goal: to grow data capacity in the nonprofit and public sectors.
+
+    He works as the architect and builder behind the firm's engagements:
+    designing dashboards, automating the reporting grind, and connecting the
+    systems that mission-driven teams juggle day to day.
+
+    His focus is the same on every project: make the data usable for the whole
+    team, not just the person who happens to be comfortable with spreadsheets.
 
 - id: michael-soto
   photo: ../assets/team/michael-soto.jpg
@@ -35,15 +38,16 @@
   credentials: PhD
   role: Chief Strategy Officer
   order: 2
+  # From the WordPress About page, with dashes replaced (Nov 25, 2026).
   bio: >-
-    Michael has spent about two decades at the intersection of data, equity and
-    public impact, including senior roles in Hennepin and Ramsey County
-    government and work at S&P Global. His doctoral research on peace processes
-    relied mainly on in-depth interviews, and that practice now anchors our
-    research and footprint reviews. He co-developed Randomised Coffee Trials at
-    Nesta and co-founded Spark Collaboration. He specializes in
-    collective-impact data, integrated data systems and equity-informed
-    analytics.
+    Michael brings two decades of work at the intersection of data, equity, and
+    public impact. As a former senior leader at Hennepin and Ramsey Counties, he
+    has built and run the kind of large-scale public data systems most
+    consultants only read about.
+
+    He specializes in collective-impact data, integrated data systems, and
+    equity-informed analytics: the work of getting many agencies to share one
+    trustworthy picture while protecting the people behind the numbers.
 
 - id: sean-horan
   photo: ../assets/team/sean-horan.jpg
