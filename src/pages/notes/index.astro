@@ -1,0 +1,16 @@
+---
+import Base from '../../layouts/Base.astro';
+import NotesIndex from '../../components/NotesIndex.astro';
+import { getNotes } from '../../lib/content';
+import { NOTE_TYPES, type NoteType } from '../../data/site';
+
+const notes = await getNotes();
+const types = (Object.keys(NOTE_TYPES) as NoteType[]).filter((t) => notes.some((n) => n.data.type === t));
+---
+
+<Base
+  title="Notes"
+  description="Projects, talks and practical thinking on data and AI for mission-driven work, from the Data for Humans team."
+>
+  <NotesIndex title="Notes" notes={notes} types={types} />
+</Base>

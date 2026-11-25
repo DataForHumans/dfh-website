@@ -1,0 +1,91 @@
+---
+/**
+ * One route for two kinds of page under /notes/:
+ *   /notes/<note-id>/  a single note
+ *   /notes/<type>/     notes of one type (project, article, news), built only
+ *                      when that type has at least one note
+ * They share a file because Astro can't have two dynamic routes at one level.
+ * The build fails if a note's file name matches a type name.
+ */
+import type { GetStaticPaths } from 'astro';
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Section from '../../components/Section.astro';
+import NotesIndex from '../../components/NotesIndex.astro';
+import { getNotes, getPerson, type Note } from '../../lib/content';
+import { formatDate, isoDate } from '../../lib/dates';
+import { NOTE_TYPES, SERVICE_NAMES, type NoteType } from '../../data/site';
+
+type Props = { kind: 'note'; note: Note } | { kind: 'type'; type: NoteType; notes: Note[]; types: NoteType[] };
+
+export const getStaticPaths = (async () => {
+  const notes = await getNotes();
+  const allTypes = Object.keys(NOTE_TYPES) as NoteType[];
+  const types = allTypes.filter((t) => notes.some((n) => n.data.type === t));
+
+  for (const n of notes) {
+    if ((allTypes as string[]).includes(n.id)) {
+      throw new Error(`Note file name "${n.id}.md" clashes with the /notes/${n.id}/ type page. Rename the note.`);
+    }
+  }
+
+  return [
+    ...notes.map((note) => ({ params: { slug: note.id }, props: { kind: 'note' as const, note } })),
+    ...types.map((type) => ({
+      params: { slug: type },
+      props: { kind: 'type' as const, type, notes: notes.filter((n) => n.data.type === type), types },
+    })),
+  ];
+}) satisfies GetStaticPaths;
+
+const props = Astro.props as Props;
+let rendered: Awaited<ReturnType<typeof render>> | undefined;
+let authorName = '';
+if (props.kind === 'note') {
+  rendered = await render(props.note);
+  const author = await getPerson(props.note.data.author);
+  authorName = author.data.knownAs ?? author.data.name;
+}
+---
+
+{
+  props.kind === 'type' ? (
+    <Base
+      title={`Notes: ${NOTE_TYPES[props.type].plural}`}
+      description={`${NOTE_TYPES[props.type].plural} from the Data for Humans team.`}
+    >
+      <NotesIndex title={NOTE_TYPES[props.type].plural} notes={props.notes} types={props.types} current={props.type} />
+    </Base>
+  ) : (
+    <Base title={props.note.data.title} description={props.note.data.summary} ogType="article">
+      <article>
+        <PageHeader title={props.note.data.title} accent>
+          <p class="entry__meta mono">
+            <time datetime={isoDate(props.note.data.date)}>{formatDate(props.note.data.date)}</time>
+            <span aria-hidden="true"> · </span>
+            <a href={`/notes/${props.note.data.type}/`}>{NOTE_TYPES[props.note.data.type].label}</a>
+            <span aria-hidden="true"> · </span>
+            <span>{authorName}</span>
+          </p>
+        </PageHeader>
+        <Section>
+          {props.note.data.image && props.note.data.imageAlt && (
+            <Image class="note__image" src={props.note.data.image} alt={props.note.data.imageAlt} width={1280} />
+          )}
+          <div class="prose">{rendered && <rendered.Content />}</div>
+          {props.note.data.service && (
+            <p class="note__service">
+              Related service:{' '}
+              <a href={`/services/#${props.note.data.service}`}>{SERVICE_NAMES[props.note.data.service]}</a>
+            </p>
+          )}
+          <p class="note__back">
+            <a href="/notes/">All notes</a>
+          </p>
+        </Section>
+      </article>
+    </Base>
+  )
+}
