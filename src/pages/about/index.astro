@@ -42,11 +42,15 @@ const principles = [
       {team.map((person) => (
         <li id={person.id}>
           {person.data.photo && person.data.photoAlt && (
-            <Image class="portrait-grid__photo" src={person.data.photo} alt={person.data.photoAlt} width={480} />
+            <div class="portrait-grid__image">
+              <Image class="portrait-grid__photo" src={person.data.photo} alt={person.data.photoAlt} width={480} />
+            </div>
           )}
-          <h3>{person.data.name}{person.data.credentials && <>, {person.data.credentials}</>}</h3>
-          <p class="mono portrait-grid__role">{person.data.role}</p>
-          {expertise[person.id] && <p class="portrait-grid__expertise">{expertise[person.id]}</p>}
+          <div>
+            <h3>{person.data.name}{person.data.credentials && <>, {person.data.credentials}</>}</h3>
+            <p class="mono portrait-grid__role">{person.data.role}</p>
+            {expertise[person.id] && <p class="portrait-grid__expertise">{expertise[person.id]}</p>}
+          </div>
           <details>
             <summary>Full bio<span class="visually-hidden"> for {person.data.name}</span></summary>
             {person.data.bio.split(/\n+/).map((paragraph) => <p>{paragraph}</p>)}

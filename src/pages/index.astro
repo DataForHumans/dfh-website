@@ -74,12 +74,17 @@ const figures = [
     <ul class="selected-work__list" role="list">
       {projects.map(({ entry, copy, externalLink }) => (
         <li class="selected-work__item">
-          <h3><a href={`/work/#${workAnchor(entry)}`}><span>{copy?.headline ?? entry.data.title}</span><span aria-hidden="true">↗</span></a></h3>
-          {copy && <p class="mono selected-work__client">{entry.data.title}</p>}
-          <p>{copy?.summary ?? outcomeOf(entry)}</p>
-          {entry.id === 'any-path-home' && <PublicDashboard preview />}
-          {entry.id === 'crowded-closet' && <VolunteerAgeChart preview />}
-          {externalLink && <a class="selected-work__source" href={externalLink}>{entry.data.linkLabel}</a>}
+          {(entry.id === 'any-path-home' || entry.id === 'crowded-closet') && (
+            <div class="selected-work__visual">
+              {entry.id === 'any-path-home' ? <PublicDashboard preview /> : <VolunteerAgeChart preview />}
+            </div>
+          )}
+          <div class="selected-work__copy">
+            <h3><a href={`/work/#${workAnchor(entry)}`}><span>{copy?.headline ?? entry.data.title}</span><span aria-hidden="true">↗</span></a></h3>
+            {copy && <p class="mono selected-work__client">{entry.data.title}</p>}
+            <p>{copy?.summary ?? outcomeOf(entry)}</p>
+            {externalLink && <a class="selected-work__source" href={externalLink}>{entry.data.linkLabel}</a>}
+          </div>
         </li>
       ))}
     </ul>

@@ -255,8 +255,11 @@
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
   }
 
-  .case-study--alternate .case-study__evidence { grid-area: 1 / 1; }
-  .case-study--alternate .case-study__story { grid-area: 1 / 2; }
+  .case-study__body:has(.case-study__evidence) .case-study__story { grid-area: 1 / 1; }
+  .case-study__body:has(.case-study__evidence) .case-study__evidence { grid-area: 1 / 2; }
+
+  .case-study--alternate .case-study__body:has(.case-study__evidence) .case-study__evidence { grid-area: 1 / 1; }
+  .case-study--alternate .case-study__body:has(.case-study__evidence) .case-study__story { grid-area: 1 / 2; }
 
 }
 
@@ -282,7 +285,12 @@
   background: var(--sage-wash);
 }
 
-#eishna-ranganathan .portrait-grid__photo { object-position: 50% 19%; }
+.portrait-grid__image { overflow: hidden; }
+#eishna-ranganathan .portrait-grid__photo {
+  object-position: 50% 19%;
+  transform: scale(1.12);
+  transform-origin: 50% 22%;
+}
 #sean-horan .portrait-grid__photo { object-position: 50% 28%; }
 
 .portrait-grid h3 {
@@ -342,6 +350,31 @@
 
 .about-roots p {
   max-width: 55ch;
+}
+
+@media (max-width: 37.99rem) {
+  .portrait-grid {
+    gap: var(--space-3);
+  }
+
+  .portrait-grid li:has(.portrait-grid__image) {
+    display: grid;
+    grid-template-columns: clamp(4.25rem, 23vw, 6rem) minmax(0, 1fr);
+    column-gap: var(--space-3);
+    align-items: start;
+  }
+
+  .portrait-grid__photo {
+    aspect-ratio: 1;
+  }
+
+  .portrait-grid h3 {
+    margin-top: 0;
+  }
+
+  .portrait-grid details {
+    grid-column: 1 / -1;
+  }
 }
 
 @media (min-width: 38rem) {

@@ -10,9 +10,9 @@ const { preview = false } = Astro.props;
       <li>Volunteers active in 2026</li>
     </ul>
     <svg viewBox="0 0 500 218" role="img" aria-label="Relative concentration by age. Both curves show younger and older concentrations. The older concentration is more pronounced among volunteers active in 2026.">
-      <g fill="none" stroke="var(--rule)">
+      <g fill="none" stroke="var(--rule)" stroke-opacity=".55">
         <path d="M56 41h418M56 80h418M56 119h418"/>
-        <path d="M56 27v131h418" stroke="var(--sage-text)"/>
+        <path d="M56 27v131h418" stroke="var(--sage-text)" stroke-opacity="1"/>
       </g>
       <path d="M57 143C77 138 85 50 114 46S151 119 195 132 276 119 312 90 360 46 384 57 425 131 473 148" fill="none" stroke="var(--ochre-text)" stroke-width="3.5" stroke-dasharray="8 5"/>
       <path d="M57 150C78 150 92 105 117 104S153 139 190 146 273 141 310 102 350 33 381 35 429 129 473 150" fill="none" stroke="var(--sage-deep)" stroke-width="4"/>
@@ -27,12 +27,16 @@ const { preview = false } = Astro.props;
       </g>
     </svg>
   </div>
-  <figcaption>Illustrative reconstruction of the observed age distributions. Curves are approximate and do not represent exact underlying counts.</figcaption>
+  <figcaption>
+    {preview
+      ? 'Illustrative reconstruction of volunteer age distributions.'
+      : 'Illustrative reconstruction of the observed age distributions. Curves are approximate and do not represent exact underlying counts.'}
+  </figcaption>
 </figure>
 
 <style>
   .age-chart { margin: 0; }
-  .age-chart__panel { padding: clamp(0.65rem, 2vw, 1.35rem); border: 1px solid var(--rule); background: var(--cream); }
+  .age-chart__panel { padding-top: var(--space-2); }
   .age-chart__heading { margin: 0 0 0.55rem; font: 400 var(--text-h3) / 1.15 var(--font-display); }
   .age-chart__legend { display: flex; flex-wrap: wrap; gap: 0.2rem 1rem; padding: 0; margin: 0 0 0.35rem; list-style: none; font-size: 0.9rem; }
   .age-chart__legend li { display: flex; align-items: center; gap: 0.4rem; }

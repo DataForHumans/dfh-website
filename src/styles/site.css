@@ -434,16 +434,11 @@ a:hover {
   margin: var(--space-1) 0 var(--space-2);
 }
 
-.selected-work__item figure {
-  max-width: 27rem;
+.selected-work__visual {
   margin-block: var(--space-2) var(--space-3);
 }
 
-.selected-work__item > :last-child {
-  margin-bottom: 0;
-}
-
-.selected-work__item:has(.selected-work__source) > p:last-of-type {
+.selected-work__copy > p:last-of-type {
   margin-bottom: 0;
 }
 
@@ -526,6 +521,15 @@ a:hover {
   .selected-work__list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .selected-work__item {
+    display: grid;
+    grid-row: span 2;
+    grid-template-rows: subgrid;
+  }
+
+  .selected-work__visual { align-self: end; }
+  .selected-work__copy { grid-row: 2; }
 }
 
 .plain-list {

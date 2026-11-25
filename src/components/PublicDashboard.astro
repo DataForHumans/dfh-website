@@ -7,8 +7,8 @@ const { preview = false } = Astro.props;
 const full = preview ? undefined : await getImage({ src: dashboard, format: 'png' });
 ---
 <figure>
-  <Image src={dashboard} alt="Public dashboard showing how participating Any Path Home providers track homelessness, entries and exits, and housing outcomes for single adults." width={preview ? 800 : 1100} format="webp" quality={90} />
-  <figcaption>Public Any Path Home community dashboard, October 2026 reporting. {full && <a href={full.src}>Enlarge dashboard</a>}</figcaption>
+  <Image loading={preview ? 'eager' : 'lazy'} src={dashboard} alt="Public dashboard showing how participating Any Path Home providers track homelessness, entries and exits, and housing outcomes for single adults." width={preview ? 800 : 1100} format="webp" quality={90} />
+  <figcaption>{preview ? 'Public dashboard · October 2026' : 'Public Any Path Home community dashboard, October 2026 reporting.'} {full && <a href={full.src}>Enlarge dashboard</a>}</figcaption>
 </figure>
 
 <style>

@@ -15,55 +15,86 @@ const sequence = [
       <p class="mono">Illustrative sample deliverable</p>
       <h3 id="sample-roadmap-title">Community Resource Network</h3>
       <p>A fictional organization, with sample systems and recommendations.</p>
+      <p class="sample-report__contents">Systems map, priorities and implementation sequence</p>
     </div>
   </header>
-  <div class="sample-report__grid">
-    <section aria-labelledby="sample-map">
-      <h4 id="sample-map">Current systems</h4>
-      <div class="sample-report__systems" role="group" aria-label="Three systems feed manual reconciliation before grant reporting">
-        <ul role="list">
-          <li>Program records</li>
-          <li>Donor CRM</li>
-          <li>Volunteer system</li>
-        </ul>
-        <svg viewBox="0 0 260 33" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M43 1C44 17 94 18 130 31m0-30v30m87-30c-1 16-51 17-87 30" fill="none" stroke="var(--sage-text)" stroke-width="1.5"/>
-          <circle cx="130" cy="30" r="3" fill="var(--ochre-text)"/>
-        </svg>
-        <p>Manual reconciliation</p>
-        <span aria-hidden="true">↓</span>
-        <p>Grant reporting</p>
-      </div>
-    </section>
-    <section aria-labelledby="sample-matrix">
-      <h4 id="sample-matrix">Where to start</h4>
-      <p class="sample-report__axis">Higher value ↑</p>
-      <dl class="sample-report__matrix" aria-label="Illustrative effort versus value matrix">
-        <div><dt>Quick wins</dt><dd>Agree on field definitions</dd></div>
-        <div><dt>Strategic builds</dt><dd>Connect recurring reports</dd></div>
-        <div><dt>Lower priority</dt><dd>Refresh internal templates</dd></div>
-        <div><dt>Reconsider</dt><dd>Replace every system at once</dd></div>
-      </dl>
-      <p class="sample-report__axis sample-report__axis--effort">Higher effort →</p>
-      <p class="sample-report__note">Placements illustrate tradeoffs without measured scores.</p>
-    </section>
-    <section aria-labelledby="sample-sequence">
-      <h4 id="sample-sequence">Implementation sequence</h4>
-      <dl class="sample-report__sequence">
-        {sequence.map(([term, detail]) => <div><dt class="mono">{term}</dt><dd>{detail}</dd></div>)}
-      </dl>
-    </section>
-  </div>
-  <p class="sample-report__first"><span class="mono">First action</span> Assign a reporting owner and agree on the definitions the team will use.</p>
+  <details class="sample-report__disclosure">
+    <summary>Full sample report</summary>
+    <div class="sample-report__grid">
+      <section aria-labelledby="sample-map">
+        <h4 id="sample-map">Current systems</h4>
+        <div class="sample-report__systems" role="group" aria-label="Three systems feed manual reconciliation before grant reporting">
+          <ul role="list">
+            <li>Program records</li>
+            <li>Donor CRM</li>
+            <li>Volunteer system</li>
+          </ul>
+          <svg viewBox="0 0 260 33" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M43 1C44 17 94 18 130 31m0-30v30m87-30c-1 16-51 17-87 30" fill="none" stroke="var(--sage-text)" stroke-width="1.5"/>
+            <circle cx="130" cy="30" r="3" fill="var(--ochre-text)"/>
+          </svg>
+          <p>Manual reconciliation</p>
+          <span aria-hidden="true">↓</span>
+          <p>Grant reporting</p>
+        </div>
+      </section>
+      <section aria-labelledby="sample-matrix">
+        <h4 id="sample-matrix">Where to start</h4>
+        <p class="sample-report__axis">Higher value ↑</p>
+        <dl class="sample-report__matrix" aria-label="Illustrative effort versus value matrix">
+          <div><dt>Quick wins</dt><dd>Agree on field definitions</dd></div>
+          <div><dt>Strategic builds</dt><dd>Connect recurring reports</dd></div>
+          <div><dt>Lower priority</dt><dd>Refresh internal templates</dd></div>
+          <div><dt>Reconsider</dt><dd>Replace every system at once</dd></div>
+        </dl>
+        <p class="sample-report__axis sample-report__axis--effort">Higher effort →</p>
+        <p class="sample-report__note">Placements illustrate tradeoffs without measured scores.</p>
+      </section>
+      <section aria-labelledby="sample-sequence">
+        <h4 id="sample-sequence">Implementation sequence</h4>
+        <dl class="sample-report__sequence">
+          {sequence.map(([term, detail]) => <div><dt class="mono">{term}</dt><dd>{detail}</dd></div>)}
+        </dl>
+      </section>
+    </div>
+    <p class="sample-report__first"><span class="mono">First action</span> Assign a reporting owner and agree on the definitions the team will use.</p>
+  </details>
 </section>
 
+<script>
+  if (window.matchMedia('(min-width: 52rem)').matches) {
+    const sample = document.querySelector<HTMLDetailsElement>('.sample-report__disclosure');
+    if (sample) sample.open = true;
+  }
+</script>
+
 <style>
-  .sample-report { background: var(--cream); padding: clamp(0.9rem, 2.5vw, 2rem); font-size: 0.95rem; line-height: 1.45; }
-  header { display: flex; align-items: start; gap: 0.8rem; padding-bottom: 1rem; border-bottom: 1px solid var(--rule); }
+  .sample-report {
+    background: var(--cream);
+    border: 1px solid var(--rule);
+    border-top: 4px solid var(--sage-deep);
+    box-shadow: 0 3px 0 var(--rule);
+    padding: clamp(0.8rem, 2.5vw, 2rem);
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+  header { display: flex; align-items: start; gap: 0.8rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--rule); }
   header img { flex: none; }
   header .mono { color: var(--sage-text); margin-bottom: 0.3rem; }
   header h3, header p, h4, dl, dd { margin: 0; }
   header h3 { font-size: clamp(1.4rem, 1.15rem + 1vw, 2.05rem); }
+  .sample-report__contents { color: var(--sage-text); margin-top: 0.35rem; }
+  summary {
+    display: list-item;
+    width: fit-content;
+    min-height: var(--touch-target);
+    padding-top: 0.65rem;
+    color: var(--sage-deep);
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+  }
+  .sample-report__disclosure[open] summary { border-bottom: 1px solid var(--rule); }
   .sample-report__grid { display: grid; gap: 1.1rem; padding-block: 1rem; }
   h4 { font: 400 1.22rem / 1.2 var(--font-display); margin-bottom: 0.55rem; }
   .sample-report__systems { text-align: center; }

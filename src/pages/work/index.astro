@@ -49,16 +49,16 @@ const entries = await Promise.all(
         {headline && <p class="case-study__client">{entry.data.title}</p>}
       </div>
       <div class="case-study__body">
-        <div class="case-study__story">
-          <Content />
-          {link && <a class="case-study__link" href={link}>{entry.data.linkLabel}</a>}
-        </div>
         {headline && (
           <div class="case-study__evidence">
             {entry.id === 'any-path-home' && <PublicDashboard />}
             {entry.id === 'crowded-closet' && <VolunteerAgeChart />}
           </div>
         )}
+        <div class="case-study__story">
+          <Content />
+          {link && <a class="case-study__link" href={link}>{entry.data.linkLabel}</a>}
+        </div>
       </div>
       {entry.data.quote && (
         <figure class="case-quote">
