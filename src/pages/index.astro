@@ -1,5 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
+import NetworkAccent from '../components/NetworkAccent.astro';
+import CapabilityIcon from '../components/CapabilityIcon.astro';
 import Button from '../components/Button.astro';
 import PublicDashboard from '../components/PublicDashboard.astro';
 import VolunteerAgeChart from '../components/VolunteerAgeChart.astro';
@@ -42,7 +44,7 @@ const figures = [
   <header class="editorial-frame editorial-grid home-hero">
     <div class="home-hero__copy">
       <p class="eyebrow mono">Rochester and the Twin Cities · Working nationally</p>
-      <h1>Your mission runs on data. <span>Let's make it work for you.</span></h1>
+      <h1><span class="home-hero__statement">Your mission runs on data.</span> <em>Let's make it work for you.</em></h1>
       <p class="lede">
         We help nonprofits, public agencies and cities make better decisions with the records they already keep, without
         hiring a full-time data team.
@@ -104,7 +106,7 @@ const figures = [
       <h3 class="mono">Our capabilities</h3>
       <ul role="list">
         {capabilities.map((slug) => (
-          <li><a href={`/services/#${slug}`}>{SERVICE_NAMES[slug]} <span aria-hidden="true">↗</span></a></li>
+          <li><a href={`/services/#${slug}`}><CapabilityIcon service={slug} /><span>{SERVICE_NAMES[slug]}</span><span aria-hidden="true">↗</span></a></li>
         ))}
       </ul>
     </div>
@@ -120,6 +122,7 @@ const figures = [
     </aside>
   )}
 
+  <NetworkAccent variant="threads" placement="closing" />
   <section class="editorial-frame home-section home-contact" aria-labelledby="h-closing">
     <div>
       <h2 id="h-closing">Start with a free 30-minute call</h2>

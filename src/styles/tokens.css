@@ -30,17 +30,17 @@
   --text-small: 1rem;
   --text-mono: 0.8125rem;
   --tracking-mono: 0.06em;
-  --text-h1: clamp(2.5rem, 1.6rem + 4vw, 4.5rem);
-  --text-h2: clamp(1.75rem, 1.3rem + 2vw, 2.5rem);
+  --text-h1: clamp(2.35rem, 1.75rem + 2.5vw, 3.65rem);
+  --text-h2: clamp(1.7rem, 1.3rem + 1.4vw, 2.25rem);
   --text-h3: clamp(1.375rem, 1.2rem + 0.8vw, 1.625rem);
   --leading-display: 1.1;
 
   /* Layout */
   --measure: 40rem;      /* reading column */
   --rail: 9rem;          /* left rail for section numbers and dates */
-  --gutter: clamp(1.25rem, 4vw, 3rem);
+  --gutter: clamp(1.25rem, 5.25vw, 5rem);
   --page-max: calc(var(--rail) + var(--gutter) + var(--measure));
-  --editorial-max: 82rem;
+  --editorial-max: 78rem;
   --editorial-gap: clamp(1.5rem, 4vw, 4.5rem);
   --editorial-space: clamp(2.75rem, 6vw, 6.5rem);
 

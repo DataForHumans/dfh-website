@@ -281,7 +281,7 @@ a:hover {
 /* ---------- Homepage ---------- */
 
 .home-hero {
-  padding-block: clamp(2rem, 4.5vw, 4.25rem);
+  padding-block: clamp(2.2rem, 6vw, 6rem);
 }
 
 .home-hero .eyebrow,
@@ -290,17 +290,23 @@ a:hover {
 }
 
 .home-hero h1 {
-  font-size: clamp(2.9rem, 1.15rem + 4.75vw, 6.35rem);
-  letter-spacing: -0.045em;
-  line-height: 0.98;
-  max-width: 13ch;
+  font-size: clamp(2.7rem, 1.8rem + 3.15vw, 4.6rem);
+  letter-spacing: -0.032em;
+  line-height: 1.02;
   text-wrap: initial;
 }
 
-.home-hero h1 span {
+.home-hero__statement {
   display: block;
-  margin-top: 0.06em;
+  max-width: 12.6ch;
+}
+
+.home-hero h1 em {
+  display: block;
+  margin-top: 0.25em;
   color: var(--sage-text);
+  font-size: 0.66em;
+  font-weight: 400;
 }
 
 .home-hero .lede {
@@ -317,6 +323,18 @@ a:hover {
   display: block;
   width: 100%;
   height: auto;
+  pointer-events: none;
+}
+
+@media (min-width: 51rem) {
+  .home-hero {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.13fr);
+  }
+
+  .systems-graphic {
+    width: calc(100% + var(--gutter) * 0.72);
+    max-width: none;
+  }
 }
 
 .figures {
@@ -328,7 +346,7 @@ a:hover {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(0.6rem, 2vw, 2rem);
-  padding-block: clamp(1rem, 2.4vw, 2rem);
+  padding-block: clamp(1.15rem, 3vw, 2.7rem);
   margin-block: 0;
 }
 
@@ -339,7 +357,7 @@ a:hover {
 
 .figures__value {
   color: var(--sage-deep);
-  font-size: clamp(1.75rem, 1.1rem + 3.6vw, 4.5rem);
+  font-size: clamp(1.75rem, 1.15rem + 2.8vw, 3.85rem);
   letter-spacing: -0.055em;
   line-height: 1.1;
 }
@@ -353,12 +371,12 @@ a:hover {
 }
 
 .home-section {
-  --home-space: clamp(1.5rem, 3vw, 3rem);
+  --home-space: clamp(1.65rem, 4.2vw, 4.45rem);
   padding-block: var(--home-space);
 }
 
 .home-section h2 {
-  font-size: clamp(2rem, 1.5rem + 2vw, 3.5rem);
+  font-size: clamp(1.85rem, 1.4rem + 1.55vw, 2.9rem);
   letter-spacing: -0.025em;
 }
 
@@ -394,7 +412,7 @@ a:hover {
 
 .selected-work__list {
   display: grid;
-  gap: 0 var(--editorial-gap);
+  gap: var(--space-4) var(--editorial-gap);
 }
 
 .selected-work__item {
@@ -445,8 +463,9 @@ a:hover {
 .home-services {
   align-items: start;
   gap: var(--space-4) var(--editorial-gap);
-  padding-inline: clamp(1rem, 3vw, 3rem);
+  padding-inline: clamp(1.15rem, 4vw, 3.5rem);
   background: var(--sage-wash);
+  border-radius: 0.25rem;
 }
 
 .home-services .eyebrow,
@@ -475,6 +494,18 @@ a:hover {
   gap: var(--space-2);
   min-height: var(--touch-target);
   color: var(--sage-deep);
+}
+
+.home-services__capabilities a > span:first-of-type { flex: 1; }
+
+@media (min-width: 70rem) {
+  .home-services__capabilities ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--space-3);
+  }
+
+  .home-services__capabilities a { min-height: 3.4rem; }
 }
 
 .home-services__capabilities a:hover {
@@ -519,6 +550,7 @@ a:hover {
 
 @media (min-width: 48rem) {
   .selected-work__list {
+    row-gap: 0;
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -720,6 +752,7 @@ a:hover {
 /* ---------- Footer ---------- */
 
 .site-footer {
+  position: relative;
   margin-top: var(--space-4);
   background: var(--sage-deep);
   color: var(--cream);
@@ -727,6 +760,7 @@ a:hover {
 }
 
 .site-footer__inner {
+  position: relative;
   display: grid;
   gap: var(--space-3) var(--editorial-gap);
   padding-block: clamp(1.5rem, 3vw, 3rem);
@@ -736,7 +770,7 @@ a:hover {
 .site-footer__name {
   margin: 0 0 var(--space-3);
   font-family: var(--font-display);
-  font-size: clamp(2.2rem, 1.65rem + 2.5vw, 4.5rem);
+  font-size: clamp(2rem, 1.55rem + 2vw, 3.65rem);
   line-height: 1;
   letter-spacing: -0.035em;
 }

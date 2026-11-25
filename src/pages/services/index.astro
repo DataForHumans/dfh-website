@@ -1,4 +1,5 @@
 ---
+import NetworkAccent from '../../components/NetworkAccent.astro';
 import Base from '../../layouts/Base.astro';
 import RoadmapSample from '../../components/RoadmapSample.astro';
 import Button from '../../components/Button.astro';
@@ -41,12 +42,13 @@ const offerings = {
 ---
 
 <Base title="Services" description="Every engagement starts with a plan: a four-week Data Roadmap. Then dashboards, records and integration, research and evaluation, AI policy and training, and part-time data leadership.">
-  <header class="editorial-frame core-intro editorial-grid services-intro">
+  <header class="editorial-frame core-intro services-intro">
     <div>
       <p class="eyebrow mono">Services</p>
       <h1>From better questions to better systems</h1>
       <p class="lede">Nearly every engagement begins with a four-week Data Roadmap. We tailor the work to your budget, tools and team.</p>
     </div>
+    <NetworkAccent variant="threads" placement="services-intro" />
     <nav class="core-index" aria-label="On this page">
       <ul role="list">
         <li><a href="#data-roadmap">The Data Roadmap <span aria-hidden="true">↓</span></a></li>

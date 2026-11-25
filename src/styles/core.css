@@ -1,7 +1,7 @@
 /* Shared rhythm for the wider Services, Work and About layouts. */
 .core-intro,
 .core-section {
-  padding-block: clamp(1.75rem, 3.6vw, 3.5rem);
+  padding-block: clamp(1.9rem, 4.6vw, 4.5rem);
 }
 
 .core-intro .eyebrow,
@@ -22,12 +22,12 @@
 }
 
 .services-intro h1 {
-  font-size: clamp(2.5rem, 1.55rem + 3vw, 4.5rem);
+  font-size: var(--text-h1);
   text-wrap: balance;
 }
 
 .core-section h2 {
-  font-size: clamp(2rem, 1.55rem + 1.8vw, 3.35rem);
+  font-size: clamp(1.85rem, 1.45rem + 1.45vw, 2.8rem);
   letter-spacing: -0.025em;
   text-wrap: initial;
 }
@@ -61,8 +61,9 @@
 }
 
 .roadmap {
-  padding-inline: clamp(1rem, 3vw, 3rem);
+  padding-inline: clamp(1rem, 4vw, 3.5rem);
   background: var(--sage-wash);
+  border-radius: 0.25rem;
 }
 
 .roadmap__heading {
@@ -394,5 +395,27 @@
   .portrait-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: var(--space-4);
+  }
+}
+
+.services-intro {
+  position: relative;
+}
+
+.services-intro .core-index {
+  margin-top: var(--space-4);
+}
+
+@media (min-width: 48rem) {
+  .services-intro .core-index ul {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0 var(--space-4);
+  }
+}
+
+@media (min-width: 62rem) {
+  .services-intro > div {
+    max-width: 57%;
   }
 }

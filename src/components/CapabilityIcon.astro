@@ -1,0 +1,20 @@
+---
+interface Props { service: string }
+const { service } = Astro.props;
+const paths: Record<string, string> = {
+  'collective-impact-dashboards': 'M3 3v18h18M7 17v-5m4 5V7m4 10v-7m4 7V4',
+  'records-integration': 'm3 7 9-4 9 4-9 4-9-4Zm0 5 9 4 9-4M3 17l9 4 9-4',
+  'research-evaluation': 'M10.5 17a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13Zm5-1.5 5 5',
+  'ai-policy-training': 'M5 5h14v10H5zM5 15l-3 4h20l-3-4',
+  'data-leadership': 'M15 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM6 20v-2a6 6 0 0 1 12 0v2H6ZM2 16a4 4 0 0 1 4-4m12 0a4 4 0 0 1 4 4M6 9a2 2 0 1 1 0-4m12 4a2 2 0 1 0 0-4',
+};
+---
+{paths[service] && (
+  <svg class="capability-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round">
+    <path d={paths[service]} />
+  </svg>
+)}
+
+<style>
+  .capability-icon { width: 1.45rem; height: 1.45rem; flex: none; color: var(--sage-deep); pointer-events: none; }
+</style>

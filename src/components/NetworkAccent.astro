@@ -1,0 +1,83 @@
+---
+interface Props {
+  variant: 'threads' | 'fragment';
+  placement: 'heading' | 'services-intro' | 'closing' | 'footer';
+}
+
+const { variant, placement } = Astro.props;
+---
+<span class:list={['network-accent', `network-accent--${placement}`]} data-network-accent aria-hidden="true">
+  <svg viewBox="0 0 360 205" focusable="false" aria-hidden="true">
+    {variant === 'threads' ? (
+      <>
+        <g fill="none" stroke="var(--network-line)" stroke-width="1.1">
+          <path d="M-8 171C46 188 65 130 117 142S192 183 245 121 318 32 369 27" />
+          <path d="M117 142C149 111 156 50 204 47S253 88 288 67 327 5 365-6" />
+          <path d="M245 121C298 101 332 148 369 112" />
+        </g>
+        <g fill="var(--network-node)">
+          <circle cx="72" cy="147" r="2.3" /><circle cx="204" cy="47" r="4.8" />
+          <circle cx="245" cy="121" r="5.2" /><circle cx="288" cy="67" r="3.2" />
+          <circle cx="335" cy="38" r="3" /><circle cx="155" cy="83" r="1.6" /><circle cx="231" cy="91" r="2.1" />
+          <circle cx="319" cy="162" r="1.8" /><circle cx="104" cy="99" r="1.5" />
+        </g>
+        <circle cx="117" cy="142" r="4.5" fill="var(--ochre)" />
+        <circle cx="322" cy="24" r="4" fill="var(--ochre)" />
+      </>
+    ) : (
+      <>
+        <g fill="none" stroke="var(--network-line)" stroke-width="1.05">
+          <path d="M-6 186C78 190 101 173 146 150S197 138 230 95 266 15 352 20" />
+          <path d="M146 150 177 100 230 95 203 164 146 150m31-50 42-40 11 35 53 18 24-45-46-14-31 41m53 18 53 21 31-36m-60-30 45-48" />
+          <path d="M203 164C240 201 323 198 371 165" />
+        </g>
+        <g fill="var(--network-node)">
+          <circle cx="146" cy="150" r="4.2" /><circle cx="177" cy="100" r="3" />
+          <circle cx="230" cy="95" r="6" /><circle cx="203" cy="164" r="3" />
+          <circle cx="219" cy="60" r="3.5" /><circle cx="283" cy="113" r="4.7" />
+          <circle cx="307" cy="68" r="2.8" /><circle cx="336" cy="134" r="3.8" />
+          <circle cx="111" cy="118" r="1.7" /><circle cx="170" cy="68" r="1.8" />
+          <circle cx="251" cy="155" r="1.4" /><circle cx="288" cy="39" r="2" />
+        </g>
+        <circle cx="261" cy="54" r="5" fill="var(--ochre)" />
+        <circle cx="352" cy="20" r="3.4" fill="var(--ochre)" />
+      </>
+    )}
+  </svg>
+</span>
+
+<style>
+  .network-accent {
+    --network-line: var(--sage);
+    --network-node: var(--sage-deep);
+    position: absolute;
+    inset-inline-end: 0;
+    width: min(18vw, 19rem);
+    pointer-events: none;
+    overflow: hidden;
+    display: none;
+  }
+
+  .network-accent svg { display: block; width: 100%; height: auto; pointer-events: none; }
+  .network-accent--heading { inset-block-start: 0; opacity: 0.48; }
+  .network-accent--services-intro { inset-block-start: 0; opacity: 0.63; width: min(42%, 30rem); }
+  .network-accent--closing { inset-inline-end: auto; inset-inline-start: 0; inset-block-end: 0; opacity: 0.45; width: min(9vw, 8rem); }
+  .network-accent--closing svg { transform: scaleX(-1) translateX(35%); }
+  .network-accent--footer {
+    --network-line: var(--diagram-soft);
+    --network-node: var(--diagram-soft);
+    inset-block-end: 0;
+    opacity: 0.46;
+    width: min(15vw, 15rem);
+  }
+  .network-accent--footer svg { transform: translate(22%, 8%); }
+
+  @media (min-width: 62rem) {
+    .network-accent--heading,
+    .network-accent--services-intro { display: block; }
+  }
+  @media (min-width: 75rem) {
+    .network-accent--closing,
+    .network-accent--footer { display: block; }
+  }
+</style>

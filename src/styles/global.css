@@ -87,3 +87,7 @@ img {
 main:focus {
   outline: none;
 }
+
+main {
+  position: relative;
+}
