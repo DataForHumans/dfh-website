@@ -10,7 +10,12 @@ export const EMAILS = ['chris@data-for-humans.com', 'michael@data-for-humans.com
 /** Company LinkedIn page, the only social link (spec). */
 export const LINKEDIN_URL = 'https://www.linkedin.com/company/data-for-humans/';
 
-export const RELAYERED_URL = 'https://relayered.design/';
+/**
+ * Outside sites we link to. Set `live: false` while a site is down or not yet
+ * launched: its name still shows, as plain text, so we never ship a dead link.
+ * The link checker in CI catches a live site that goes down.
+ */
+export const RELAYERED = { name: 'Relayered Design', url: 'https://relayered.design/', live: false };
 
 export const NAV = [
   { href: '/services/', label: 'Services' },
@@ -21,10 +26,16 @@ export const NAV = [
 ];
 
 /** Products that live on their own sites. Shown on /services/ and in the footer. */
-export const PRODUCTS = [
-  { name: 'Donor Overlap', url: 'https://donoroverlap.com/', domain: 'donoroverlap.com' },
-  { name: 'Footprint Review', url: 'https://footprintreview.com/', domain: 'footprintreview.com' },
-];
+export const PRODUCTS = {
+  donorOverlap: { name: 'Donor Overlap', url: 'https://donoroverlap.com/', domain: 'donoroverlap.com', live: true },
+  // Not live on Nov 24, 2026: HTTPS times out and www doesn't resolve.
+  footprintReview: {
+    name: 'Footprint Review',
+    url: 'https://footprintreview.com/',
+    domain: 'footprintreview.com',
+    live: false,
+  },
+};
 
 export const FOOTER_LINE =
   'Rochester and the Twin Cities, Minnesota. Working with nonprofits, public agencies and cities, mostly remotely. Member, Minnesota Council of Nonprofits.';

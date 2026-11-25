@@ -3,7 +3,9 @@ import Base from '../../layouts/Base.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import Section from '../../components/Section.astro';
 import Button from '../../components/Button.astro';
-import { BOOKING_URL } from '../../data/site';
+import { BOOKING_URL, PRODUCTS } from '../../data/site';
+
+const { donorOverlap, footprintReview } = PRODUCTS;
 
 /*
  * The Data Roadmap section keeps the current site's text, with dashes replaced
@@ -170,7 +172,7 @@ const deliverables = [
         <div class="ledger__body">
           <h3>Donor Overlap</h3>
           <p>Links donor, volunteer and event records so you can see who gives time, money or both.</p>
-          <p><a href="https://donoroverlap.com/">donoroverlap.com</a></p>
+          <p>{donorOverlap.live ? <a href={donorOverlap.url}>{donorOverlap.domain}</a> : donorOverlap.domain}</p>
         </div>
       </li>
       <li class="ledger__row">
@@ -180,7 +182,9 @@ const deliverables = [
             Gathers what your organization knows and has achieved, from staff interviews and the documents you already
             have, so you can find it and tell your story.
           </p>
-          <p><a href="https://footprintreview.com/">footprintreview.com</a></p>
+          <p>
+            {footprintReview.live ? <a href={footprintReview.url}>{footprintReview.domain}</a> : footprintReview.domain}
+          </p>
         </div>
       </li>
       <li class="ledger__row">

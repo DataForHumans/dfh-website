@@ -1,5 +1,5 @@
 ---
-import { FOOTER_LINE, LINKEDIN_URL, PRODUCTS, RELAYERED_URL, SITE_NAME, TAGLINE } from '../data/site';
+import { FOOTER_LINE, LINKEDIN_URL, PRODUCTS, RELAYERED, SITE_NAME, TAGLINE } from '../data/site';
 ---
 
 <footer class="site-footer">
@@ -18,13 +18,9 @@ import { FOOTER_LINE, LINKEDIN_URL, PRODUCTS, RELAYERED_URL, SITE_NAME, TAGLINE 
         }
         <li><a href="/events/">Talks and events</a></li>
         <li><a href="/notes/rss.xml">RSS</a></li>
-        <li>Fabrication:&nbsp;<a href={RELAYERED_URL}>Relayered Design</a></li>
+        <li>Fabrication:&nbsp;{RELAYERED.live ? <a href={RELAYERED.url}>{RELAYERED.name}</a> : RELAYERED.name}</li>
         {
-          PRODUCTS.map((p) => (
-            <li>
-              <a href={p.url}>{p.name}</a>
-            </li>
-          ))
+          Object.values(PRODUCTS).map((p) => <li>{p.live ? <a href={p.url}>{p.name}</a> : p.name}</li>)
         }
       </ul>
     </nav>
