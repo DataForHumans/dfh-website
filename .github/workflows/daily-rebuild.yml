@@ -30,10 +30,11 @@ permissions:
 
 env:
   # Each production deploy costs 15 Netlify credits (Personal plan: 1,000 a
-  # month), so a daily rebuild uses about 450 a month. Set this to 'true' to
-  # rebuild only on the morning after an event, which is the only time the
-  # schedule changes what the site shows.
-  ONLY_AFTER_EVENTS: 'false'
+  # month), so rebuilding every day would use about 450 a month. With 'true',
+  # the job still runs daily but calls the hook only on the morning after an
+  # event, which is the only time the schedule changes what the site shows.
+  # Set 'false' to rebuild every day. Run workflow by hand always rebuilds.
+  ONLY_AFTER_EVENTS: 'true'
 
 jobs:
   rebuild:

@@ -74,7 +74,7 @@ The schedule is in `.github/workflows/daily-rebuild.yml`. GitHub cron runs in UT
 
 The workflow uses **10:17 UTC**: 5:17 am in summer and 4:17 am in winter, so the rebuild is never later than 5:17 am local time.
 
-A daily rebuild is about 30 production deploys, or 450 credits a month. To rebuild only on the morning after an event, the only time the schedule changes what the site shows, set `ONLY_AFTER_EVENTS: 'true'` in that workflow file. GitHub also pauses schedules in a public repo after 60 days with no commits. It emails the owner, and you turn it back on under **Actions**.
+The job runs every morning but rebuilds only on the morning after an event (`ONLY_AFTER_EVENTS: 'true'` in the workflow file), the only time the schedule changes what the site shows. Rebuilding every day would cost about 450 credits a month. On other days the run ends with "No event ended yesterday; no rebuild needed." Running it by hand from the Actions tab always rebuilds. GitHub also pauses schedules in a public repo after 60 days with no commits. It emails the owner, and you turn it back on under **Actions**.
 
 ### Before DNS
 
