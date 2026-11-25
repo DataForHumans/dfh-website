@@ -306,3 +306,9 @@
     align-self: start;
   }
 }
+
+@media (min-width: 62rem) {
+  .contact-paths {
+    margin-bottom: var(--space-6);
+  }
+}

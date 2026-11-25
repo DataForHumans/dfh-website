@@ -419,3 +419,13 @@
     max-width: 57%;
   }
 }
+
+.about-intro,
+.work-intro { position: relative; }
+
+@media (min-width: 62rem) {
+  .core-intro { padding-block: clamp(3.25rem, 5.3vw, 5.25rem); }
+  .core-section { padding-block: clamp(3rem, 5vw, 5.15rem); }
+  .roadmap { padding-inline: clamp(2.4rem, 4.8vw, 4.2rem); }
+  .about-intro .lede { max-width: min(56%, 52ch); }
+}

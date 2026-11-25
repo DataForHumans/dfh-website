@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import { getEntry } from 'astro:content';
+import NetworkAccent from '../../components/NetworkAccent.astro';
 import Base from '../../layouts/Base.astro';
 import Button from '../../components/Button.astro';
 import { getTeam, isLive } from '../../lib/content';
@@ -27,11 +28,11 @@ const principles = [
 ---
 
 <Base
-  accent="fragment"
   title="About"
   description="Data for Humans is a small team that helps mission-driven organizations make sense of their data and of what their people know. Rochester and the Twin Cities, working nationally."
 >
   <header class="editorial-frame core-intro about-intro">
+    <NetworkAccent variant="drift" placement="about" />
     <p class="eyebrow mono">About Data for Humans</p>
     <h1>A small team you work with directly.</h1>
     <p class="lede">We help nonprofits and public agencies make sense of their data and of what their people know. Chris Roberts founded Data for Humans in 2021 to build data capacity in those sectors.</p>

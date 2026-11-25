@@ -3,6 +3,7 @@ import Button from '../../components/Button.astro';
 import PublicDashboard from '../../components/PublicDashboard.astro';
 import VolunteerAgeChart from '../../components/VolunteerAgeChart.astro';
 import { render } from 'astro:content';
+import NetworkAccent from '../../components/NetworkAccent.astro';
 import Base from '../../layouts/Base.astro';
 import { getWork, workAnchor, workLink } from '../../lib/content';
 import '../../styles/core.css';
@@ -23,11 +24,11 @@ const entries = await Promise.all(
 ---
 
 <Base
-  accent="fragment"
   title="Our work"
   description="Here is what changed for mission-driven organizations once their data started working for them."
 >
   <header class="editorial-frame core-intro work-intro">
+    <NetworkAccent variant="threads" placement="work" />
     <div>
       <p class="eyebrow mono">Portfolio</p>
       <h1>Our work</h1>

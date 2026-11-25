@@ -498,16 +498,6 @@ a:hover {
 
 .home-services__capabilities a > span:first-of-type { flex: 1; }
 
-@media (min-width: 70rem) {
-  .home-services__capabilities ul {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: var(--space-3);
-  }
-
-  .home-services__capabilities a { min-height: 3.4rem; }
-}
-
 .home-services__capabilities a:hover {
   color: var(--ink);
 }
@@ -843,4 +833,22 @@ a:hover {
 .field textarea[aria-invalid='true'] {
   border-width: 2px;
   border-color: var(--ink);
+}
+
+.figures,
+.home-services { position: relative; }
+
+@media (min-width: 62rem) {
+  .home-section {
+    padding-block: calc(var(--home-space) + 0.65rem);
+  }
+
+  .home-services {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: var(--editorial-gap);
+  }
+
+  .home-services > div { position: relative; }
+  .home-services__capabilities a { min-height: 3rem; }
+  .home-contact { padding-block-end: calc(var(--home-space) + 1.65rem); }
 }

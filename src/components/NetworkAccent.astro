@@ -1,14 +1,52 @@
 ---
 interface Props {
-  variant: 'threads' | 'fragment';
-  placement: 'heading' | 'services-intro' | 'closing' | 'footer';
+  variant: 'threads' | 'fragment' | 'drift' | 'bridge';
+  placement: 'heading' | 'services-intro' | 'closing' | 'footer' | 'metrics' | 'sage-panel' | 'about' | 'work' | 'contact';
 }
 
 const { variant, placement } = Astro.props;
+const dust = Array.from({ length: variant === 'drift' ? 48 : 0 }, (_, index) => {
+  const density = index / 47;
+  return {
+    x: 354 - 348 * density ** 1.7,
+    y: 106 + (((index * 47) % 97) - 48) * (1.65 - density * 0.7),
+    radius: 0.7 + (index % 5) * (1.1 - density) * 0.43,
+    opacity: 0.77 - density * 0.49,
+  };
+});
 ---
 <span class:list={['network-accent', `network-accent--${placement}`]} data-network-accent aria-hidden="true">
   <svg viewBox="0 0 360 205" focusable="false" aria-hidden="true">
-    {variant === 'threads' ? (
+    {variant === 'drift' ? (
+      <>
+        <path d="M-6 188C64 180 93 124 151 130S223 152 265 98 326 85 365 49m-100 49 52 40 42-15m-42 15 23 35" fill="none" stroke="var(--network-line)" stroke-width="1.4" />
+        <circle cx="151" cy="130" r="3" fill="var(--network-node)" />
+        <circle cx="265" cy="98" r="5" fill="var(--ochre)" />
+        <circle cx="317" cy="138" r="4" fill="var(--network-node)" />
+        {dust.map(({ x, y, radius, opacity }, index) => (
+          <circle cx={x} cy={y} r={radius} opacity={opacity} fill={index % 4 === 0 ? 'var(--ochre-text)' : 'var(--network-line)'} />
+        ))}
+      </>
+    ) : variant === 'bridge' ? (
+      <>
+        <g fill="none" stroke="var(--network-line)" stroke-width="1.25">
+          <path d="m38 141 39-38 29 27-25 45-43-34m39-38 4 72m25-45 36-24m-65-3 31-44 34 47" />
+          <path d="M106 130C167 158 187 63 244 85s71 37 120-6m-120 6 35-43 36 14 23-40m-23 40 12 63-53 21-30-55m35-43-5 98m53-21 37 33" />
+        </g>
+        <g fill="var(--network-node)">
+          <circle cx="38" cy="141" r="3" /><circle cx="77" cy="103" r="5.5" />
+          <circle cx="106" cy="130" r="5" /><circle cx="81" cy="175" r="3.7" />
+          <circle cx="108" cy="59" r="3" /><circle cx="244" cy="85" r="6" />
+          <circle cx="315" cy="56" r="5" /><circle cx="274" cy="140" r="4" />
+          <circle cx="327" cy="119" r="3.3" />
+        </g>
+        <g fill="var(--ochre)">
+          <circle cx="142" cy="106" r="4" /><circle cx="279" cy="42" r="4.5" />
+          <circle cx="338" cy="16" r="2.5" /><circle cx="193" cy="73" r="1.7" />
+          <circle cx="205" cy="137" r="2" /><circle cx="345" cy="172" r="2" />
+        </g>
+      </>
+    ) : variant === 'threads' ? (
       <>
         <g fill="none" stroke="var(--network-line)" stroke-width="1.1">
           <path d="M-8 171C46 188 65 130 117 142S192 183 245 121 318 32 369 27" />
@@ -61,23 +99,70 @@ const { variant, placement } = Astro.props;
   .network-accent svg { display: block; width: 100%; height: auto; pointer-events: none; }
   .network-accent--heading { inset-block-start: 0; opacity: 0.48; }
   .network-accent--services-intro { inset-block-start: 0; opacity: 0.63; width: min(42%, 30rem); }
-  .network-accent--closing { inset-inline-end: auto; inset-inline-start: 0; inset-block-end: 0; opacity: 0.45; width: min(9vw, 8rem); }
-  .network-accent--closing svg { transform: scaleX(-1) translateX(35%); }
+  .network-accent--metrics {
+    inset-inline-end: auto;
+    inset-inline-start: 0;
+    inset-block-start: -4.4rem;
+    width: min(7.8vw, 7rem);
+    opacity: 0.82;
+  }
+  .network-accent--metrics svg { width: 13rem; margin-inline-start: -6.2rem; transform: scaleX(-1); }
+  .network-accent--sage-panel {
+    inset-inline-end: auto;
+    inset-inline-start: 0;
+    inset-block-end: 0;
+    width: min(34%, 24rem);
+    height: 7rem;
+    opacity: 0.57;
+  }
+  .network-accent--sage-panel svg { width: 100%; transform: translateY(-21%) scaleX(-1); }
+  .network-accent--closing {
+    inset-inline-end: auto;
+    inset-inline-start: 0;
+    inset-block-end: 0;
+    opacity: 0.73;
+    width: min(11vw, 10rem);
+  }
+  .network-accent--closing svg { width: 14rem; transform: scaleX(-1) translateX(37%); }
+  .network-accent--about {
+    inset-block-start: 0.5rem;
+    width: min(38%, 28rem);
+    opacity: 0.76;
+  }
+  .network-accent--about svg { transform: translateX(8%); }
+  .network-accent--work {
+    inset-block-end: -1.05rem;
+    width: min(36%, 24rem);
+    height: 5rem;
+    opacity: 0.65;
+  }
+  .network-accent--work svg { transform: translateY(-43%); }
+  .network-accent--contact {
+    inset-block-start: 0;
+    width: min(32vw, 29rem);
+    opacity: 0.76;
+  }
   .network-accent--footer {
     --network-line: var(--diagram-soft);
     --network-node: var(--diagram-soft);
     inset-block-end: 0;
-    opacity: 0.46;
-    width: min(15vw, 15rem);
+    opacity: 0.7;
+    width: min(22vw, 21rem);
+    height: 9.25rem;
   }
-  .network-accent--footer svg { transform: translate(22%, 8%); }
+  .network-accent--footer svg { transform: translate(12%, -12%); }
 
   @media (min-width: 62rem) {
     .network-accent--heading,
-    .network-accent--services-intro { display: block; }
+    .network-accent--services-intro,
+    .network-accent--about,
+    .network-accent--work { display: block; }
   }
   @media (min-width: 75rem) {
+    .network-accent--metrics,
+    .network-accent--sage-panel,
     .network-accent--closing,
+    .network-accent--contact,
     .network-accent--footer { display: block; }
   }
 </style>
