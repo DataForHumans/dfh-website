@@ -33,7 +33,13 @@ The build fails if a note, event or work entry has bad frontmatter, an unknown a
 
 ## Voice rules (apply to every word on the site)
 
-The site should read like a well-made field report from people who did the work, not a template.
+The brand starts with a belief: Behind every number, a human story. Our purpose is to help the people who help people.
+
+- Start with what the reader or client is trying to accomplish. Give clients credit for the decisions they make and the work they do.
+- Say what the technical work makes possible. Name the method or deliverable when that helps the reader judge what we can do. Explain unfamiliar terms in context.
+- Treat the people represented in records with dignity. Be specific about privacy, what the records can tell us, and what staff know from doing the work.
+- Use plain headings and clear action labels. Save “For humans, by humans” for a light signature, where it stands for human judgment and accountability alongside technology.
+- Preserve approved client copy and the substance of published work. Ask the owner or author to review proposed changes to claims, findings, testimonials, or substantive biography details.
 
 - No dashes of any kind except hyphens in compound words. Use colons, commas, periods or parentheses. That means no em dash, no en dash, and no spaced hyphen standing in for either. Ranges are written out: "12:00 to 1:00 pm", "Items 1 to 5".
 - Write for a program manager or an executive director, not a data person. Name the problem in their words before the method.
