@@ -5,19 +5,26 @@ import { opportunities, phases, quadrants, systems, type SystemId } from '../dat
 import '../styles/roadmap.css';
 
 const nodes = [
-  { id: 'program', x: 48, y: 39 },
-  { id: 'donor', x: 147, y: 23 },
-  { id: 'volunteer', x: 252, y: 47 },
-  { id: 'reconciliation', x: 144, y: 127 },
-  { id: 'grants', x: 211, y: 196 },
+  { id: 'program', x: 48, y: 70 },
+  { id: 'donor', x: 147, y: 62 },
+  { id: 'volunteer', x: 252, y: 79 },
+  { id: 'reconciliation', x: 147, y: 144 },
+  { id: 'grants', x: 217, y: 198 },
 ] as const satisfies readonly { id: SystemId; x: number; y: number }[];
 
 const edges = [
-  { from: 'program', to: 'reconciliation', path: 'M48 39C13 49 12 77 23 95S91 115 144 127' },
-  { from: 'donor', to: 'reconciliation', path: 'M147 23C111 45 116 65 123 80S146 104 144 127' },
-  { from: 'volunteer', to: 'reconciliation', path: 'M252 47C283 46 294 76 284 99S214 112 144 127' },
-  { from: 'reconciliation', to: 'grants', path: 'M144 127C168 134 224 131 218 163S210 183 211 196' },
+  { from: 'program', to: 'reconciliation', path: 'M48 70C53 111 93 118 147 144' },
+  { from: 'donor', to: 'reconciliation', path: 'M147 62C124 92 162 116 147 144' },
+  { from: 'volunteer', to: 'reconciliation', path: 'M252 79C256 113 203 116 147 144' },
+  { from: 'reconciliation', to: 'grants', path: 'M147 144C179 143 221 154 217 198' },
 ] as const satisfies readonly { from: SystemId; to: SystemId; path: string }[];
+
+// Qualitative visual offsets within each opportunity's existing quadrant.
+const markerPlacement: Record<number, [number, number]> = {
+  1: [0.02, 0.29], 2: [0.98, 0.81],
+  3: [0.05, 0.87], 4: [0.97, 0.22],
+  5: [0.38, 0.56],
+};
 ---
 
 <section class="sample-report" aria-labelledby="sample-roadmap-title">
@@ -84,6 +91,7 @@ const edges = [
                       type="button"
                       class="roadmap-marker"
                       data-opportunity={item.id}
+                      style={`--marker-x:${markerPlacement[item.id][0]};--marker-y:${markerPlacement[item.id][1]}`}
                       aria-label={`Opportunity ${item.id}: ${item.name}, ${quadrant.name}`}
                       disabled
                     ><span>{item.id}</span></button>

@@ -88,6 +88,36 @@ test('network nodes remain reachable without overlapping at narrow widths', asyn
       expect(box.left < other.right && box.right > other.left && box.top < other.bottom && box.bottom > other.top).toBe(false);
     }
   }
+
+  const cells = await matrix(page).locator('.roadmap-quadrant > div').evaluateAll((quadrants) =>
+    quadrants.map((cell) => {
+      const bounds = cell.getBoundingClientRect();
+      return [...cell.querySelectorAll('button')].map((button) => {
+        const rect = button.getBoundingClientRect();
+        return {
+          width: rect.width, height: rect.height,
+          left: rect.left - bounds.left, right: rect.right - bounds.left,
+          top: rect.top - bounds.top, bottom: rect.bottom - bounds.top,
+          cellWidth: bounds.width, cellHeight: bounds.height,
+        };
+      });
+    })
+  );
+  expect(cells.map((controls) => controls.length)).toEqual([2, 2, 1, 0]);
+  for (const controls of cells) {
+    for (const [index, box] of controls.entries()) {
+      expect(box.width).toBeGreaterThanOrEqual(44);
+      expect(box.height).toBeGreaterThanOrEqual(44);
+      expect(box.left).toBeGreaterThanOrEqual(-0.1);
+      expect(box.top).toBeGreaterThanOrEqual(-0.1);
+      expect(box.right).toBeLessThanOrEqual(box.cellWidth + 0.1);
+      expect(box.bottom).toBeLessThanOrEqual(box.cellHeight + 0.1);
+      for (const other of controls.slice(index + 1)) {
+        expect(box.left < other.right && box.right > other.left && box.top < other.bottom && box.bottom > other.top).toBe(false);
+      }
+    }
+  }
+
   const readout = exhibit(page).locator('.roadmap-exhibit__detail');
   const before = await readout.evaluate((node) => node.getBoundingClientRect().height);
   await map(page).getByRole('button', { name: 'Manual reconciliation' }).click();

@@ -166,7 +166,25 @@
 .roadmap-node[data-system='donor'] .roadmap-node__point::before,
 .roadmap-node[data-system='grants'] .roadmap-node__point::before { background: var(--sage-wash); }
 
-.roadmap-node[data-system='reconciliation'] { width: min(74%, 10.5rem); }
+.roadmap-node:not([data-system='reconciliation'], [data-system='grants']) {
+  grid-template-rows: 2.5rem 2.75rem;
+  transform: translate(-50%, -3.875rem);
+}
+.roadmap-node:not([data-system='reconciliation'], [data-system='grants']) .roadmap-node__label {
+  grid-row: 1;
+  align-self: end;
+}
+.roadmap-node:not([data-system='reconciliation'], [data-system='grants']) .roadmap-node__point { grid-row: 2; }
+
+.roadmap-panel .roadmap-node[data-system='reconciliation'] {
+  width: min(58%, 10.5rem);
+  grid-template-columns: minmax(0, 1fr) 2.75rem;
+  grid-template-rows: auto;
+  align-items: center;
+  transform: translate(calc(-100% + 1.375rem), -1.375rem);
+}
+.roadmap-node[data-system='reconciliation'] .roadmap-node__point { grid-area: 1 / 2; }
+.roadmap-node[data-system='reconciliation'] .roadmap-node__label { grid-area: 1 / 1; }
 .roadmap-node[data-system='grants'] { width: min(52%, 7.25rem); }
 .roadmap-node[data-system='reconciliation'] .roadmap-node__point::before {
   width: 1.3rem;
@@ -177,7 +195,6 @@
 
 .roadmap-node__label {
   padding: 0.1rem 0.22rem;
-  background: var(--cream);
 }
 
 .roadmap-node.is-related .roadmap-node__point::before {
@@ -217,7 +234,7 @@
 .roadmap-quadrant:nth-child(3) { background: color-mix(in srgb, var(--sage-wash) 27%, var(--cream)); }
 .roadmap-quadrant:nth-child(4) { background: color-mix(in srgb, var(--ochre) 12%, var(--cream)); }
 .roadmap-quadrant p { margin: 0; color: var(--sage-deep); font-size: 0.78rem; line-height: 1.25; text-align: center; }
-.roadmap-quadrant > div { display: flex; flex-wrap: wrap; justify-content: center; }
+.roadmap-quadrant > div { position: relative; height: 4.5rem; }
 .roadmap-marker span, .roadmap-step__number {
   display: grid;
   place-items: center;
@@ -231,6 +248,10 @@
 }
 
 .roadmap-panel button.roadmap-marker {
+  position: absolute;
+  inset-inline-start: calc(var(--touch-target) / 2 + (100% - var(--touch-target)) * var(--marker-x));
+  inset-block-start: calc(var(--touch-target) / 2 + (100% - var(--touch-target)) * var(--marker-y));
+  transform: translate(-50%, -50%);
   display: grid;
   place-items: center;
   padding: 0;
