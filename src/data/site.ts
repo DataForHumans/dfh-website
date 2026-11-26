@@ -38,7 +38,7 @@ export const PRODUCTS = {
 };
 
 export const FOOTER_LINE =
-  'Based in Minnesota, working nationally with nonprofits, public agencies, and cities. Member, Minnesota Council of Nonprofits.';
+  'Based in Minnesota, working nationally. Member, Minnesota Council of Nonprofits.';
 
 /** Display labels for note types. */
 export const NOTE_TYPES = {

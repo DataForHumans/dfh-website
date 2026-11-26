@@ -9,7 +9,7 @@ import { getWork, workAnchor, workLink } from '../../lib/content';
 import '../../styles/core.css';
 
 const headlines: Record<string, string> = {
-  'any-path-home': 'One view of progress on homelessness',
+  'any-path-home': 'Seeing progress on homelessness together',
   'crowded-closet': 'Volunteer records sharpen recruitment',
 };
 
@@ -25,13 +25,13 @@ const entries = await Promise.all(
 
 <Base
   title="Our work"
-  description="Here is what changed for mission-driven organizations once their data started working for them."
+  description="See how a housing coalition and a nonprofit thrift shop used the records they already kept to make decisions."
 >
   <header class="editorial-frame core-intro work-intro">
     <NetworkAccent variant="bridge" placement="work" />
     <div>
-        <h1>Our work</h1>
-      <p class="lede">How nonprofits, public agencies and their partners use data to see progress, make decisions and plan for change.</p>
+      <h1>Our work</h1>
+      <p class="lede">See what teams working on housing and volunteer recruitment could learn from the records they already kept.</p>
     </div>
     <nav class="core-index" aria-label="Jump to a project">
       <ul role="list">
@@ -70,7 +70,7 @@ const entries = await Promise.all(
     </section>
   ))}
   <section class="editorial-frame core-section work-contact" aria-labelledby="work-contact-heading">
-    <h2 id="work-contact-heading">Talk through a similar data challenge</h2>
+    <h2 id="work-contact-heading">Bring us a challenge your team is facing</h2>
     <Button href="/contact/">Contact the team</Button>
   </section>
 </Base>

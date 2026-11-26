@@ -17,7 +17,10 @@ const { title, notes, types, current } = Astro.props;
 
 <SupportHeader title={title}>
   <p class="lede">
-    Projects, talks and practical thinking on data and AI for mission-driven work, from the Data for Humans team.
+    {current === 'project' && 'What teams wanted to learn, what their records showed and how they used what they found.'}
+    {current === 'article' && 'Practical ways to make sense of data and AI in your own work.'}
+    {current === 'news' && 'Updates and coverage about Data for Humans and our work.'}
+    {!current && 'What we’re learning from projects and how you can make sense of data and AI in your own work.'}
   </p>
 </SupportHeader>
 

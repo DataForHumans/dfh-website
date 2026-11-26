@@ -16,8 +16,8 @@ const [roadmapSlug, ...capabilities] = SERVICE_SLUGS;
 
 const projectCopy: Record<string, { headline: string; summary: string }> = {
   'any-path-home': {
-    headline: 'One view of progress on homelessness',
-    summary: 'A public dashboard brings agency data together while keeping individual records out of public view.',
+    headline: 'Seeing progress on homelessness together',
+    summary: 'Any Path Home partners can see their shared progress on homelessness in one public dashboard that keeps individual records private.',
   },
   'crowded-closet': {
     headline: 'Volunteer records sharpen recruitment',
@@ -40,13 +40,12 @@ const figures = [
 ];
 ---
 
-<Base title={SITE_NAME} description={`${TAGLINE}. We help nonprofits, public agencies and cities make better decisions with the records they already keep.`}>
+<Base title={SITE_NAME} description={`${TAGLINE}. We help nonprofits, public agencies and cities spend less time managing records and make better use of what they know.`}>
   <header class="editorial-frame editorial-grid home-hero">
     <div class="home-hero__copy">
-      <h1><span class="home-hero__statement">Your mission runs on data.</span> <em>Let's make it work for you.</em></h1>
+      <h1>Behind every number, <span>a human story.</span></h1>
       <p class="lede">
-        We help nonprofits, public agencies and cities make better decisions with the records they already keep, without
-        hiring a full-time data team.
+        A family finding a home. A neighbor getting a meal. We help nonprofits, public agencies and cities use data and AI to spend less time managing records and decide where their services are needed most.
       </p>
       <p class="actions">
         <Button href={BOOKING_URL} primary>Book a free call</Button>
@@ -71,7 +70,7 @@ const figures = [
   <section class="editorial-frame home-section selected-work" aria-labelledby="h-work">
     <NetworkAccent variant="threads" placement="selected-work" />
     <div class="home-section__heading">
-      <h2 id="h-work">Selected work</h2>
+      <h2 id="h-work">What better data makes possible</h2>
       <a href="/work/">View all work <span aria-hidden="true">↗</span></a>
     </div>
     <ul class="selected-work__list" role="list">
@@ -97,10 +96,9 @@ const figures = [
     <NetworkAccent variant="drift" placement="sage-panel" />
     <div>
       <p class="home-services__label">The Data Roadmap</p>
-      <h2 id="h-services">Know what to fix first</h2>
+      <h2 id="h-services">Know where to begin</h2>
       <p>
-        In four weeks, for a fixed fee, we map your systems and give you a prioritized plan.
-        The plan is yours to use with any team.
+        If reporting takes too much staff time, start here. In four weeks, for a fixed fee, we map how your records move and give you a plan for what to fix first. You can use it with any team.
       </p>
       <Button href={`/services/#${roadmapSlug}`}>Explore the Roadmap</Button>
     </div>
@@ -127,8 +125,8 @@ const figures = [
   <NetworkAccent variant="fragment" placement="closing" />
   <section class="editorial-frame home-section home-contact" aria-labelledby="h-closing">
     <div>
-      <h2 id="h-closing">Start with a free 30-minute call</h2>
-      <p>You'll leave with a suggested next step, whether or not you hire us.</p>
+      <h2 id="h-closing">Tell us what you’re working toward</h2>
+      <p>In a free 30-minute call, we’ll hear what you’re working on and suggest a next step you can take.</p>
     </div>
     <p class="actions">
       <Button href={BOOKING_URL} primary>Book a free call</Button>
