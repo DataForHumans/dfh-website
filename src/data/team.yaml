@@ -2,12 +2,12 @@
 # slug (`id`) from notes (`author`) and events (`speakers`).
 #
 # Photos live in src/assets/team/ and are added in the `photo` field as a path
-# relative to this file, e.g. ../assets/team/eishna-ranganathan.jpg.
+# relative to this file, e.g. ../assets/team/eishna.png.
 # In a bio, a blank line starts a new paragraph.
 # `photoAlt` is required whenever `photo` is set.
 
 - id: chris-roberts
-  photo: ../assets/team/chris-roberts.jpg
+  photo: ../assets/team/chris.png
   photoAlt: Portrait of Christopher Roberts
   linkedin: https://www.linkedin.com/in/christopher-j-roberts/
   name: Christopher Roberts
@@ -31,7 +31,7 @@
     team, not just the person who happens to be comfortable with spreadsheets.
 
 - id: michael-soto
-  photo: ../assets/team/michael-soto.jpg
+  photo: ../assets/team/michael.jpg
   photoAlt: Portrait of Michael Soto
   linkedin: https://www.linkedin.com/in/misoca/
   name: Michael Soto
@@ -50,7 +50,7 @@
     trustworthy picture while protecting the people behind the numbers.
 
 - id: sean-horan
-  photo: ../assets/team/sean-horan.jpg
+  photo: ../assets/team/sean.png
   photoAlt: Portrait of Sean Horan
   name: Sean Horan
   credentials: PhD
@@ -68,7 +68,7 @@
     University.
 
 - id: eishna-ranganathan
-  photo: ../assets/team/eishna-ranganathan.jpg
+  photo: ../assets/team/eishna.png
   photoAlt: Portrait of Eishna Ranganathan
   name: Eishna Ranganathan
   role: Analyst
