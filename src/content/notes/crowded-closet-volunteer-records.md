@@ -1,6 +1,6 @@
 ---
 title: "What a thrift shop's volunteer records revealed about who keeps it running"
-date: 2026-12-02
+date: 2026-11-25
 author: michael-soto
 type: project
 tags: [volunteers, case-study, nonprofit-retail]

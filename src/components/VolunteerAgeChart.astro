@@ -1,22 +1,23 @@
 ---
-interface Props { preview?: boolean }
-const { preview = false } = Astro.props;
+interface Props { preview?: boolean; analysisHref?: string }
+const { preview = false, analysisHref } = Astro.props;
 ---
 <figure class="age-chart">
   <div class="age-chart__panel">
-    {!preview && <p class="age-chart__heading">Older volunteers are more prominent among those active in 2026</p>}
+    {!preview && <p class="age-chart__heading">The distribution shifts toward older ages when viewed by hours served</p>}
     <ul class="age-chart__legend" role="list">
-      <li>All volunteer records</li>
-      <li>Volunteers active in 2026</li>
+      <li>Number of volunteers</li>
+      <li>Hours served</li>
     </ul>
-    <svg viewBox="0 0 500 218" role="img" aria-label="Relative concentration by age. Both curves show younger and older concentrations. The older concentration is more pronounced among volunteers active in 2026.">
-      <g fill="none" stroke="var(--rule)" stroke-opacity=".55">
+    <svg viewBox="0 0 500 218" role="img" aria-label="Illustrative relative concentration by age. The number of volunteers peaks at younger and older ages. Hours served has a much smaller younger peak and a stronger concentration at older ages.">
+      <g fill="none" stroke="var(--rule)" stroke-opacity=".45">
         <path d="M56 41h418M56 80h418M56 119h418"/>
         <path d="M56 27v131h418" stroke="var(--sage-text)" stroke-opacity="1"/>
       </g>
-      <path d="M57 143C77 138 85 50 114 46S151 119 195 132 276 119 312 90 360 46 384 57 425 131 473 148" fill="none" stroke="var(--ochre-text)" stroke-width="3.5" stroke-dasharray="8 5"/>
-      <path d="M57 150C78 150 92 105 117 104S153 139 190 146 273 141 310 102 350 33 381 35 429 129 473 150" fill="none" stroke="var(--sage-deep)" stroke-width="4"/>
-      <path d="M282 48q29-34 80-24m-12-10 12 10-14 5" fill="none" stroke="var(--sage-deep)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M57 153C79 149 87 52 112 47S157 129 198 142 269 136 303 102 346 59 377 64 427 141 473 153" fill="none" stroke="var(--ochre-text)" stroke-width="2.8" stroke-linecap="round" stroke-dasharray="0.4 6"/>
+      <path d="M57 154C80 154 97 125 116 124S155 143 193 149 268 149 304 113 350 30 380 38 426 135 473 153" fill="none" stroke="var(--sage-deep)" stroke-width="2.65" stroke-linecap="round"/>
+      <text x="183" y="41" fill="var(--sage-deep)" font-family="var(--font-body)" font-size="18">Shift by hours</text>
+      <path d="M299 42q24-19 61-17m-11-6 11 6-12 6" fill="none" stroke="var(--sage-deep)" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"/>
       <g fill="var(--ink)" font-family="var(--font-body)" font-size="19">
         <text x="56" y="20">Relative concentration</text>
         <text x="110" y="182" text-anchor="middle">20</text>
@@ -29,9 +30,10 @@ const { preview = false } = Astro.props;
   </div>
   <figcaption>
     {preview
-      ? 'Illustrative reconstruction of volunteer age distributions.'
-      : 'Illustrative reconstruction of the observed age distributions. Curves are approximate and do not represent exact underlying counts.'}
+      ? 'Illustrative comparison of volunteer counts and hours served by age.'
+      : 'Illustrative reconstruction of volunteer counts and hours served by age. The curves are approximate. The source chart is labeled “hours in 2026,” with its weighting method unverified.'}
   </figcaption>
+  {analysisHref && <a class="age-chart__analysis" href={analysisHref}>Read the full analysis</a>}
 </figure>
 
 <style>
@@ -40,8 +42,9 @@ const { preview = false } = Astro.props;
   .age-chart__heading { margin: 0 0 0.55rem; font: 400 var(--text-h3) / 1.15 var(--font-display); }
   .age-chart__legend { display: flex; flex-wrap: wrap; gap: 0.2rem 1rem; padding: 0; margin: 0 0 0.35rem; list-style: none; font-size: 0.9rem; }
   .age-chart__legend li { display: flex; align-items: center; gap: 0.4rem; }
-  .age-chart__legend li::before { content: ''; width: 1.25rem; border-top: 3px dashed var(--ochre-text); }
-  .age-chart__legend li + li::before { border-top: 3px solid var(--sage-deep); }
+  .age-chart__legend li::before { content: ''; width: 1.25rem; border-top: 2px dotted var(--ochre-text); }
+  .age-chart__legend li + li::before { border-top: 2px solid var(--sage-deep); }
   svg { display: block; width: 100%; height: auto; }
+  .age-chart__analysis { display: inline-flex; align-items: center; min-height: var(--touch-target); }
   figcaption { margin-top: 0.45rem; font-size: 0.9rem; line-height: 1.4; }
 </style>

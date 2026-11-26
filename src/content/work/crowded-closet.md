@@ -6,7 +6,7 @@ sector: Nonprofit retail
 order: 2
 featured: true
 link: /notes/crowded-closet-volunteer-records/
-linkLabel: Read the full story
+linkLabel: Read the full analysis
 quote: "The analysis helped us move from recognizing the value of community outreach to making it a greater priority in our recruitment strategy."
 quoteSource: Crowded Closet volunteer team
 ---
