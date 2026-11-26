@@ -296,6 +296,10 @@ a:hover {
 
 .home-hero h1 span { white-space: nowrap; }
 
+@media (max-width: 31rem) {
+  .home-hero h1 { font-size: clamp(1.85rem, 9.3vw, 2.55rem); }
+}
+
 .home-hero .lede {
   max-width: 41ch;
   margin-bottom: 0;
