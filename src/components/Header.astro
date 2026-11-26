@@ -4,7 +4,7 @@ import mark from '../assets/brand/dfh-mark.png';
 import { NAV, SITE_NAME } from '../data/site';
 
 const path = Astro.url.pathname;
-const isCurrent = (href: string) => path === href || path.startsWith(href);
+const isCurrent = (href: string) => path === href || (href !== '/' && path.startsWith(href));
 ---
 
 <header class="site-header">
@@ -18,7 +18,11 @@ const isCurrent = (href: string) => path === href || path.startsWith(href);
         {
           NAV.map((item) => (
             <li>
-              <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+              <a
+                class:list={{ 'site-nav__contact': item.href === '/contact/' }}
+                href={item.href}
+                aria-current={isCurrent(item.href) ? 'page' : undefined}
+              >
                 {item.label}
               </a>
             </li>

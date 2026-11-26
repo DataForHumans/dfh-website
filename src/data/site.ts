@@ -18,6 +18,7 @@ export const LINKEDIN_URL = 'https://www.linkedin.com/company/data-for-humans/';
 export const RELAYERED = { name: 'Relayered Design', url: 'https://relayered.design/', live: false };
 
 export const NAV = [
+  { href: '/', label: 'Home' },
   { href: '/services/', label: 'Services' },
   { href: '/work/', label: 'Work' },
   { href: '/notes/', label: 'Notes' },
@@ -28,17 +29,16 @@ export const NAV = [
 /** Products that live on their own sites. Shown on /services/ and in the footer. */
 export const PRODUCTS = {
   donorOverlap: { name: 'Donor Overlap', url: 'https://donoroverlap.com/', domain: 'donoroverlap.com', live: true },
-  // Not live on Nov 24, 2026: HTTPS times out and www doesn't resolve.
+  // Temporary destination until the permanent Footprint Review domain is ready.
   footprintReview: {
     name: 'Footprint Review',
-    url: 'https://footprintreview.com/',
-    domain: 'footprintreview.com',
-    live: false,
+    url: 'https://footprint-review-site.twilight-silence-2539.workers.dev/',
+    live: true,
   },
 };
 
 export const FOOTER_LINE =
-  'Rochester and the Twin Cities, Minnesota. Working with nonprofits, public agencies and cities, mostly remotely. Member, Minnesota Council of Nonprofits.';
+  'Based in Minnesota, working nationally with nonprofits, public agencies, and cities. Member, Minnesota Council of Nonprofits.';
 
 /** Display labels for note types. */
 export const NOTE_TYPES = {

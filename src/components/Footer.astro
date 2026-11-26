@@ -1,14 +1,18 @@
 ---
+import NetworkAccent from './NetworkAccent.astro';
 import { FOOTER_LINE, LINKEDIN_URL, PRODUCTS, RELAYERED, SITE_NAME, TAGLINE } from '../data/site';
 ---
 
 <footer class="site-footer">
+  <NetworkAccent variant="fragment" placement="footer" />
   <div class="site-footer__inner">
-    <p class="site-footer__name">{SITE_NAME}</p>
-    <p class="site-footer__tagline">{TAGLINE}</p>
-    <p class="site-footer__line">{FOOTER_LINE}</p>
-    <nav aria-label="Footer">
-      <ul class="site-footer__links">
+    <div class="site-footer__identity">
+      <p class="site-footer__name">{SITE_NAME}</p>
+      <p class="site-footer__tagline">{TAGLINE}.</p>
+      <p class="site-footer__line">{FOOTER_LINE}</p>
+    </div>
+    <nav class="site-footer__links" aria-label="Footer">
+      <ul role="list">
         {
           LINKEDIN_URL && (
             <li>
@@ -18,11 +22,16 @@ import { FOOTER_LINE, LINKEDIN_URL, PRODUCTS, RELAYERED, SITE_NAME, TAGLINE } fr
         }
         <li><a href="/events/">Talks and events</a></li>
         <li><a href="/notes/rss.xml">RSS</a></li>
-        <li>Fabrication:&nbsp;{RELAYERED.live ? <a href={RELAYERED.url}>{RELAYERED.name}</a> : RELAYERED.name}</li>
-        {
-          Object.values(PRODUCTS).map((p) => <li>{p.live ? <a href={p.url}>{p.name}</a> : p.name}</li>)
-        }
       </ul>
+      <div>
+        <p class="site-footer__ventures" id="footer-ventures">Related ventures</p>
+        <ul role="list" aria-labelledby="footer-ventures">
+          <li>Fabrication:&nbsp;{RELAYERED.live ? <a href={RELAYERED.url}>{RELAYERED.name}</a> : RELAYERED.name}</li>
+          {
+            Object.values(PRODUCTS).map((p) => <li>{p.live ? <a href={p.url}>{p.name}</a> : p.name}</li>)
+          }
+        </ul>
+      </div>
     </nav>
   </div>
 </footer>

@@ -1,7 +1,7 @@
 ---
+import NetworkAccent from '../../components/NetworkAccent.astro';
 import Base from '../../layouts/Base.astro';
-import PageHeader from '../../components/PageHeader.astro';
-import Section from '../../components/Section.astro';
+import SupportHeader from '../../components/SupportHeader.astro';
 import Button from '../../components/Button.astro';
 import { BOOKING_URL, EMAILS } from '../../data/site';
 ---
@@ -10,66 +10,77 @@ import { BOOKING_URL, EMAILS } from '../../data/site';
   title="Contact"
   description="Start with a free conversation. Tell us where your data is getting in the way, and we'll suggest a sensible next step."
 >
-  <PageHeader title="Contact">
-    <p class="lede">
-      Start with a free conversation. Tell us where your data is getting in the way, and we'll suggest a sensible next
-      step, whether or not that's working with us.
-    </p>
-  </PageHeader>
+  <NetworkAccent variant="bridge" placement="contact" />
+  <SupportHeader title="Tell us what you're working on">
+    <p class="lede">Tell us where your data is getting in the way. You'll leave the conversation with a suggested next step, whether or not you hire us.</p>
+  </SupportHeader>
 
-  <Section num={1} label="Call" labelledby="h-book">
-    <h2 id="h-book">Book a free 30-minute call.</h2>
-    <p>No prep needed.</p>
-    <p class="actions">
+  <div class="editorial-frame contact-paths">
+    <section class="contact-paths__book" aria-labelledby="h-book">
+      <h2 id="h-book">Book a free 30-minute call</h2>
+      <p>No prep needed.</p>
       <Button href={BOOKING_URL} primary>Book a time</Button>
-    </p>
-  </Section>
+    </section>
 
-  <Section num={2} label="Message" labelledby="h-form">
-    <h2 id="h-form">Send a message</h2>
-    <form
-      class="form"
-      name="contact"
-      method="POST"
-      action="/contact/thanks/"
-      data-netlify="true"
-      netlify-honeypot="company-website"
-    >
-      <input type="hidden" name="form-name" value="contact" />
-      <!-- Honeypot: hidden from everyone. Netlify drops submissions that fill it in. -->
-      <p hidden>
-        <label>Leave this field empty <input name="company-website" tabindex="-1" autocomplete="off" /></label>
-      </p>
+    <section class="contact-paths__message" aria-labelledby="h-form">
+      <h2 id="h-form">Send a message</h2>
+      <form
+        class="form"
+        name="contact"
+        method="POST"
+        action="/contact/thanks/"
+        data-netlify="true"
+        netlify-honeypot="company-website"
+      >
+        <input type="hidden" name="form-name" value="contact" />
+        <!-- Honeypot: hidden from everyone. Netlify drops submissions that fill it in. -->
+        <p hidden>
+          <label>Leave this field empty <input name="company-website" tabindex="-1" autocomplete="off" /></label>
+        </p>
 
-      <div class="field">
-        <label for="name">Name</label>
-        <input id="name" name="name" type="text" autocomplete="name" required data-error="Enter your name." />
-        <p class="field__error" id="name-error" hidden></p>
-      </div>
-      <div class="field">
-        <label for="email">Email</label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          autocomplete="email"
-          required
-          data-error="Enter your email address, like name@example.org."
-        />
-        <p class="field__error" id="email-error" hidden></p>
-      </div>
-      <div class="field">
-        <label for="organization">Organization <span class="field__optional">(optional)</span></label>
-        <input id="organization" name="organization" type="text" autocomplete="organization" />
-      </div>
-      <div class="field">
-        <label for="message">Message</label>
-        <textarea id="message" name="message" rows="7" required data-error="Enter a message."></textarea>
-        <p class="field__error" id="message-error" hidden></p>
-      </div>
-      <button class="button" type="submit">Send message</button>
-    </form>
-  </Section>
+        <div class="field">
+          <label for="name">Name</label>
+          <input id="name" name="name" type="text" autocomplete="name" required data-error="Enter your name." />
+          <p class="field__error" id="name-error" hidden></p>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            required
+            data-error="Enter your email address, like name@example.org."
+          />
+          <p class="field__error" id="email-error" hidden></p>
+        </div>
+        <div class="field">
+          <label for="organization">Organization <span class="field__optional">(optional)</span></label>
+          <input id="organization" name="organization" type="text" autocomplete="organization" />
+        </div>
+        <div class="field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="7" required data-error="Enter a message."></textarea>
+          <p class="field__error" id="message-error" hidden></p>
+        </div>
+        <button class="button" type="submit">Send message</button>
+      </form>
+    </section>
+
+    <div class="contact-details">
+      <section aria-labelledby="h-email">
+        <h2 id="h-email">Email</h2>
+        <ul class="plain-list" role="list">
+          {EMAILS.map((email) => <li><a href={`mailto:${email}`}>{email}</a></li>)}
+        </ul>
+      </section>
+      <section aria-labelledby="h-where">
+        <h2 id="h-where">Where we are</h2>
+        <p>Rochester and the Twin Cities. We work with mission-driven organizations across Minnesota and beyond, mostly remotely.</p>
+      </section>
+    </div>
+  </div>
 
   <script>
     // Inline error text for the contact form. Without JavaScript the browser's
@@ -113,18 +124,4 @@ import { BOOKING_URL, EMAILS } from '../../data/site';
     }
   </script>
 
-  <Section num={3} label="Email" labelledby="h-email">
-    <h2 id="h-email" class="visually-hidden">Email</h2>
-    <ul class="plain-list" role="list">
-      {EMAILS.map((e) => <li><a href={`mailto:${e}`}>{e}</a></li>)}
-    </ul>
-  </Section>
-
-  <Section num={4} label="Where" labelledby="h-where">
-    <h2 id="h-where">Where we are</h2>
-    <p>
-      Rochester and the Twin Cities. We work with mission-driven organizations across Minnesota and beyond, mostly
-      remotely.
-    </p>
-  </Section>
 </Base>

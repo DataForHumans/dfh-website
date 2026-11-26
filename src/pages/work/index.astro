@@ -1,13 +1,25 @@
 ---
-import { Image } from 'astro:assets';
+import Button from '../../components/Button.astro';
+import PublicDashboard from '../../components/PublicDashboard.astro';
+import VolunteerAgeChart from '../../components/VolunteerAgeChart.astro';
 import { render } from 'astro:content';
+import NetworkAccent from '../../components/NetworkAccent.astro';
 import Base from '../../layouts/Base.astro';
-import PageHeader from '../../components/PageHeader.astro';
-import Section from '../../components/Section.astro';
-import { getWork } from '../../lib/content';
+import { getWork, workAnchor, workLink } from '../../lib/content';
+import '../../styles/core.css';
+
+const headlines: Record<string, string> = {
+  'any-path-home': 'One view of progress on homelessness',
+  'crowded-closet': 'Volunteer records sharpen recruitment',
+};
 
 const entries = await Promise.all(
-  (await getWork()).map(async (entry) => ({ entry, Content: (await render(entry)).Content })),
+  (await getWork()).map(async (entry) => ({
+    entry,
+    headline: headlines[entry.id],
+    Content: (await render(entry)).Content,
+    link: await workLink(entry),
+  })),
 );
 ---
 
@@ -15,37 +27,50 @@ const entries = await Promise.all(
   title="Our work"
   description="Here is what changed for mission-driven organizations once their data started working for them."
 >
-  <PageHeader title="Our work" accent>
-    <p class="lede">Here is what changed for mission-driven organizations once their data started working for them.</p>
-  </PageHeader>
+  <header class="editorial-frame core-intro work-intro">
+    <NetworkAccent variant="bridge" placement="work" />
+    <div>
+        <h1>Our work</h1>
+      <p class="lede">How nonprofits, public agencies and their partners use data to see progress, make decisions and plan for change.</p>
+    </div>
+    <nav class="core-index" aria-label="Jump to a project">
+      <ul role="list">
+        {entries.map(({ entry }) => (
+          <li><a href={`#${workAnchor(entry)}`}>{entry.data.title} <span aria-hidden="true">↓</span></a></li>
+        ))}
+      </ul>
+    </nav>
+  </header>
 
-  {
-    entries.map(({ entry, Content }, i) => (
-      <Section num={i + 1} id={entry.id} labelledby={`h-${entry.id}`} class="work-entry">
-        <p class="entry__meta mono">
-          {entry.data.service} · {entry.data.sector}
-        </p>
-        <h2 id={`h-${entry.id}`}>{entry.data.title}</h2>
-        {entry.data.logo && entry.data.logoAlt && (
-          <Image class="work-entry__logo" src={entry.data.logo} alt={entry.data.logoAlt} width={240} />
+  {entries.map(({ entry, headline, Content, link }) => (
+    <section class:list={['editorial-frame core-section case-study', { 'case-study--alternate': entry.id === 'crowded-closet' }]} id={workAnchor(entry)} aria-labelledby={`h-${entry.id}`}>
+      <div class="case-study__header">
+        <p class="entry__meta">{entry.data.service + ' · ' + entry.data.sector}</p>
+        <h2 id={`h-${entry.id}`}>{headline ?? entry.data.title}</h2>
+        {headline && <p class="case-study__client">{entry.data.title}</p>}
+      </div>
+      <div class="case-study__body">
+        {headline && (
+          <div class="case-study__evidence">
+            {entry.id === 'any-path-home' && <PublicDashboard />}
+            {entry.id === 'crowded-closet' && <VolunteerAgeChart analysisHref={link} />}
+          </div>
         )}
-        <div class="prose">
+        <div class="case-study__story">
           <Content />
+          {link && entry.id !== 'crowded-closet' && <a class="case-study__link" href={link}>{entry.data.linkLabel}</a>}
         </div>
-        {entry.data.quote && (
-          <figure class="pull-quote">
-            <blockquote>
-              <p>“{entry.data.quote}”</p>
-            </blockquote>
-            <figcaption>{entry.data.quoteSource}</figcaption>
-          </figure>
-        )}
-        {entry.data.link && (
-          <p>
-            <a href={entry.data.link}>{entry.data.linkLabel}</a>
-          </p>
-        )}
-      </Section>
-    ))
-  }
+      </div>
+      {entry.data.quote && (
+        <figure class="case-quote">
+          <blockquote><p>“{entry.data.quote}”</p></blockquote>
+          <figcaption>{entry.data.quoteSource}</figcaption>
+        </figure>
+      )}
+    </section>
+  ))}
+  <section class="editorial-frame core-section work-contact" aria-labelledby="work-contact-heading">
+    <h2 id="work-contact-heading">Talk through a similar data challenge</h2>
+    <Button href="/contact/">Contact the team</Button>
+  </section>
 </Base>

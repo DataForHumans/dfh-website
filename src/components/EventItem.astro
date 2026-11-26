@@ -1,7 +1,7 @@
 ---
-import { render } from 'astro:content';
+import { getEntry, render } from 'astro:content';
 import { formatDate, isoDate } from '../lib/dates';
-import { getPerson, type Event } from '../lib/content';
+import { getPerson, isLive, type Event } from '../lib/content';
 
 interface Props {
   event: Event;
@@ -10,6 +10,9 @@ interface Props {
 const { event, headingLevel = 3 } = Astro.props;
 const Heading = `h${headingLevel}` as 'h2' | 'h3';
 const { Content } = await render(event);
+// Link the recap only once its note is on the site.
+const recap = event.data.recap ? await getEntry('notes', event.data.recap.id) : undefined;
+const showRecap = recap !== undefined && isLive(recap);
 const speakers = await Promise.all(event.data.speakers.map(getPerson));
 const names = speakers.map((s) => s.data.knownAs ?? s.data.name);
 const withLine =
@@ -30,6 +33,6 @@ const withLine =
   <div class="prose"><Content /></div>
   <p class="event__links">
     {event.data.url && <a href={event.data.url}>Event page<span class="visually-hidden">: {event.data.title}</span></a>}
-    {event.data.recap && <a href={`/notes/${event.data.recap.id}/`}>Read the recap</a>}
+    {showRecap && <a href={`/notes/${recap.id}/`}>Read the recap</a>}
   </p>
 </article>

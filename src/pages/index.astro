@@ -1,31 +1,49 @@
 ---
 import Base from '../layouts/Base.astro';
-import Section from '../components/Section.astro';
+import NetworkAccent from '../components/NetworkAccent.astro';
+import CapabilityIcon from '../components/CapabilityIcon.astro';
 import Button from '../components/Button.astro';
-import NoteList from '../components/NoteList.astro';
-import EventItem from '../components/EventItem.astro';
-import { BOOKING_URL, TAGLINE, SITE_NAME } from '../data/site';
-import { getNotes, getUpcomingEvents, getWork, outcomeOf } from '../lib/content';
+import PublicDashboard from '../components/PublicDashboard.astro';
+import VolunteerAgeChart from '../components/VolunteerAgeChart.astro';
+import SystemsGraphic from '../components/SystemsGraphic.astro';
+import { SERVICE_SLUGS } from '../content.config';
+import { BOOKING_URL, SERVICE_NAMES, TAGLINE, SITE_NAME } from '../data/site';
+import { getUpcomingEvents, getWork, outcomeOf, workAnchor, workLink } from '../lib/content';
+import { formatDate, isoDate } from '../lib/dates';
 
 const [nextEvent] = await getUpcomingEvents();
-const latestNotes = (await getNotes()).slice(0, 2);
-const recentWork = await getWork(true);
-const quoted = recentWork.find((w) => w.id === 'crowded-closet');
+const [roadmapSlug, ...capabilities] = SERVICE_SLUGS;
+
+const projectCopy: Record<string, { headline: string; summary: string }> = {
+  'any-path-home': {
+    headline: 'One view of progress on homelessness',
+    summary: 'A public dashboard brings agency data together while keeping individual records out of public view.',
+  },
+  'crowded-closet': {
+    headline: 'Volunteer records sharpen recruitment',
+    summary: 'The analysis helped the shop focus recruiting on older volunteers, who provided much of its steady service.',
+  },
+};
+
+const projects = await Promise.all(
+  (await getWork(true)).map(async (entry) => ({
+    entry,
+    copy: projectCopy[entry.id],
+    link: await workLink(entry),
+  })),
+);
 
 const figures = [
-  { value: '85+', label: "organizations' data brought together" },
-  { value: '25+', label: 'years of combined experience' },
-  { value: '100+', label: 'organizations reached by one planning tool' },
-  { value: '4', label: 'weeks to a roadmap' },
+  { value: '85+', label: "Organizations' data brought together" },
+  { value: '30+', label: 'Years of combined experience' },
+  { value: '4', unit: 'weeks', label: 'To a focused data roadmap' },
 ];
 ---
 
 <Base title={SITE_NAME} description={`${TAGLINE}. We help nonprofits, public agencies and cities make better decisions with the records they already keep.`}>
-  <header class="page-header home-hero">
-    <div class="section__rail"></div>
-    <div class="section__body">
-      <p class="eyebrow mono">Rochester and the Twin Cities · Working nationally</p>
-      <h1>Your mission runs on data. Let's make it work for you.</h1>
+  <header class="editorial-frame editorial-grid home-hero">
+    <div class="home-hero__copy">
+      <h1><span class="home-hero__statement">Your mission runs on data.</span> <em>Let's make it work for you.</em></h1>
       <p class="lede">
         We help nonprofits, public agencies and cities make better decisions with the records they already keep, without
         hiring a full-time data team.
@@ -35,79 +53,86 @@ const figures = [
         <Button href="/work/">See our work</Button>
       </p>
     </div>
+    <SystemsGraphic />
   </header>
 
   <section class="figures" aria-label="Key figures">
-    <dl class="figures__list">
-      {
-        figures.map((f) => (
-          <div class="figures__item">
-            <dt class="mono figures__value">{f.value}</dt>
-            <dd class="figures__label">{f.label}</dd>
-          </div>
-        ))
-      }
+    <NetworkAccent variant="drift" placement="metrics" />
+    <dl class="editorial-frame figures__list">
+      {figures.map((figure) => (
+        <div class="figures__item">
+          <dt class="mono figures__value">{figure.value}{figure.unit && <> <span class="figures__unit">{figure.unit}</span></>}</dt>
+          <dd class="figures__label">{figure.label}</dd>
+        </div>
+      ))}
     </dl>
   </section>
 
-  <Section num={1} label="Start" labelledby="h-start">
-    <h2 id="h-start">Where most work starts</h2>
-    <p>
-      The Data Roadmap is four weeks and a fixed fee. We look at your systems, talk with the people who use them, and hand
-      you a plan in order of what to fix first. You own it, whoever builds it, and you are free to stop there.
-    </p>
-  </Section>
-
-  <Section num={2} label="Services" labelledby="h-after">
-    <h2 id="h-after">What we do after that</h2>
-    <p>
-      Shared dashboards for coalitions, connected and cleaned-up records, research and evaluation for funders and boards,
-      and practical help putting AI to work safely.
-    </p>
-    <p><a href="/services/">All services</a></p>
-  </Section>
-
-  <Section num={3} label="Work" labelledby="h-work">
-    <h2 id="h-work">Recent work</h2>
-    <ul class="entry-list" role="list">
-      {
-        recentWork.map((w) => (
-          <li class="entry">
-            <p class="entry__meta mono">
-              {w.data.service} · {w.data.sector}
-            </p>
-            <h3 class="entry__title">
-              <a href={`/work/#${w.id}`}>{w.data.title}</a>
-            </h3>
-            <p>{outcomeOf(w)}</p>
-          </li>
-        ))
-      }
+  <section class="editorial-frame home-section selected-work" aria-labelledby="h-work">
+    <NetworkAccent variant="threads" placement="selected-work" />
+    <div class="home-section__heading">
+      <h2 id="h-work">Selected work</h2>
+      <a href="/work/">View all work <span aria-hidden="true">↗</span></a>
+    </div>
+    <ul class="selected-work__list" role="list">
+      {projects.map(({ entry, copy, link }) => (
+        <li class="selected-work__item">
+          {(entry.id === 'any-path-home' || entry.id === 'crowded-closet') && (
+            <div class="selected-work__visual">
+              {entry.id === 'any-path-home' ? <PublicDashboard preview /> : <VolunteerAgeChart preview analysisHref={link} />}
+            </div>
+          )}
+          <div class="selected-work__copy">
+            <h3><a href={`/work/#${workAnchor(entry)}`}><span>{copy?.headline ?? entry.data.title}</span><span aria-hidden="true">↗</span></a></h3>
+            {copy && <p class="selected-work__client">{entry.data.title}</p>}
+            <p>{copy?.summary ?? outcomeOf(entry)}</p>
+            {link?.startsWith('https://') && <a class="selected-work__source" href={link}>{entry.data.linkLabel}</a>}
+          </div>
+        </li>
+      ))}
     </ul>
-    {
-      quoted?.data.quote && (
-        <figure class="pull-quote">
-          <blockquote>
-            <p>“{quoted.data.quote}”</p>
-          </blockquote>
-          <figcaption>{quoted.data.quoteSource}</figcaption>
-        </figure>
-      )
-    }
-  </Section>
+  </section>
 
-  <Section num={4} label="Next up" labelledby="h-next">
-    <h2 id="h-next">Next up</h2>
-    {nextEvent && <EventItem event={nextEvent} headingLevel={3} />}
-    <NoteList notes={latestNotes} headingLevel={3} />
-  </Section>
+  <section class="editorial-frame editorial-grid home-section home-services" aria-labelledby="h-services">
+    <NetworkAccent variant="drift" placement="sage-panel" />
+    <div>
+      <p class="home-services__label">The Data Roadmap</p>
+      <h2 id="h-services">Know what to fix first</h2>
+      <p>
+        In four weeks, for a fixed fee, we map your systems and give you a prioritized plan.
+        The plan is yours to use with any team.
+      </p>
+      <Button href={`/services/#${roadmapSlug}`}>Explore the Roadmap</Button>
+    </div>
+    <div class="home-services__capabilities">
+      <h3>Our capabilities</h3>
+      <ul role="list">
+        {capabilities.map((slug) => (
+          <li><a href={`/services/#${slug}`}><CapabilityIcon service={slug} /><span>{SERVICE_NAMES[slug]}</span><span aria-hidden="true">↗</span></a></li>
+        ))}
+      </ul>
+    </div>
+  </section>
 
-  <Section class="closing" labelledby="h-closing">
-    <h2 id="h-closing">Start with a free 30-minute call.</h2>
-    <p>You'll leave with a suggested next step, whether or not you hire us.</p>
+  {nextEvent && (
+    <aside class="editorial-frame home-event" aria-label="Upcoming event">
+      <div>
+        <p class="mono">Upcoming event · <time datetime={isoDate(nextEvent.data.date)}>{formatDate(nextEvent.data.date)}</time> · {nextEvent.data.time}</p>
+        <p>{nextEvent.data.title}</p>
+      </div>
+      <a href="/events/">Event details <span aria-hidden="true">↗</span></a>
+    </aside>
+  )}
+
+  <NetworkAccent variant="fragment" placement="closing" />
+  <section class="editorial-frame home-section home-contact" aria-labelledby="h-closing">
+    <div>
+      <h2 id="h-closing">Start with a free 30-minute call</h2>
+      <p>You'll leave with a suggested next step, whether or not you hire us.</p>
+    </div>
     <p class="actions">
-      <Button href={BOOKING_URL}>Book a free call</Button>
+      <Button href={BOOKING_URL} primary>Book a free call</Button>
       <Button href="/contact/">Send a message</Button>
     </p>
-  </Section>
+  </section>
 </Base>

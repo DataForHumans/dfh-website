@@ -1,15 +1,15 @@
 ---
 import Base from '../layouts/Base.astro';
-import PageHeader from '../components/PageHeader.astro';
+import SupportHeader from '../components/SupportHeader.astro';
 ---
 
 <Base title="Page not found" description="This page isn't here." noindex>
-  <PageHeader title="Page not found" accent>
+  <SupportHeader title="Page not found">
     <p class="lede">This page isn't here. It may have moved when we rebuilt the site.</p>
-    <ul class="plain-list" role="list">
+    <ul class="support-actions plain-list" role="list">
       <li><a href="/services/">Services</a></li>
       <li><a href="/notes/">Notes</a></li>
       <li><a href="/contact/">Contact</a></li>
     </ul>
-  </PageHeader>
+  </SupportHeader>
 </Base>

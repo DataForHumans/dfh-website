@@ -55,7 +55,7 @@ The look is a printed report, not a SaaS landing page.
 - Thin rules between sections. No rounded cards, drop shadows, gradients, emoji or icon grids. Services appear as a numbered ledger, one row each.
 - Key figures go on one ruled line of four numbers in Space Mono, not in big stat tiles.
 - Photos are plain rectangles, never circles. Team photos are small and grayscale until hover or focus.
-- One ochre accent per page at most: the rule under the page title, or the primary button.
+- Use ochre sparingly for a title rule or a primary action. Repeated links to the same primary action can share that treatment.
 - Text colors on cream: `--ink`, `--sage-text` or `--ochre-text` only. `--sage` and `--ochre` are never used for body or small text.
 
 ## Accessibility (WCAG 2.1 AA)
@@ -66,7 +66,7 @@ Every page has a skip link, a visible focus ring, landmarks (`header`, `nav`, `m
 
 | Route | Page | Built from |
 | --- | --- | --- |
-| `/` | Home | `src/pages/index.astro`, featured work, the next event and the two latest notes |
+| `/` | Home | `src/pages/index.astro`, selected work, services and the Roadmap, and the next event when scheduled |
 | `/services/` | Services | `src/pages/services/index.astro`. Each service has an anchor, e.g. `/services/#records-integration`; products are at `#products` |
 | `/work/` | Our work | `work` collection, in `order` |
 | `/notes/` | Notes | `notes` collection, newest first, with links to the type pages |
@@ -121,6 +121,7 @@ People are referenced by their `id` in `team.yaml` (for example `chris-roberts`,
 3. Write the body in Markdown. Use `##` for section headings, never `#`, because the title is the page's only `h1`.
 4. Follow the voice rules. Check for dashes before you commit.
 5. Run `npm run build`, open a PR, and share the deploy preview. Post the note on the company LinkedIn page the same week it goes live.
+6. To schedule a note, give it a future `date` and merge it whenever it's ready. The live site leaves out any note dated after the day it was built, along with its RSS item, sitemap entry and any links to it (the About page's "Our note", an event's recap link). The daily rebuild publishes it on the morning of its date (Minnesota time). Deploy previews, branch deploys and `npm run dev` show scheduled notes so they can be reviewed; for a local production build with them, run `SHOW_SCHEDULED=true npm run build`.
 
 ### Add an event
 
@@ -157,7 +158,8 @@ People are referenced by their `id` in `team.yaml` (for example `chris-roberts`,
    sector: Homelessness
    service: Collective impact
    order: 1                       # position on /work/, lowest first
-   featured: true                 # show in "Recent work" on the home page (keep it to three)
+   public: true                   # default; false keeps the source out of the public portfolio
+   featured: true                 # show this public entry in "Selected work" on the home page
    link: https://anypathhome.org/ # optional
    linkLabel: View the live dashboard on anypathhome.org   # required if link is set
    quote: "..."                   # optional, only a real, approved quote
@@ -167,7 +169,7 @@ People are referenced by their `id` in `team.yaml` (for example `chris-roberts`,
    ---
    ```
 
-3. The body is short: one paragraph each for the challenge, what we did and the outcome, in that order. The home page shows the last paragraph (the outcome) under featured entries, so make it stand on its own.
+3. Use short level-three headings for the challenge, the work and the outcome. Label ongoing work as such and describe what is underway. Featured entries without a bespoke home summary use the last paragraph, so make it stand on its own.
 4. Anonymized entries carry no client name or identifying details, in the frontmatter or in the body.
 5. Only publish a client's name, logo or quote once they have approved it.
 
