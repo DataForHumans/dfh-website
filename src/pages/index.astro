@@ -29,21 +29,20 @@ const projects = await Promise.all(
   (await getWork(true)).map(async (entry) => ({
     entry,
     copy: projectCopy[entry.id],
-    externalLink: entry.data.link?.startsWith('https://') ? await workLink(entry) : undefined,
+    link: await workLink(entry),
   })),
 );
 
 const figures = [
-  { value: '85+', label: "organizations' data brought together" },
-  { value: '25+', label: 'years of combined experience' },
-  { value: '100+', label: 'organizations reached by one planning tool' },
+  { value: '85+', label: "Organizations' data brought together" },
+  { value: '30+', label: 'Years of combined experience' },
+  { value: '4', unit: 'weeks', label: 'To a focused data roadmap' },
 ];
 ---
 
 <Base title={SITE_NAME} description={`${TAGLINE}. We help nonprofits, public agencies and cities make better decisions with the records they already keep.`}>
   <header class="editorial-frame editorial-grid home-hero">
     <div class="home-hero__copy">
-      <p class="eyebrow mono">Rochester and the Twin Cities · Working nationally</p>
       <h1><span class="home-hero__statement">Your mission runs on data.</span> <em>Let's make it work for you.</em></h1>
       <p class="lede">
         We help nonprofits, public agencies and cities make better decisions with the records they already keep, without
@@ -62,7 +61,7 @@ const figures = [
     <dl class="editorial-frame figures__list">
       {figures.map((figure) => (
         <div class="figures__item">
-          <dt class="mono figures__value">{figure.value}</dt>
+          <dt class="mono figures__value">{figure.value}{figure.unit && <> <span class="figures__unit">{figure.unit}</span></>}</dt>
           <dd class="figures__label">{figure.label}</dd>
         </div>
       ))}
@@ -70,23 +69,24 @@ const figures = [
   </section>
 
   <section class="editorial-frame home-section selected-work" aria-labelledby="h-work">
+    <NetworkAccent variant="threads" placement="selected-work" />
     <div class="home-section__heading">
       <h2 id="h-work">Selected work</h2>
       <a href="/work/">View all work <span aria-hidden="true">↗</span></a>
     </div>
     <ul class="selected-work__list" role="list">
-      {projects.map(({ entry, copy, externalLink }) => (
+      {projects.map(({ entry, copy, link }) => (
         <li class="selected-work__item">
           {(entry.id === 'any-path-home' || entry.id === 'crowded-closet') && (
             <div class="selected-work__visual">
-              {entry.id === 'any-path-home' ? <PublicDashboard preview /> : <VolunteerAgeChart preview />}
+              {entry.id === 'any-path-home' ? <PublicDashboard preview /> : <VolunteerAgeChart preview analysisHref={link} />}
             </div>
           )}
           <div class="selected-work__copy">
             <h3><a href={`/work/#${workAnchor(entry)}`}><span>{copy?.headline ?? entry.data.title}</span><span aria-hidden="true">↗</span></a></h3>
-            {copy && <p class="mono selected-work__client">{entry.data.title}</p>}
+            {copy && <p class="selected-work__client">{entry.data.title}</p>}
             <p>{copy?.summary ?? outcomeOf(entry)}</p>
-            {externalLink && <a class="selected-work__source" href={externalLink}>{entry.data.linkLabel}</a>}
+            {link?.startsWith('https://') && <a class="selected-work__source" href={link}>{entry.data.linkLabel}</a>}
           </div>
         </li>
       ))}
@@ -96,7 +96,7 @@ const figures = [
   <section class="editorial-frame editorial-grid home-section home-services" aria-labelledby="h-services">
     <NetworkAccent variant="drift" placement="sage-panel" />
     <div>
-      <p class="eyebrow mono">The Data Roadmap</p>
+      <p class="home-services__label">The Data Roadmap</p>
       <h2 id="h-services">Know what to fix first</h2>
       <p>
         In four weeks, for a fixed fee, we map your systems and give you a prioritized plan.
@@ -105,7 +105,7 @@ const figures = [
       <Button href={`/services/#${roadmapSlug}`}>Explore the Roadmap</Button>
     </div>
     <div class="home-services__capabilities">
-      <h3 class="mono">Our capabilities</h3>
+      <h3>Our capabilities</h3>
       <ul role="list">
         {capabilities.map((slug) => (
           <li><a href={`/services/#${slug}`}><CapabilityIcon service={slug} /><span>{SERVICE_NAMES[slug]}</span><span aria-hidden="true">↗</span></a></li>

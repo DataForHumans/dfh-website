@@ -29,7 +29,7 @@
   --leading-body: 1.6;
   --text-small: 1rem;
   --text-mono: 0.8125rem;
-  --tracking-mono: 0.06em;
+  --tracking-mono: 0.025em;
   --text-h1: clamp(2.35rem, 1.75rem + 2.5vw, 3.65rem);
   --text-h2: clamp(1.7rem, 1.3rem + 1.4vw, 2.25rem);
   --text-h3: clamp(1.375rem, 1.2rem + 0.8vw, 1.625rem);

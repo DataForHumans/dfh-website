@@ -429,3 +429,28 @@
   .roadmap { padding-inline: clamp(2.4rem, 4.8vw, 4.2rem); }
   .about-intro .lede { max-width: min(56%, 52ch); }
 }
+
+
+.services-intro .services-intro__flagship {
+  padding-inline: var(--space-2);
+  background: var(--sage-wash);
+  color: var(--sage-deep);
+  font-weight: 600;
+}
+
+
+.roadmap { position: relative; }
+
+@media (min-width: 62rem) {
+  .work-intro {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .work-intro > div { max-width: 57%; }
+
+  .work-intro .core-index ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 var(--space-4);
+  }
+}

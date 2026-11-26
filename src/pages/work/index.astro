@@ -28,10 +28,9 @@ const entries = await Promise.all(
   description="Here is what changed for mission-driven organizations once their data started working for them."
 >
   <header class="editorial-frame core-intro work-intro">
-    <NetworkAccent variant="threads" placement="work" />
+    <NetworkAccent variant="bridge" placement="work" />
     <div>
-      <p class="eyebrow mono">Portfolio</p>
-      <h1>Our work</h1>
+        <h1>Our work</h1>
       <p class="lede">How nonprofits, public agencies and their partners use data to see progress, make decisions and plan for change.</p>
     </div>
     <nav class="core-index" aria-label="Jump to a project">
@@ -46,7 +45,7 @@ const entries = await Promise.all(
   {entries.map(({ entry, headline, Content, link }) => (
     <section class:list={['editorial-frame core-section case-study', { 'case-study--alternate': entry.id === 'crowded-closet' }]} id={workAnchor(entry)} aria-labelledby={`h-${entry.id}`}>
       <div class="case-study__header">
-        <p class="eyebrow mono">{entry.data.service + ' · ' + entry.data.sector}</p>
+        <p class="entry__meta">{entry.data.service + ' · ' + entry.data.sector}</p>
         <h2 id={`h-${entry.id}`}>{headline ?? entry.data.title}</h2>
         {headline && <p class="case-study__client">{entry.data.title}</p>}
       </div>
@@ -54,12 +53,12 @@ const entries = await Promise.all(
         {headline && (
           <div class="case-study__evidence">
             {entry.id === 'any-path-home' && <PublicDashboard />}
-            {entry.id === 'crowded-closet' && <VolunteerAgeChart />}
+            {entry.id === 'crowded-closet' && <VolunteerAgeChart analysisHref={link} />}
           </div>
         )}
         <div class="case-study__story">
           <Content />
-          {link && <a class="case-study__link" href={link}>{entry.data.linkLabel}</a>}
+          {link && entry.id !== 'crowded-closet' && <a class="case-study__link" href={link}>{entry.data.linkLabel}</a>}
         </div>
       </div>
       {entry.data.quote && (

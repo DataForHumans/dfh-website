@@ -1,12 +1,12 @@
 ---
 interface Props {
   variant: 'threads' | 'fragment' | 'drift' | 'bridge';
-  placement: 'heading' | 'services-intro' | 'closing' | 'footer' | 'metrics' | 'sage-panel' | 'about' | 'work' | 'contact';
+  placement: 'heading' | 'services-intro' | 'closing' | 'footer' | 'metrics' | 'selected-work' | 'roadmap' | 'sage-panel' | 'about' | 'work' | 'contact';
 }
 
 const { variant, placement } = Astro.props;
-const dust = Array.from({ length: variant === 'drift' ? 48 : 0 }, (_, index) => {
-  const density = index / 47;
+const dust = Array.from({ length: variant === 'drift' ? 92 : 38 }, (_, index) => {
+  const density = index / (variant === 'drift' ? 91 : 37);
   return {
     x: 354 - 348 * density ** 1.7,
     y: 106 + (((index * 47) % 97) - 48) * (1.65 - density * 0.7),
@@ -17,6 +17,19 @@ const dust = Array.from({ length: variant === 'drift' ? 48 : 0 }, (_, index) => 
 ---
 <span class:list={['network-accent', `network-accent--${placement}`]} data-network-accent aria-hidden="true">
   <svg viewBox="0 0 360 205" focusable="false" aria-hidden="true">
+    {variant !== 'drift' && (
+      <g class="network-accent__constellation">
+        <path d="M11 148C69 154 104 90 121 72S175 44 212 63m-139 26 24-41 24 24-19 31-29-14m48-17 32 21 22-33 37 3m-110 40 51-10 55 31 24-15" fill="none" stroke="var(--network-line)" stroke-width=".85"/>
+        <g fill="var(--network-node)">
+          <circle cx="73" cy="89" r="3.4"/><circle cx="97" cy="48" r="2.3"/><circle cx="121" cy="72" r="4.1"/>
+          <circle cx="102" cy="103" r="2.4"/><circle cx="153" cy="93" r="3"/><circle cx="175" cy="60" r="2.7"/>
+          <circle cx="212" cy="63" r="2.8"/><circle cx="208" cy="124" r="2.5"/>
+        </g>
+        {dust.map(({ x, y, radius, opacity }, index) => (
+          <circle cx={x} cy={y} r={radius} opacity={opacity} fill={index % 5 === 0 ? 'var(--ochre)' : 'var(--network-node)'} />
+        ))}
+      </g>
+    )}
     {variant === 'drift' ? (
       <>
         <path d="M-6 188C64 180 93 124 151 130S223 152 265 98 326 85 365 49m-100 49 52 40 42-15m-42 15 23 35" fill="none" stroke="var(--network-line)" stroke-width="1.4" />
@@ -97,60 +110,94 @@ const dust = Array.from({ length: variant === 'drift' ? 48 : 0 }, (_, index) => 
   }
 
   .network-accent svg { display: block; width: 100%; height: auto; pointer-events: none; }
-  .network-accent--heading { inset-block-start: 0; opacity: 0.48; }
-  .network-accent--services-intro { inset-block-start: 0; opacity: 0.63; width: min(42%, 30rem); }
+  .network-accent--heading { inset-block-start: 0; }
+  .network-accent__constellation { opacity: 0.68; }
+  .network-accent--heading { width: min(27vw, 26rem); opacity: 0.48; }
+  .network-accent--services-intro {
+    inset-block-start: -0.9rem;
+    inset-inline-end: calc(var(--gutter) * -0.85);
+    opacity: 0.72;
+    width: min(39vw, 36rem);
+  }
+  .network-accent--services-intro svg { mask-image: linear-gradient(to bottom, #000 75%, transparent); }
   .network-accent--metrics {
     inset-inline-end: auto;
     inset-inline-start: 0;
-    inset-block-start: -4.4rem;
-    width: min(7.8vw, 7rem);
-    opacity: 0.82;
+    inset-block-start: -8.4rem;
+    width: min(30vw, 28rem);
+    height: 11.8rem;
+    opacity: 0.78;
+    mask-image: linear-gradient(115deg, #000 32%, transparent 82%);
   }
-  .network-accent--metrics svg { width: 13rem; margin-inline-start: -6.2rem; transform: scaleX(-1); }
+  .network-accent--metrics svg { transform: scaleX(-1) translateX(13%); }
+
+  .network-accent--selected-work {
+    inset-inline-end: calc(var(--gutter) * -1);
+    inset-block-start: -2.8rem;
+    width: min(28vw, 24rem);
+    height: 7.5rem;
+    opacity: 0.63;
+    mask-image: linear-gradient(to bottom, transparent, #000 22%, #000 68%, transparent);
+  }
+  .network-accent--selected-work svg { transform: translate(10%, -29%); }
+
+  .network-accent--roadmap {
+    inset-inline-end: calc(var(--gutter) * -1);
+    inset-block-start: -5.4rem;
+    width: min(32vw, 30rem);
+    height: 12rem;
+    opacity: 0.72;
+    mask-image: linear-gradient(116deg, transparent 32%, #000 72%);
+  }
+  .network-accent--roadmap svg { transform: translateY(-15%); }
+
   .network-accent--sage-panel {
     inset-inline-end: auto;
-    inset-inline-start: 0;
-    inset-block-end: 0;
-    width: min(34%, 24rem);
-    height: 7rem;
-    opacity: 0.57;
+    inset-inline-start: calc(var(--gutter) * -1);
+    inset-block-end: -2.15rem;
+    width: min(33vw, 29rem);
+    height: 10rem;
+    opacity: 0.73;
   }
-  .network-accent--sage-panel svg { width: 100%; transform: translateY(-21%) scaleX(-1); }
+  .network-accent--sage-panel svg { transform: translate(-7%, -20%) scaleX(-1); }
+
   .network-accent--closing {
     inset-inline-end: auto;
     inset-inline-start: 0;
-    inset-block-end: 0;
-    opacity: 0.73;
-    width: min(11vw, 10rem);
+    inset-block-end: -2.6rem;
+    opacity: 0.68;
+    width: min(34vw, 31rem);
+    height: 8.8rem;
+    mask-image: linear-gradient(120deg, transparent 13%, #000 46%, #000 70%, transparent);
   }
-  .network-accent--closing svg { width: 14rem; transform: scaleX(-1) translateX(37%); }
-  .network-accent--about {
-    inset-block-start: 0.5rem;
-    width: min(38%, 28rem);
-    opacity: 0.76;
-  }
-  .network-accent--about svg { transform: translateX(8%); }
+  .network-accent--closing svg { transform: scaleX(-1) translate(15%, -36%); }
+
+  .network-accent--about,
   .network-accent--work {
-    inset-block-end: -1.05rem;
-    width: min(36%, 24rem);
-    height: 5rem;
-    opacity: 0.65;
+    inset-inline-end: calc(var(--gutter) * -1);
+    width: min(39vw, 36rem);
+    opacity: 0.78;
+    inset-block-start: -1.2rem;
   }
-  .network-accent--work svg { transform: translateY(-43%); }
+  .network-accent--about svg { transform: translate(8%, 4%); }
+  .network-accent--work svg { transform: translate(7%, -1%); }
+
   .network-accent--contact {
-    inset-block-start: 0;
-    width: min(32vw, 29rem);
+    inset-block-start: -0.8rem;
+    width: min(37vw, 34rem);
     opacity: 0.76;
   }
+
   .network-accent--footer {
     --network-line: var(--diagram-soft);
     --network-node: var(--diagram-soft);
     inset-block-end: 0;
-    opacity: 0.7;
-    width: min(22vw, 21rem);
-    height: 9.25rem;
+    opacity: 0.72;
+    width: min(33vw, 31rem);
+    height: 10rem;
+    mask-image: linear-gradient(to right, transparent 44%, #000 80%);
   }
-  .network-accent--footer svg { transform: translate(12%, -12%); }
+  .network-accent--footer svg { transform: translate(11%, -23%); }
 
   @media (min-width: 62rem) {
     .network-accent--heading,
@@ -160,6 +207,8 @@ const dust = Array.from({ length: variant === 'drift' ? 48 : 0 }, (_, index) => 
   }
   @media (min-width: 75rem) {
     .network-accent--metrics,
+    .network-accent--selected-work,
+    .network-accent--roadmap,
     .network-accent--sage-panel,
     .network-accent--closing,
     .network-accent--contact,

@@ -97,7 +97,6 @@ ol {
   font-family: var(--font-mono);
   font-size: var(--text-mono);
   letter-spacing: var(--tracking-mono);
-  text-transform: uppercase;
   line-height: 1.5;
 }
 
@@ -284,8 +283,7 @@ a:hover {
   padding-block: clamp(2.2rem, 6vw, 6rem);
 }
 
-.home-hero .eyebrow,
-.home-services .eyebrow {
+.home-services__label {
   color: var(--sage-text);
 }
 
@@ -369,6 +367,9 @@ a:hover {
   line-height: 1.35;
   hyphens: auto;
 }
+
+.figures__value { white-space: nowrap; }
+.figures__unit { font: 500 clamp(0.9rem, 1.55vw, 1.65rem) / 1 var(--font-body); letter-spacing: -0.025em; }
 
 .home-section {
   --home-space: clamp(1.65rem, 4.2vw, 4.45rem);
@@ -468,12 +469,12 @@ a:hover {
   border-radius: 0.25rem;
 }
 
-.home-services .eyebrow,
+.home-services__label,
 .home-services h2 {
   margin-bottom: var(--space-2);
 }
 
-.home-services p:not(.eyebrow) {
+.home-services p:not(.home-services__label) {
   max-width: 43ch;
   margin-bottom: var(--space-3);
 }
@@ -508,8 +509,9 @@ a:hover {
   align-items: center;
   justify-content: space-between;
   gap: 0 var(--space-3);
-  padding-block: var(--space-3);
-  border-bottom: 1px solid var(--rule);
+  margin-top: clamp(1.4rem, 3vw, 2.5rem);
+  padding-block: clamp(1rem, 2vw, 1.75rem);
+  border-block: 1px solid var(--rule);
 }
 
 .home-event p,
@@ -743,6 +745,7 @@ a:hover {
 
 .site-footer {
   position: relative;
+  overflow: clip;
   margin-top: var(--space-4);
   background: var(--sage-deep);
   color: var(--cream);
@@ -760,7 +763,7 @@ a:hover {
 .site-footer__name {
   margin: 0 0 var(--space-3);
   font-family: var(--font-display);
-  font-size: clamp(2rem, 1.55rem + 2vw, 3.65rem);
+  font-size: clamp(1.45rem, 1.2rem + 0.85vw, 2.05rem);
   line-height: 1;
   letter-spacing: -0.035em;
 }
@@ -783,6 +786,7 @@ a:hover {
 }
 
 .site-footer__ventures {
+  font-size: var(--text-small);
   margin: 0 0 var(--space-1);
   color: var(--diagram-soft);
 }
@@ -836,6 +840,7 @@ a:hover {
 }
 
 .figures,
+.selected-work,
 .home-services { position: relative; }
 
 @media (min-width: 62rem) {
@@ -851,4 +856,17 @@ a:hover {
   .home-services > div { position: relative; }
   .home-services__capabilities a { min-height: 3rem; }
   .home-contact { padding-block-end: calc(var(--home-space) + 1.65rem); }
+}
+
+@media (max-width: 40rem) {
+  .site-nav ul { column-gap: 0.5rem; }
+}
+
+@media (max-width: 24rem) {
+  .site-nav ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .site-nav a { width: 100%; }
+}
+
+@media (min-width: 75rem) {
+  .home-contact { padding-block-end: calc(var(--home-space) + 3rem); }
 }

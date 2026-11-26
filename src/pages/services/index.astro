@@ -44,14 +44,13 @@ const offerings = {
 <Base title="Services" description="Every engagement starts with a plan: a four-week Data Roadmap. Then dashboards, records and integration, research and evaluation, AI policy and training, and part-time data leadership.">
   <header class="editorial-frame core-intro services-intro">
     <div>
-      <p class="eyebrow mono">Services</p>
       <h1>From better questions to better systems</h1>
       <p class="lede">Nearly every engagement begins with a four-week Data Roadmap. We tailor the work to your budget, tools and team.</p>
     </div>
     <NetworkAccent variant="threads" placement="services-intro" />
     <nav class="core-index" aria-label="On this page">
       <ul role="list">
-        <li><a href="#data-roadmap">The Data Roadmap <span aria-hidden="true">↓</span></a></li>
+        <li><a class="services-intro__flagship" href="#data-roadmap">The Data Roadmap <span aria-hidden="true">↓</span></a></li>
         {capabilities.map((slug) => (
           <li><a href={`#${slug}`}>{SERVICE_NAMES[slug]} <span aria-hidden="true">↓</span></a></li>
         ))}
@@ -60,6 +59,7 @@ const offerings = {
   </header>
 
   <section class="editorial-frame core-section roadmap" id="data-roadmap" aria-labelledby="h-roadmap">
+    <NetworkAccent variant="drift" placement="roadmap" />
     <div class="roadmap__heading">
       <h2 id="h-roadmap">The Data Roadmap</h2>
       <p>Four weeks, fixed fee and scope. You own the plan and can hand it to your team or any vendor, with no obligation to continue.</p>
@@ -122,7 +122,7 @@ const offerings = {
       <li>
         <h3>Footprint Review</h3>
         <p>Gathers what your organization knows and has achieved, from staff interviews and the documents you already have, so you can find it and tell your story.</p>
-        <p>{footprintReview.live ? <a href={footprintReview.url}>{footprintReview.domain}</a> : footprintReview.domain}</p>
+        <p>{footprintReview.live ? <a href={footprintReview.url}>{footprintReview.name}</a> : footprintReview.name}</p>
       </li>
       <li>
         <h3>Parcelwise</h3>

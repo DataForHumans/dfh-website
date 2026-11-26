@@ -4,14 +4,12 @@ import '../styles/support.css';
 
 interface Props {
   title: string;
-  eyebrow?: string;
 }
 
-const { title, eyebrow } = Astro.props;
+const { title } = Astro.props;
 ---
 
 <header class="editorial-frame core-intro">
-  {eyebrow && <p class="eyebrow mono">{eyebrow}</p>}
   <h1>{title}</h1>
   <slot />
 </header>

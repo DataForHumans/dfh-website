@@ -8,7 +8,7 @@ import { FOOTER_LINE, LINKEDIN_URL, PRODUCTS, RELAYERED, SITE_NAME, TAGLINE } fr
   <div class="site-footer__inner">
     <div class="site-footer__identity">
       <p class="site-footer__name">{SITE_NAME}</p>
-      <p class="site-footer__tagline">{TAGLINE}</p>
+      <p class="site-footer__tagline">{TAGLINE}.</p>
       <p class="site-footer__line">{FOOTER_LINE}</p>
     </div>
     <nav class="site-footer__links" aria-label="Footer">
@@ -24,7 +24,7 @@ import { FOOTER_LINE, LINKEDIN_URL, PRODUCTS, RELAYERED, SITE_NAME, TAGLINE } fr
         <li><a href="/notes/rss.xml">RSS</a></li>
       </ul>
       <div>
-        <p class="mono site-footer__ventures" id="footer-ventures">Related ventures</p>
+        <p class="site-footer__ventures" id="footer-ventures">Related ventures</p>
         <ul role="list" aria-labelledby="footer-ventures">
           <li>Fabrication:&nbsp;{RELAYERED.live ? <a href={RELAYERED.url}>{RELAYERED.name}</a> : RELAYERED.name}</li>
           {

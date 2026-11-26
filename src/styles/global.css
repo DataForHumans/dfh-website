@@ -90,4 +90,5 @@ main:focus {
 
 main {
   position: relative;
+  overflow-x: clip;
 }
