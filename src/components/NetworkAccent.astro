@@ -5,93 +5,65 @@ interface Props {
 }
 
 const { variant, placement } = Astro.props;
-const dust = Array.from({ length: variant === 'drift' ? 92 : 38 }, (_, index) => {
-  const density = index / (variant === 'drift' ? 91 : 37);
-  return {
-    x: 354 - 348 * density ** 1.7,
-    y: 106 + (((index * 47) % 97) - 48) * (1.65 - density * 0.7),
-    radius: 0.7 + (index % 5) * (1.1 - density) * 0.43,
-    opacity: 0.77 - density * 0.49,
-  };
-});
 ---
 <span class:list={['network-accent', `network-accent--${placement}`]} data-network-accent aria-hidden="true">
-  <svg viewBox="0 0 360 205" focusable="false" aria-hidden="true">
-    {variant !== 'drift' && (
-      <g class="network-accent__constellation">
-        <path d="M11 148C69 154 104 90 121 72S175 44 212 63m-139 26 24-41 24 24-19 31-29-14m48-17 32 21 22-33 37 3m-110 40 51-10 55 31 24-15" fill="none" stroke="var(--network-line)" stroke-width=".85"/>
-        <g fill="var(--network-node)">
-          <circle cx="73" cy="89" r="3.4"/><circle cx="97" cy="48" r="2.3"/><circle cx="121" cy="72" r="4.1"/>
-          <circle cx="102" cy="103" r="2.4"/><circle cx="153" cy="93" r="3"/><circle cx="175" cy="60" r="2.7"/>
-          <circle cx="212" cy="63" r="2.8"/><circle cx="208" cy="124" r="2.5"/>
-        </g>
-        {dust.map(({ x, y, radius, opacity }, index) => (
-          <circle cx={x} cy={y} r={radius} opacity={opacity} fill={index % 5 === 0 ? 'var(--ochre)' : 'var(--network-node)'} />
-        ))}
-      </g>
-    )}
+  <svg viewBox={variant === 'drift' ? '0 0 360 148' : '0 0 360 205'} focusable="false" aria-hidden="true">
     {variant === 'drift' ? (
       <>
-        <path d="M-6 188C64 180 93 124 151 130S223 152 265 98 326 85 365 49m-100 49 52 40 42-15m-42 15 23 35" fill="none" stroke="var(--network-line)" stroke-width="1.4" />
-        <circle cx="151" cy="130" r="3" fill="var(--network-node)" />
-        <circle cx="265" cy="98" r="5" fill="var(--ochre)" />
-        <circle cx="317" cy="138" r="4" fill="var(--network-node)" />
-        {dust.map(({ x, y, radius, opacity }, index) => (
-          <circle cx={x} cy={y} r={radius} opacity={opacity} fill={index % 4 === 0 ? 'var(--ochre-text)' : 'var(--network-line)'} />
-        ))}
+        <path class="edges" d="M36 98C97 105 128 34 192 48C215 53 231 65 253 74S313 92 359 75Q390 64 407 39M192 48Q243 2 292 24T401 18M253 74C275 104 288 129 319 123S369 105 401 129M192 48Q168 71 162 92" />
+        <circle cx="36" cy="98" r="3" class="ring" />
+        <circle cx="162" cy="92" r="3.3" class="blue" />
+        <circle cx="192" cy="48" r="6" class="sage" />
+        <circle cx="292" cy="24" r="4" class="ring" />
+        <circle cx="319" cy="123" r="4.8" class="blue" />
+        <circle cx="359" cy="75" r="5.3" class="ochre" />
       </>
     ) : variant === 'bridge' ? (
       <>
-        <g fill="none" stroke="var(--network-line)" stroke-width="1.25">
-          <path d="m38 141 39-38 29 27-25 45-43-34m39-38 4 72m25-45 36-24m-65-3 31-44 34 47" />
-          <path d="M106 130C167 158 187 63 244 85s71 37 120-6m-120 6 35-43 36 14 23-40m-23 40 12 63-53 21-30-55m35-43-5 98m53-21 37 33" />
-        </g>
-        <g fill="var(--network-node)">
-          <circle cx="38" cy="141" r="3" /><circle cx="77" cy="103" r="5.5" />
-          <circle cx="106" cy="130" r="5" /><circle cx="81" cy="175" r="3.7" />
-          <circle cx="108" cy="59" r="3" /><circle cx="244" cy="85" r="6" />
-          <circle cx="315" cy="56" r="5" /><circle cx="274" cy="140" r="4" />
-          <circle cx="327" cy="119" r="3.3" />
-        </g>
-        <g fill="var(--ochre)">
-          <circle cx="142" cy="106" r="4" /><circle cx="279" cy="42" r="4.5" />
-          <circle cx="338" cy="16" r="2.5" /><circle cx="193" cy="73" r="1.7" />
-          <circle cx="205" cy="137" r="2" /><circle cx="345" cy="172" r="2" />
-        </g>
+        <path class="edges" d="M29 116Q55 130 78 105L121 121 109 155 67 160 78 105 106 63 146 79 121 121M121 121C171 140 187 60 244 85s67 37 113 16l38-18M244 85l35-43 39 14 24-35 48 6m-72 29 9 63-53 21-30-55m83 34 30-18m-30 18q-5 32 18 42t53 13M318 56q32-3 73 13" />
+        <circle cx="29" cy="116" r="2.8" class="ring" />
+        <circle cx="78" cy="105" r="5.5" class="sage" />
+        <circle cx="121" cy="121" r="5" class="ochre" />
+        <circle cx="109" cy="155" r="3.7" class="blue" />
+        <circle cx="67" cy="160" r="2.7" class="ring" />
+        <circle cx="106" cy="63" r="3" class="blue" />
+        <circle cx="146" cy="79" r="3.5" class="ring" />
+        <circle cx="244" cy="85" r="6" class="sage" />
+        <circle cx="318" cy="56" r="5" class="blue" />
+        <circle cx="274" cy="140" r="4" class="ring" />
+        <circle cx="327" cy="119" r="3.7" class="sage" />
+        <circle cx="279" cy="42" r="4.5" class="ochre" />
+        <circle cx="342" cy="21" r="2.8" class="ring" />
+        <circle cx="357" cy="101" r="5" class="sage" />
+        <circle cx="345" cy="161" r="3" class="ochre" />
       </>
     ) : variant === 'threads' ? (
       <>
-        <g fill="none" stroke="var(--network-line)" stroke-width="1.1">
-          <path d="M-8 171C46 188 65 130 117 142S192 183 245 121 318 32 369 27" />
-          <path d="M117 142C149 111 156 50 204 47S253 88 288 67 327 5 365-6" />
-          <path d="M245 121C298 101 332 148 369 112" />
-        </g>
-        <g fill="var(--network-node)">
-          <circle cx="72" cy="147" r="2.3" /><circle cx="204" cy="47" r="4.8" />
-          <circle cx="245" cy="121" r="5.2" /><circle cx="288" cy="67" r="3.2" />
-          <circle cx="335" cy="38" r="3" /><circle cx="155" cy="83" r="1.6" /><circle cx="231" cy="91" r="2.1" />
-          <circle cx="319" cy="162" r="1.8" /><circle cx="104" cy="99" r="1.5" />
-        </g>
-        <circle cx="117" cy="142" r="4.5" fill="var(--ochre)" />
-        <circle cx="322" cy="24" r="4" fill="var(--ochre)" />
+        <path class="edges" d="M23 164C58 169 78 128 117 142S192 183 245 121 326 32 360 40Q386 42 400 30M117 142C149 111 156 50 204 47S253 88 288 67Q309 55 322 26T391 5M245 121C298 101 331 145 377 119l23-13M288 67Q307 100 337 88t63-9" />
+        <circle cx="23" cy="164" r="2.8" class="ring" />
+        <circle cx="204" cy="47" r="4.8" class="blue" />
+        <circle cx="245" cy="121" r="5.8" class="sage" />
+        <circle cx="288" cy="67" r="3.8" class="ring" />
+        <circle cx="117" cy="142" r="4.5" class="ochre" />
+        <circle cx="322" cy="26" r="4" class="ochre" />
+        <circle cx="360" cy="40" r="5" class="sage" />
+        <circle cx="337" cy="88" r="3.2" class="blue" />
       </>
     ) : (
       <>
-        <g fill="none" stroke="var(--network-line)" stroke-width="1.05">
-          <path d="M-6 186C78 190 101 173 146 150S197 138 230 95 266 15 352 20" />
-          <path d="M146 150 177 100 230 95 203 164 146 150m31-50 42-40 11 35 53 18 24-45-46-14-31 41m53 18 53 21 31-36m-60-30 45-48" />
-          <path d="M203 164C240 201 323 198 371 165" />
-        </g>
-        <g fill="var(--network-node)">
-          <circle cx="146" cy="150" r="4.2" /><circle cx="177" cy="100" r="3" />
-          <circle cx="230" cy="95" r="6" /><circle cx="203" cy="164" r="3" />
-          <circle cx="219" cy="60" r="3.5" /><circle cx="283" cy="113" r="4.7" />
-          <circle cx="307" cy="68" r="2.8" /><circle cx="336" cy="134" r="3.8" />
-          <circle cx="111" cy="118" r="1.7" /><circle cx="170" cy="68" r="1.8" />
-          <circle cx="251" cy="155" r="1.4" /><circle cx="288" cy="39" r="2" />
-        </g>
-        <circle cx="261" cy="54" r="5" fill="var(--ochre)" />
-        <circle cx="352" cy="20" r="3.4" fill="var(--ochre)" />
+        <path class="edges" d="M31 151Q100 180 146 150T230 95Q263 42 352 20l50-5M146 150l31-50 53-5-27 69-57-14m31-50 42-40 11 35 53 18 24-45-46-14m22 59 53 21 31-36 38 6m-98-36 45-48m-16 114q-19 42 27 49t45-5M203 164C240 201 323 198 374 163l30-12" />
+        <circle cx="31" cy="151" r="3" class="ring" />
+        <circle cx="146" cy="150" r="4.2" class="sage" />
+        <circle cx="177" cy="100" r="3" class="ring" />
+        <circle cx="230" cy="95" r="6" class="sage" />
+        <circle cx="203" cy="164" r="3" class="blue" />
+        <circle cx="219" cy="60" r="3.5" class="blue" />
+        <circle cx="283" cy="113" r="4.7" class="sage" />
+        <circle cx="307" cy="68" r="2.8" class="ring" />
+        <circle cx="336" cy="134" r="3.8" class="ring" />
+        <circle cx="261" cy="54" r="4.5" class="ochre" />
+        <circle cx="352" cy="20" r="3.8" class="ochre" />
+        <circle cx="363" cy="183" r="5.3" class="blue" />
       </>
     )}
   </svg>
@@ -101,103 +73,71 @@ const dust = Array.from({ length: variant === 'drift' ? 92 : 38 }, (_, index) =>
   .network-accent {
     --network-line: var(--sage);
     --network-node: var(--sage-deep);
+    /* Offset centered editorial frames by their full margin to the page edge. */
+    --frame-edge: max(var(--gutter), (100cqi - var(--editorial-max)) / 2);
     position: absolute;
-    inset-inline-end: 0;
-    width: min(18vw, 19rem);
+    inset-inline-end: -0.25rem;
+    width: min(38vw, 34rem);
     pointer-events: none;
-    overflow: hidden;
+    opacity: 0.72;
     display: none;
   }
 
-  .network-accent svg { display: block; width: 100%; height: auto; pointer-events: none; }
-  .network-accent--heading { inset-block-start: 0; }
-  .network-accent__constellation { opacity: 0.68; }
-  .network-accent--heading { width: min(27vw, 26rem); opacity: 0.48; }
-  .network-accent--services-intro {
-    inset-block-start: -0.9rem;
-    inset-inline-end: calc(var(--gutter) * -0.85);
-    opacity: 0.72;
-    width: min(39vw, 36rem);
+  .network-accent svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    pointer-events: none;
   }
-  .network-accent--services-intro svg { mask-image: linear-gradient(to bottom, #000 75%, transparent); }
-  .network-accent--metrics {
-    inset-inline-end: auto;
-    inset-inline-start: 0;
-    inset-block-start: -8.4rem;
-    width: min(30vw, 28rem);
-    height: 11.8rem;
-    opacity: 0.78;
-    mask-image: linear-gradient(115deg, #000 32%, transparent 82%);
-  }
-  .network-accent--metrics svg { transform: scaleX(-1) translateX(13%); }
 
-  .network-accent--selected-work {
-    inset-inline-end: calc(var(--gutter) * -1);
-    inset-block-start: -2.8rem;
-    width: min(28vw, 24rem);
-    height: 7.5rem;
-    opacity: 0.63;
-    mask-image: linear-gradient(to bottom, transparent, #000 22%, #000 68%, transparent);
-  }
-  .network-accent--selected-work svg { transform: translate(10%, -29%); }
+  .edges { fill: none; stroke: var(--network-line); stroke-width: 1.25; }
+  .sage { fill: var(--network-node); }
+  .ochre { fill: var(--ochre); }
+  .blue { fill: var(--diagram-blue); }
+  .ring { fill: var(--cream); stroke: var(--network-line); stroke-width: 1.35; }
 
-  .network-accent--roadmap {
-    inset-inline-end: calc(var(--gutter) * -1);
-    inset-block-start: -5.4rem;
-    width: min(32vw, 30rem);
-    height: 12rem;
-    opacity: 0.72;
-    mask-image: linear-gradient(116deg, transparent 32%, #000 72%);
-  }
-  .network-accent--roadmap svg { transform: translateY(-15%); }
-
-  .network-accent--sage-panel {
-    inset-inline-end: auto;
-    inset-inline-start: calc(var(--gutter) * -1);
-    inset-block-end: -2.15rem;
-    width: min(33vw, 29rem);
-    height: 10rem;
-    opacity: 0.73;
-  }
-  .network-accent--sage-panel svg { transform: translate(-7%, -20%) scaleX(-1); }
-
-  .network-accent--closing {
-    inset-inline-end: auto;
-    inset-inline-start: 0;
-    inset-block-end: -2.6rem;
-    opacity: 0.68;
-    width: min(34vw, 31rem);
-    height: 8.8rem;
-    mask-image: linear-gradient(120deg, transparent 13%, #000 46%, #000 70%, transparent);
-  }
-  .network-accent--closing svg { transform: scaleX(-1) translate(15%, -36%); }
-
+  .network-accent--services-intro,
+  .network-accent--selected-work,
+  .network-accent--roadmap,
   .network-accent--about,
   .network-accent--work {
-    inset-inline-end: calc(var(--gutter) * -1);
-    width: min(39vw, 36rem);
-    opacity: 0.78;
-    inset-block-start: -1.2rem;
+    inset-inline-end: calc(-1 * var(--frame-edge) - 0.25rem);
   }
-  .network-accent--about svg { transform: translate(8%, 4%); }
-  .network-accent--work svg { transform: translate(7%, -1%); }
 
-  .network-accent--contact {
-    inset-block-start: -0.8rem;
-    width: min(37vw, 34rem);
-    opacity: 0.76;
+  .network-accent--heading { inset-block-start: 0; width: min(21vw, 19rem); opacity: 0.58; }
+  .network-accent--services-intro { inset-block-start: -0.65rem; width: min(35vw, 33rem); }
+  .network-accent--about { inset-block-start: -0.3rem; width: min(37vw, 35rem); }
+  .network-accent--work { inset-block-start: -1.1rem; width: min(39vw, 36rem); }
+  .network-accent--contact { inset-block-start: -0.25rem; width: min(35vw, 32rem); }
+
+  .network-accent--metrics,
+  .network-accent--sage-panel,
+  .network-accent--closing {
+    inset-inline-end: auto;
+    inset-inline-start: -0.25rem;
+    transform: scaleX(-1);
   }
+
+  .network-accent--metrics { inset-block-start: -5.15rem; width: min(23vw, 21rem); }
+  .network-accent--selected-work { inset-block-start: -4.75rem; width: min(18vw, 17rem); }
+  .network-accent--roadmap { inset-block-start: -2.1rem; width: min(20vw, 19rem); }
+  .network-accent--sage-panel {
+    inset-inline-start: calc(-1 * var(--frame-edge) - 0.25rem);
+    inset-block-end: -1.6rem;
+    width: min(17vw, 16rem);
+  }
+  .network-accent--closing { inset-block-end: -1.45rem; width: min(15vw, 14rem); }
 
   .network-accent--footer {
     --network-line: var(--diagram-soft);
     --network-node: var(--diagram-soft);
-    inset-block-end: 0;
-    opacity: 0.72;
-    width: min(33vw, 31rem);
-    height: 10rem;
-    mask-image: linear-gradient(to right, transparent 44%, #000 80%);
+    inset-block-end: -0.4rem;
+    width: min(19vw, 17rem);
+    opacity: 0.62;
   }
-  .network-accent--footer svg { transform: translate(11%, -23%); }
+
+  .network-accent--footer .ring { fill: var(--sage-deep); }
 
   @media (min-width: 62rem) {
     .network-accent--heading,
@@ -205,6 +145,7 @@ const dust = Array.from({ length: variant === 'drift' ? 92 : 38 }, (_, index) =>
     .network-accent--about,
     .network-accent--work { display: block; }
   }
+
   @media (min-width: 75rem) {
     .network-accent--metrics,
     .network-accent--selected-work,
