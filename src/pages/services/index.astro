@@ -1,7 +1,7 @@
 ---
 import NetworkAccent from '../../components/NetworkAccent.astro';
 import Base from '../../layouts/Base.astro';
-import RoadmapSample from '../../components/RoadmapSample.astro';
+import ConnectionMapSample from '../../components/ConnectionMapSample.astro';
 import Button from '../../components/Button.astro';
 import { SERVICE_SLUGS } from '../../content.config';
 import { BOOKING_URL, CONNECTION_MAP, PRODUCTS, SERVICE_NAMES } from '../../data/site';
@@ -66,16 +66,15 @@ const offerings = {
       <p class="lede">{CONNECTION_MAP.subtitle}</p>
       <p>Find where your systems create extra work and decide what’s worth fixing first. The engagement has a fixed fee and scope. You own the strategy and can hand it to your team or any vendor, with no obligation to continue.</p>
     </div>
-    <ol class="roadmap__weeks" role="list">
-      {weeks.map((week, index) => (
-        <li>
-          <p class="mono">Week {index + 1}</p>
-          <h3>{week.title}</h3>
-          <p>{week.text}</p>
-        </li>
-      ))}
-    </ol>
-    <RoadmapSample />
+    <ConnectionMapSample />
+    <div class="roadmap__method">
+      <h3>How the four weeks work</h3>
+      <ol class="roadmap__weeks">
+        {weeks.map(({ title, text }, index) => (
+          <li><span class="mono">Week {index + 1}</span> <strong>{title}.</strong> {text}</li>
+        ))}
+      </ol>
+    </div>
     <div class="roadmap__readout">
       <div>
         <h3>What you receive</h3>
