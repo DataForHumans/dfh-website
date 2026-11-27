@@ -72,7 +72,7 @@ Every page has a skip link, a visible focus ring, landmarks (`header`, `nav`, `m
 
 | Route | Page | Built from |
 | --- | --- | --- |
-| `/` | Home | `src/pages/index.astro`, selected work, services and the Roadmap, and the next event when scheduled |
+| `/` | Home | `src/pages/index.astro`, selected work, services and the Connection Map, and the next event when scheduled |
 | `/services/` | Services | `src/pages/services/index.astro`. Each service has an anchor, e.g. `/services/#records-integration`; products are at `#products` |
 | `/work/` | Our work | `work` collection, in `order` |
 | `/notes/` | Notes | `notes` collection, newest first, with links to the type pages |
@@ -178,6 +178,14 @@ People are referenced by their `id` in `team.yaml` (for example `chris-roberts`,
 3. Use short level-three headings for the challenge, the work and the outcome. Label ongoing work as such and describe what is underway. Featured entries without a bespoke home summary use the last paragraph, so make it stand on its own.
 4. Anonymized entries carry no client name or identifying details, in the frontmatter or in the body.
 5. Only publish a client's name, logo or quote once they have approved it.
+
+## The Connection Map
+
+The flagship engagement is a four-week data strategy. Use `/services/#connection-map` for new links. The earlier `#data-roadmap` fragment remains an alias.
+
+`src/components/ConnectionMapSample.astro` embeds the fictional Community Food Network example and its complete text alternative. `src/data/connection-map.ts` defines the scenario, stage boundaries, numbered opportunities and their illustrative ranking. The scene in `src/scripts/connection-map-scene.ts` uses one SVG canvas and carries the same objects from staff contributions to the systems map, then carries the matrix and ranked rows into the client-owned report. Blue-gray circles represent staff. Sage boxes and outlined circles show processes and systems. Ochre lines and numbered markers identify proposed connections. Decorative network art belongs outside the canvas.
+
+The approved reference is `docs/connection-map-animation-v4.html` in the local documentation folder. Preserve its roughly 38-second pacing, one-second lead-ins, separate narrow composition and final hold. Keep the Play, Pause and Replay actions in one control. Autoplay runs once and yields to manual stage selection. Offscreen and hidden documents suspend the frame clock. Reduced motion gets completed stages, and the transcript works without JavaScript. The example’s priorities are hypothetical and carry no measured results.
 
 ## Redirects
 
