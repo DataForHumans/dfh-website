@@ -420,14 +420,12 @@
   }
 }
 
-.about-intro,
 .work-intro { position: relative; }
 
 @media (min-width: 62rem) {
   .core-intro { padding-block: clamp(3.25rem, 5.3vw, 5.25rem); }
   .core-section { padding-block: clamp(3rem, 5vw, 5.15rem); }
   .roadmap { padding-inline: clamp(2.4rem, 4.8vw, 4.2rem); }
-  .about-intro .lede { max-width: min(56%, 52ch); }
 }
 
 
@@ -453,4 +451,60 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0 var(--space-4);
   }
+}
+
+/* The manifesto uses the approved text in BRAND-MANIFESTO.md. */
+.manifesto { position: relative; }
+
+.manifesto .editorial-frame {
+  position: relative;
+  z-index: 1;
+  padding-block: clamp(2.6rem, 6.3vw, 6rem);
+}
+
+.manifesto__text { max-width: 42rem; }
+
+.manifesto h1 {
+  margin: 0 0 clamp(1.3rem, 2.5vw, 2.4rem);
+  font-size: clamp(2.1rem, 8.1vw, 6.2rem);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+
+.manifesto__text p {
+  margin: 0 0 clamp(1.15rem, 2.2vw, 1.85rem);
+  font-size: clamp(1.125rem, 1rem + 0.38vw, 1.35rem);
+  line-height: 1.58;
+}
+
+.manifesto__text p:first-of-type,
+.manifesto__text p:nth-of-type(4) {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 1rem + 1.35vw, 2.05rem);
+  line-height: 1.25;
+}
+
+.manifesto__text p:nth-of-type(4) {
+  padding-inline-start: clamp(0.8rem, 2vw, 1.35rem);
+  border-inline-start: 2px solid var(--ochre);
+  color: var(--sage-deep);
+}
+
+.manifesto__text .manifesto__signature {
+  margin: clamp(1.5rem, 3vw, 2.6rem) 0 0;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--rule);
+  font: 400 clamp(1.4rem, 1rem + 1.5vw, 2.15rem) / 1.15 var(--font-display);
+}
+
+.about-context { background: var(--sage-wash); }
+
+.about-context p {
+  margin-block: 0;
+  padding-block: clamp(1.3rem, 3vw, 2.6rem);
+  padding-inline-end: max(0px, (100% - 48rem) / 2);
+}
+
+@media (min-width: 62rem) {
+  .manifesto__text { max-width: min(58%, 42rem); }
 }

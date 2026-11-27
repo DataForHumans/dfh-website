@@ -1,7 +1,7 @@
 /** Site-wide constants. Change a link here and it changes everywhere. */
 
 export const SITE_NAME = 'Data for Humans';
-export const TAGLINE = 'Data and AI for mission-driven organizations';
+export const SERVICE_DESCRIPTION = 'Data, research and AI consulting for mission-driven organizations';
 
 export const BOOKING_URL = 'https://calendar.app.google/ohQmbuZoB2KJomYH7';
 

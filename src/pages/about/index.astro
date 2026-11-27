@@ -3,10 +3,13 @@ import { Image } from 'astro:assets';
 import { getEntry } from 'astro:content';
 import NetworkAccent from '../../components/NetworkAccent.astro';
 import Base from '../../layouts/Base.astro';
+import manifesto from '../../../BRAND-MANIFESTO.md?raw';
 import Button from '../../components/Button.astro';
 import { getTeam, isLive } from '../../lib/content';
 import '../../styles/core.css';
 
+const [manifestoTitle, ...manifestoBlocks] = manifesto.trim().split('\n\n');
+const manifestoSignature = manifestoBlocks.pop()!;
 const team = await getTeam();
 const collider = await getEntry('notes', 'collider-spotlight');
 if (!collider?.data.url) throw new Error('About page needs the collider-spotlight note with a url.');
@@ -31,11 +34,20 @@ const principles = [
   title="About"
   description="Meet the Minnesota team helping nonprofits and public agencies make sense of their records and build tools their staff can maintain."
 >
-  <header class="editorial-frame core-intro about-intro">
-    <NetworkAccent variant="fragment" placement="about" />
-    <h1>Data should serve people</h1>
-    <p class="lede">The people who do the work know things their records can’t tell us. Chris Roberts founded Data for Humans in 2021 to help nonprofits and public agencies bring that knowledge together with the information they collect. You’ll work directly with our small team.</p>
+  <header class="manifesto" id="manifesto">
+    <div class="editorial-frame">
+      <div class="manifesto__text">
+        <h1>{manifestoTitle.slice(2)}</h1>
+        {manifestoBlocks.map((paragraph) => <p>{paragraph}</p>)}
+        <p class="manifesto__signature">{manifestoSignature.slice(2, -2)}</p>
+      </div>
+    </div>
+    <NetworkAccent variant="arc" placement="manifesto" />
   </header>
+
+  <div class="about-context">
+    <p class="editorial-frame lede">The people who do the work know things their records can’t tell us. Chris Roberts founded Data for Humans in 2021 to help nonprofits and public agencies bring that knowledge together with the information they collect. You’ll work directly with our small team.</p>
+  </div>
 
   <section class="editorial-frame core-section about-team" aria-labelledby="h-team">
     <h2 id="h-team">Meet the team</h2>

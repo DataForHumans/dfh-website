@@ -60,7 +60,7 @@ if (props.kind === 'note') {
       <NotesIndex title={NOTE_TYPES[props.type].plural} notes={props.notes} types={props.types} current={props.type} />
     </Base>
   ) : (
-    <Base title={props.note.data.title} description={props.note.data.summary} ogType="article">
+    <Base accent="drift" title={props.note.data.title} description={props.note.data.summary} ogType="article">
       <article class="editorial-frame note-article">
         <header class="note-article__header">
           <a class="note-article__back" href="/notes/"><span aria-hidden="true">←</span> All notes</a>
