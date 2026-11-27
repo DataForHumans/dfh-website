@@ -1,4 +1,4 @@
-import { duration, headingAt, stageAt, stages } from '../data/connection-map';
+import { duration, headingAt, stages } from '../data/connection-map';
 import { createScene } from './connection-map-scene';
 
 function mount(root: HTMLElement) {
@@ -41,10 +41,9 @@ function mount(root: HTMLElement) {
     const valueText = `${value}% of animation`;
     if (progress.getAttribute('aria-valuetext') !== valueText) progress.setAttribute('aria-valuetext', valueText);
     stageButtons.forEach((button, index) => {
-      const active = index === stageAt(time);
+      const active = index === title.stage;
       if (active && !button.hasAttribute('aria-current')) button.setAttribute('aria-current', 'true');
       else if (!active && button.hasAttribute('aria-current')) button.removeAttribute('aria-current');
-      button.toggleAttribute('data-preview', preview === index);
     });
     const action = wantsPlayback ? 'Pause' : time >= duration ? 'Replay' : 'Play';
     if (playback.textContent !== action) playback.textContent = action;
@@ -180,7 +179,7 @@ function mount(root: HTMLElement) {
       autoEligible = false;
       wantsPlayback = false;
       preview = null;
-      time = stages[stageAt(time)].hold;
+      time = stages[headingAt(time).stage].hold;
       draw();
     }
     syncFrame();

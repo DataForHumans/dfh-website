@@ -125,17 +125,10 @@ import { exampleText, headings, items, opportunities, priorities, quadrant, rank
     font-weight: 400;
   }
 
-  .connection-map__stages button[aria-current='true'],
-  .connection-map__stages button[data-preview] {
+  .connection-map__stages button[aria-current='true'] {
     color: var(--cream);
     background: var(--sage-deep);
     border-bottom-color: var(--ochre);
-  }
-
-  .connection-map__stages:has([data-preview]) button[aria-current='true']:not([data-preview]) {
-    color: var(--sage-deep);
-    background: var(--sage-wash);
-    border-bottom-color: var(--sage);
   }
 
   .connection-map__headline {

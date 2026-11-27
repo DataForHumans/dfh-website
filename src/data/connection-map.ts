@@ -6,22 +6,21 @@ export const scenario = {
   closing: 'A clear path forward. Yours to keep.',
 } as const;
 
-export const duration = 40;
+export const duration = 39;
 export const headingHalfFade = 0.17;
 export const timeline = {
   people: 0.9,
-  contributions: 3.05,
-  gatherHeading: 5.3,
-  mapHeading: 9.2,
-  connectHeading: 16.5,
-  planHeading: 25.8,
-  deliverHeading: 32.8,
+  contributions: [3.05, 4.2, 5.43],
+  mapHeading: 7.2,
+  connectHeading: 14.5,
+  planHeading: 23.8,
+  deliverHeading: 31.2,
 } as const;
 
 export const stages = [
-  { name: 'Listen', start: 0, hold: 8.5, headline: 'Start with people.', status: 'Staff knowledge, processes and systems gathered.' },
-  { name: 'Map', start: timeline.mapHeading, hold: 15.8, headline: 'See how the organization works.', status: 'Four separate systems receive information from their existing processes.' },
-  { name: 'Connect', start: timeline.connectHeading, hold: 25.1, headline: 'Reveal the connections worth making.', status: 'Three proposed connections are visible.' },
+  { name: 'Listen', start: 0, hold: 6.6, headline: 'Start with people.', status: 'Staff knowledge, processes and systems gathered.' },
+  { name: 'Map', start: timeline.mapHeading, hold: 14, headline: 'See how the organization works.', status: 'Four separate systems receive information from their existing processes.' },
+  { name: 'Connect', start: timeline.connectHeading, hold: 23.1, headline: 'Reveal the connections worth making.', status: 'Three proposed connections are visible.' },
   { name: 'Plan', start: timeline.planHeading, hold: duration, headline: 'Decide what to do first.', status: 'The ranked opportunities form a completed, client-owned data strategy.' },
 ] as const;
 
@@ -38,12 +37,6 @@ export const items = [
   { id: 'obs-overlap', label: 'Possible donor overlap', kind: 'obs', person: 2 },
   { id: 'proc-fundraising', label: 'Fundraising', kind: 'proc', person: 2 },
   { id: 'sys-donor', label: 'Donor CRM', kind: 'sys', person: 2 },
-] as const;
-
-export const categories = [
-  { label: 'Staff knowledge', ids: ['obs-demand', 'obs-coverage', 'obs-stock', 'obs-overlap'] },
-  { label: 'Processes', ids: ['proc-distribution', 'proc-donations', 'proc-scheduling', 'proc-fundraising'] },
-  { label: 'Data systems', ids: ['sys-service', 'sys-inventory', 'sys-volunteer', 'sys-donor'] },
 ] as const;
 
 export const flows = [
@@ -73,15 +66,10 @@ export const exampleText = {
   plan: 'The client receives a current-state map, ranked opportunities and a written implementation sequence they own.',
 };
 
-export function stageAt(time: number): number {
-  return stages.findLastIndex(stage => time >= stage.start);
-}
-
 export const headings = [
-  ...stages.map(({ start, headline }) => ({ time: start, text: headline })),
-  { time: timeline.gatherHeading, text: 'Bring their knowledge together.' },
-  { time: timeline.deliverHeading, text: 'Leave with a plan that belongs to you.' },
-].sort((a, b) => a.time - b.time);
+  ...stages.map(({ start, headline }, stage) => ({ time: start, text: headline, stage })),
+  { time: timeline.deliverHeading, text: 'Leave with a plan that belongs to you.', stage: stages.length - 1 },
+];
 
 export function headingAt(time: number) {
   const index = headings.findLastIndex(heading => time >= heading.time);
@@ -89,5 +77,5 @@ export function headingAt(time: number) {
   const upcoming = headings[index + 1];
   const fadeIn = index === 0 ? 1 : (time - current.time) / headingHalfFade;
   const fadeOut = upcoming ? (upcoming.time - time) / headingHalfFade : 1;
-  return { text: current.text, opacity: Math.min(1, fadeIn, fadeOut) };
+  return { ...current, opacity: Math.min(1, fadeIn, fadeOut) };
 }

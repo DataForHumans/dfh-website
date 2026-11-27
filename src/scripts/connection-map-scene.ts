@@ -1,4 +1,4 @@
-import { categories, flows, items, opportunities, priorities, quadrants, rankedOpportunities, scenario, timeline } from '../data/connection-map';
+import { flows, items, opportunities, priorities, quadrants, rankedOpportunities, scenario, timeline } from '../data/connection-map';
 
 type Point = readonly [number, number];
 type Bounds = readonly [number, number, number, number];
@@ -84,20 +84,22 @@ function marker(parent: SVGElement, id: number, radius: number) {
   text(parent, 0, 4.6, String(id), 14, 700, 'middle', 'var(--ink)');
 }
 
-function planGraphics(plan: SVGGElement, report: SVGGElement, view: typeof views.wide | typeof views.narrow, narrow: boolean) {
-  plan.replaceChildren();
+function planGraphics(matrixLayer: SVGGElement, report: SVGGElement, rankingLayer: SVGGElement, view: typeof views.wide | typeof views.narrow, narrow: boolean) {
+  matrixLayer.replaceChildren();
+  rankingLayer.replaceChildren();
   report.replaceChildren();
 
   const [px, py, pw, ph] = view.matrix;
-  const matrix = make(plan, 'g', { 'data-map-matrix': '' });
+  const matrix = make(matrixLayer, 'g', { 'data-map-matrix': '' });
   make(matrix, 'rect', { x: px, y: py, width: pw, height: ph, fill: colors.sage, stroke: colors.line });
   make(matrix, 'rect', { x: px, y: py, width: pw / 2, height: ph / 2, fill: colors.highValue });
   make(matrix, 'path', { d: `M${px + pw / 2} ${py}V${py + ph} M${px} ${py + ph / 2}H${px + pw}`, stroke: colors.paper, 'stroke-width': 2 });
+  const matrixLabels = make(matrix, 'g', { 'data-map-matrix-labels': '' });
   quadrants.forEach((label, index) => {
-    text(matrix, px + pw * (index % 2 ? 0.75 : 0.25), py + ph * (index >= 2 ? 0.5 : 0) + 20, label, narrow ? 13 : 14);
+    text(matrixLabels, px + pw * (index % 2 ? 0.75 : 0.25), py + ph * (index >= 2 ? 0.5 : 0) + 20, label, narrow ? 13 : 14);
   });
-  text(matrix, px + pw / 2, py + ph + 23, 'Implementation effort →', narrow ? 13 : 14);
-  const benefit = text(matrix, 0, 0, 'Expected benefit →', narrow ? 13 : 14);
+  text(matrixLabels, px + pw / 2, py + ph + 23, 'Implementation effort →', narrow ? 13 : 14);
+  const benefit = text(matrixLabels, 0, 0, 'Expected benefit →', narrow ? 13 : 14);
   set(benefit, { transform: `${translate(px - 19, py + ph / 2)} rotate(-90)` });
 
   const reportWidth = narrow ? 265 : 340;
@@ -108,7 +110,7 @@ function planGraphics(plan: SVGGElement, report: SVGGElement, view: typeof views
   const seqX = narrow ? 30 : 555;
   const seqY = narrow ? 300 : 54;
   const seqSpacing = narrow ? 69 : 93;
-  const sequence = make(plan, 'g', { 'data-map-ranking': '' });
+  const sequence = make(rankingLayer, 'g', { 'data-map-ranking': '' });
   const sequenceTitle = text(sequence, seqX, seqY - 12, 'Ranked opportunities', narrow ? 16 : 19, 600, 'start');
   const rows = rankedOpportunities.map(opportunity => {
     const row = make(sequence, 'g', { 'data-map-ranked': opportunity.id });
@@ -130,17 +132,18 @@ function planGraphics(plan: SVGGElement, report: SVGGElement, view: typeof views
       fill: i === 2 ? colors.highValue : colors.sage, stroke: colors.line, 'stroke-width': 1.2,
     });
   }
-  const cover = make(stack, 'g');
-  make(cover, 'rect', { x: reportX, y: reportY, width: reportWidth, height: reportHeight, fill: colors.paper, stroke: colors.line, 'stroke-width': 1.3 });
-  make(cover, 'rect', { x: reportX, y: reportY, width: reportWidth, height: 8, fill: colors.green });
-  text(cover, reportX + 19, reportY + 37, 'Data for Humans', narrow ? 15 : 16, 600, 'start');
-  const reportTitle = text(cover, reportX + 19, reportY + 71, 'Your data strategy', narrow ? 24 : 29, 400, 'start');
+  const surface = make(report, 'rect', { 'data-map-front': '', x: reportX, y: reportY, width: reportWidth, height: reportHeight, fill: colors.paper, stroke: colors.line, 'stroke-width': 1.3 });
+  const details = make(report, 'g', { 'data-map-details': '' });
+  make(details, 'rect', { x: reportX, y: reportY, width: reportWidth, height: 8, fill: colors.green });
+  text(details, reportX + 19, reportY + 37, 'Data for Humans', narrow ? 15 : 16, 600, 'start');
+  const reportTitle = text(details, reportX + 19, reportY + 71, 'Your data strategy', narrow ? 24 : 29, 400, 'start');
   reportTitle.classList.add('connection-map__report-title');
-  text(cover, reportX + 19, reportY + 96, scenario.name, narrow ? 14 : 15, 400, 'start', colors.line);
-  make(cover, 'path', { d: `M${reportX + 19} ${reportY + 113}H${reportX + reportWidth - 19}`, stroke: colors.border });
-  text(report, view.width / 2, narrow ? 450 : 398, scenario.closing, narrow ? 15 : 16, 600);
+  text(details, reportX + 19, reportY + 96, scenario.name, narrow ? 14 : 15, 400, 'start', colors.line);
+  make(details, 'path', { d: `M${reportX + 19} ${reportY + 113}H${reportX + reportWidth - 19}`, stroke: colors.border });
+  const closing = text(report, view.width / 2, narrow ? 450 : 398, scenario.closing, narrow ? 15 : 16, 600);
+  set(closing, { 'data-map-closing': '' });
 
-  return { matrix, sequenceTitle, rows, stack, cover, bounds };
+  return { matrix, matrixLabels, sequenceTitle, rows, stack, surface, details, closing, bounds };
 }
 
 export function createScene(svg: SVGSVGElement) {
@@ -149,8 +152,10 @@ export function createScene(svg: SVGSVGElement) {
   const peopleLayer = make(svg, 'g');
   const connectionLayer = make(svg, 'g');
   const itemLayer = make(svg, 'g');
-  const reportLayer = make(svg, 'g', { 'data-map-report': '' });
   const planLayer = make(svg, 'g', { 'data-map-priorities': '' });
+  const matrixLayer = make(planLayer, 'g');
+  const reportLayer = make(planLayer, 'g', { 'data-map-report': '' });
+  const rankingLayer = make(planLayer, 'g');
   const markerLayer = make(svg, 'g');
 
   const contributions = items.map((item, index) => {
@@ -166,7 +171,6 @@ export function createScene(svg: SVGSVGElement) {
     make(group, 'circle', { r: 16, fill: colors.blue });
     return { group, name, label: text(group, 0, 39, name, 15, 600) };
   });
-  const categoryLabels = categories.map(category => text(peopleLayer, 0, 0, category.label, 17, 600));
   const flowLines = flows.map(({ process }) => make(flowLayer, 'path', {
     'data-map-flow': process, fill: 'none', stroke: colors.line, 'stroke-width': 1.8, 'stroke-linecap': 'round',
   }));
@@ -190,22 +194,16 @@ export function createScene(svg: SVGSVGElement) {
       set(person.label, { 'font-size': narrow ? 13 : 15 });
       wrap(person.label, person.name, narrow ? 112 : 215, 14);
     });
-    categoryLabels.forEach((label, index) => set(label, {
-      x: view.columns[index], y: narrow ? 30 : 39, 'font-size': narrow ? 14 : 17,
-    }));
     const map = Object.fromEntries(flows.flatMap((flow, index) => [
       [flow.process, view.processes[index]], [flow.system, view.systems[index]],
     ])) as Record<string, Point>;
     const observationOrder = ['obs-stock', 'obs-demand', 'obs-coverage', 'obs-overlap'];
     observationOrder.forEach((id, index) => { map[id] = view.observations[index]; });
     const positions = contributions.map(item => {
-      const category = categories.findIndex(entry => entry.ids.some(id => id === item.id));
-      const row = categories[category].ids.findIndex(id => id === item.id);
       set(item.label, { 'font-size': narrow ? 13 : 16 });
       wrap(item.label, item.description, narrow ? 101 : 210, 14);
       return {
         staff: [view.columns[item.person], (narrow ? 111 : 112) + item.ownedBefore * (narrow ? 64 : 55)] as Point,
-        group: [view.columns[category], (narrow ? 90 : 103) + row * (narrow ? 78 : 67)] as Point,
         map: map[item.id],
       };
     });
@@ -221,7 +219,7 @@ export function createScene(svg: SVGSVGElement) {
       const point = line.getPointAtLength(line.getTotalLength() / 2);
       return [point.x, point.y] as Point;
     });
-    return { view, positions, markerPositions, narrow, ...planGraphics(planLayer, reportLayer, view, narrow) };
+    return { view, positions, markerPositions, narrow, ...planGraphics(matrixLayer, reportLayer, rankingLayer, view, narrow) };
   }
 
   // During a crossover the same cards and markers keep moving. Briefly conceal
@@ -231,7 +229,7 @@ export function createScene(svg: SVGSVGElement) {
     const next = new Set<SVGTextElement>();
     if (active) {
       const occupied: DOMRect[] = [];
-      const layers = [markerLayer, planLayer, reportLayer, connectionLayer, peopleLayer, itemLayer];
+      const layers = [peopleLayer, itemLayer];
       for (const layer of layers) {
         for (const label of layer.querySelectorAll('text')) {
           let alpha = 1;
@@ -266,28 +264,26 @@ export function createScene(svg: SVGSVGElement) {
   }
 
   function draw(time: number) {
-    const { narrow, positions, markerPositions, view, matrix, sequenceTitle, rows, stack, cover, bounds } = composition;
+    const { narrow, positions, markerPositions, view, matrix, matrixLabels, sequenceTitle, rows, stack, surface, details, closing, bounds } = composition;
     // Offset the approved movement windows rather than shortening them for the new pauses.
     const mapping = time - timeline.mapHeading;
     const connecting = time - timeline.connectHeading;
     const planning = time - timeline.planHeading;
     const delivery = time - timeline.deliverHeading;
-    const sort = phase(time - timeline.gatherHeading, 1, 2.8);
     const map = phase(mapping, 1, 4.8);
-    const present = 1 - phase(planning, 1, 2.2);
+    const present = 1 - phase(planning, 1, 1.7);
 
-    // Keep the contribution elements intact as they move from staff to categories to the operational map.
+    // Keep the contribution elements intact as they move directly from staff into the operational map.
     people.forEach((person, index) => {
       const start = timeline.people + index * 0.34;
-      opacity(person.group, phase(time, start, start + 0.68) * (1 - sort));
+      opacity(person.group, phase(time, start, start + 0.68) * (1 - phase(mapping, 1, 1.65)));
     });
-    categoryLabels.forEach(label => opacity(label, sort * (1 - map)));
     contributions.forEach((item, index) => {
-      const { staff, group, map: point } = positions[index];
-      const x = mix(mix(staff[0], group[0], sort), point[0], map);
-      const y = mix(mix(staff[1], group[1], sort), point[1], map);
-      const start = timeline.contributions + item.person * 0.33 + item.ownedBefore * 0.075;
-      const arrival = phase(time, start, start + 0.31);
+      const { staff, map: point } = positions[index];
+      const x = mix(staff[0], point[0], map);
+      const y = mix(staff[1], point[1], map);
+      const start = timeline.contributions[item.person] + item.ownedBefore * 0.075;
+      const arrival = phase(time, start, start + 0.52);
       const system = item.kind === 'sys';
       const width = narrow ? 108 : 222;
       const height = narrow ? 36 : 42;
@@ -318,23 +314,25 @@ export function createScene(svg: SVGSVGElement) {
     opacity(callout, phase(connecting, 1.65 + index * 3, 2.15 + index * 3) * (1 - phase(planning, 1, 1.2)));
 
     // The matrix and the same ranked row elements travel into the layered report.
-    const prioritizing = phase(planning, 1.3, 3.8);
+    const prioritizing = phase(planning, 1.7, 4.2);
     const delivering = phase(delivery, 1, 3.5);
-    opacity(planLayer, phase(planning, 1, 2.1));
+    opacity(planLayer, phase(planning, 1.7, 2.8));
     const [px, py, pw, ph] = view.matrix;
     const [rx, ry, rw, rh] = bounds;
     const kx = mix(1, rw / pw, delivering), ky = mix(1, rh / ph, delivering);
     const mx = mix(px, rx + 20, delivering), my = mix(py, ry - 18, delivering);
     set(matrix, { transform: `${translate(mx, my)} scale(${kx} ${ky}) ${translate(-px, -py)}` });
-    opacity(matrix, 1 - phase(delivery, 1.9, 2.65));
-    Array.from(matrix.children).slice(1).forEach(child => opacity(child as SVGElement, 1 - phase(delivery, 1, 1.7)));
+    // Labels enter once traveling markers have settled. They intentionally exit as the matrix folds away.
+    opacity(matrix, 1 - phase(delivery, 3.75, 4.35));
+    opacity(matrixLabels, phase(planning, 4.2, 4.55) * (1 - phase(delivery, 1, 1.2)));
+    Array.from(matrix.children).slice(1, -1).forEach(child => opacity(child as SVGElement, 1 - phase(delivery, 1, 1.7)));
 
-    opacity(sequenceTitle, phase(planning, 3.8, 4.25) * (1 - phase(delivery, 1, 1.7)));
+    opacity(sequenceTitle, phase(planning, 4.2, 4.65) * (1 - phase(delivery, 1, 1.2)));
     rows.forEach(({ row, rule, from }, rank) => {
       const scale = mix(1, narrow ? 0.96 : 0.83, delivering);
       const x = mix(from[0], rx + 10, delivering), y = mix(from[1], ry + 147 + rank * 56, delivering);
       set(row, { transform: `${translate(x, y)} scale(${scale})` });
-      opacity(row, phase(planning, 4 + rank * 0.7, 4.5 + rank * 0.7));
+      opacity(row, phase(planning, 4.4 + rank * 0.7, 4.9 + rank * 0.7));
       opacity(rule, 1 - phase(delivery, 1, 1.6));
     });
     markers.forEach((group, index) => {
@@ -346,14 +344,15 @@ export function createScene(svg: SVGSVGElement) {
       set(group, { transform: translate(mix(x, endX, prioritizing), mix(y, endY, prioritizing) + arc) });
       opacity(group, phase(connecting, 1.75 + index * 3, 2.2 + index * 3) * (1 - phase(delivery, 1, 1.7)));
     });
-    opacity(reportLayer, phase(delivery, 1.8, 3.3));
-    opacity(cover, phase(delivery, 2.5, 3.15));
-    set(stack, { transform: translate(0, mix(12, 0, delivering)) });
+    // The rows and matrix finish moving before the stationary report layers appear, underneath the ranked rows.
+    const front = phase(delivery, 3.75, 4.35);
+    opacity(reportLayer, front > 0 ? 1 : 0);
+    opacity(surface, front);
+    opacity(stack, phase(delivery, 3.93, 4.57));
+    opacity(details, phase(delivery, 4.12, 4.72));
+    opacity(closing, phase(delivery, 4.45, 5.02));
 
-    clearOverlaps(
-      (sort > 0 && sort < 1) || (map > 0 && map < 1) || (planning >= 1 && planning <= 3.8) ||
-      (delivering > 0 && delivering < 1),
-    );
+    clearOverlaps(map > 0 && map < 1);
   }
 
   return { resize, draw };
