@@ -265,8 +265,8 @@ export function createScene(svg: SVGSVGElement) {
 
   function draw(time: number) {
     const { narrow, positions, markerPositions, view, matrix, matrixLabels, sequenceTitle, rows, stack, surface, details, closing, bounds } = composition;
-    // Offset the approved movement windows rather than shortening them for the new pauses.
-    const mapping = time - timeline.mapHeading;
+    // Keep the heading lead-in intact, then run the Map choreography 15% shorter.
+    const mapping = 1 + (time - timeline.mapHeading - 1) / 0.85;
     const connecting = time - timeline.connectHeading;
     const planning = time - timeline.planHeading;
     const delivery = time - timeline.deliverHeading;
@@ -315,7 +315,8 @@ export function createScene(svg: SVGSVGElement) {
 
     // The matrix and the same ranked row elements travel into the layered report.
     const prioritizing = phase(planning, 1.7, 4.2);
-    const delivering = phase(delivery, 1, 3.5);
+    const delivering = phase(delivery, 1, 3.25);
+    const front = phase(delivery, 2.97, 3.57);
     opacity(planLayer, phase(planning, 1.7, 2.8));
     const [px, py, pw, ph] = view.matrix;
     const [rx, ry, rw, rh] = bounds;
@@ -323,16 +324,16 @@ export function createScene(svg: SVGSVGElement) {
     const mx = mix(px, rx + 20, delivering), my = mix(py, ry - 18, delivering);
     set(matrix, { transform: `${translate(mx, my)} scale(${kx} ${ky}) ${translate(-px, -py)}` });
     // Labels enter once traveling markers have settled. They intentionally exit as the matrix folds away.
-    opacity(matrix, 1 - phase(delivery, 3.75, 4.35));
+    opacity(matrix, 1 - front);
     opacity(matrixLabels, phase(planning, 4.2, 4.55) * (1 - phase(delivery, 1, 1.2)));
     Array.from(matrix.children).slice(1, -1).forEach(child => opacity(child as SVGElement, 1 - phase(delivery, 1, 1.7)));
 
-    opacity(sequenceTitle, phase(planning, 4.2, 4.65) * (1 - phase(delivery, 1, 1.2)));
+    opacity(sequenceTitle, phase(planning, 4.85, 5.3) * (1 - phase(delivery, 1, 1.2)));
     rows.forEach(({ row, rule, from }, rank) => {
       const scale = mix(1, narrow ? 0.96 : 0.83, delivering);
       const x = mix(from[0], rx + 10, delivering), y = mix(from[1], ry + 147 + rank * 56, delivering);
       set(row, { transform: `${translate(x, y)} scale(${scale})` });
-      opacity(row, phase(planning, 4.4 + rank * 0.7, 4.9 + rank * 0.7));
+      opacity(row, phase(planning, 5 + rank * 0.7, 5.5 + rank * 0.7));
       opacity(rule, 1 - phase(delivery, 1, 1.6));
     });
     markers.forEach((group, index) => {
@@ -344,13 +345,12 @@ export function createScene(svg: SVGSVGElement) {
       set(group, { transform: translate(mix(x, endX, prioritizing), mix(y, endY, prioritizing) + arc) });
       opacity(group, phase(connecting, 1.75 + index * 3, 2.2 + index * 3) * (1 - phase(delivery, 1, 1.7)));
     });
-    // The rows and matrix finish moving before the stationary report layers appear, underneath the ranked rows.
-    const front = phase(delivery, 3.75, 4.35);
+    // Bring in the stationary report layers beneath the rows just before the fold settles.
     opacity(reportLayer, front > 0 ? 1 : 0);
     opacity(surface, front);
-    opacity(stack, phase(delivery, 3.93, 4.57));
-    opacity(details, phase(delivery, 4.12, 4.72));
-    opacity(closing, phase(delivery, 4.45, 5.02));
+    opacity(stack, phase(delivery, 3.04, 3.68));
+    opacity(details, phase(delivery, 3.14, 3.74));
+    opacity(closing, phase(delivery, 3.55, 4.12));
 
     clearOverlaps(map > 0 && map < 1);
   }

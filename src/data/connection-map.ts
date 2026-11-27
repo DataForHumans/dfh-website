@@ -6,21 +6,21 @@ export const scenario = {
   closing: 'A clear path forward. Yours to keep.',
 } as const;
 
-export const duration = 39;
+export const duration = 37.5;
 export const headingHalfFade = 0.17;
 export const timeline = {
   people: 0.9,
-  contributions: [3.05, 4.2, 5.43],
-  mapHeading: 7.2,
-  connectHeading: 14.5,
-  planHeading: 23.8,
-  deliverHeading: 31.2,
+  contributions: [3.05, 3.99, 5],
+  mapHeading: 6.77,
+  connectHeading: 13.29,
+  planHeading: 22.59,
+  deliverHeading: 30.59,
 } as const;
 
 export const stages = [
-  { name: 'Listen', start: 0, hold: 6.6, headline: 'Start with people.', status: 'Staff knowledge, processes and systems gathered.' },
-  { name: 'Map', start: timeline.mapHeading, hold: 14, headline: 'See how the organization works.', status: 'Four separate systems receive information from their existing processes.' },
-  { name: 'Connect', start: timeline.connectHeading, hold: 23.1, headline: 'Reveal the connections worth making.', status: 'Three proposed connections are visible.' },
+  { name: 'Listen', start: 0, hold: 6.17, headline: 'Start with people.', status: 'Staff knowledge, processes and systems gathered.' },
+  { name: 'Map', start: timeline.mapHeading, hold: 12.79, headline: 'See how the organization works.', status: 'Four separate systems receive information from their existing processes.' },
+  { name: 'Connect', start: timeline.connectHeading, hold: 21.89, headline: 'Reveal the connections worth making.', status: 'Three proposed connections are visible.' },
   { name: 'Plan', start: timeline.planHeading, hold: duration, headline: 'Decide what to do first.', status: 'The ranked opportunities form a completed, client-owned data strategy.' },
 ] as const;
 
