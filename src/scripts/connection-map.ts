@@ -8,7 +8,8 @@ function mount(root: HTMLElement) {
   const heading = root.querySelector<HTMLElement>('[data-map-heading]')!;
   const playback = root.querySelector<HTMLButtonElement>('[data-map-play]')!;
   const stageButtons = [...root.querySelectorAll<HTMLButtonElement>('[data-map-stage]')];
-  const progress = root.querySelector<HTMLElement>('[data-map-progress]')!;
+  const progress = root.querySelector<HTMLInputElement>('[data-map-progress]')!;
+  const restart = root.querySelector<HTMLButtonElement>('[data-map-restart]')!;
   const status = root.querySelector<HTMLElement>('[data-map-status]')!;
   const transcript = root.querySelector<HTMLDetailsElement>('[data-map-transcript]')!;
   const abort = new AbortController();
@@ -21,6 +22,7 @@ function mount(root: HTMLElement) {
   let wantsPlayback = false;
   let autoEligible = !motion.matches;
   let inView = false;
+  let seeking = false;
   let frame: number | null = null;
   let last: number | null = null;
   let narrow: boolean | undefined;
@@ -29,8 +31,15 @@ function mount(root: HTMLElement) {
     const shown = preview === null ? time : stages[preview].hold;
     scene.draw(shown);
     const title = headingAt(shown);
-    if (heading.textContent !== title) heading.textContent = title;
-    progress.style.width = `${shown / duration * 100}%`;
+    if (heading.textContent !== title.text) heading.textContent = title.text;
+    heading.style.opacity = String(title.opacity);
+    const percentage = time / duration * 100;
+    progress.style.setProperty('--position', `${percentage}%`);
+    // The slider describes the committed timeline; mouse previews are temporary.
+    const value = String(Math.round(percentage));
+    if (progress.value !== value) progress.value = value;
+    const valueText = `${value}% of animation`;
+    if (progress.getAttribute('aria-valuetext') !== valueText) progress.setAttribute('aria-valuetext', valueText);
     stageButtons.forEach((button, index) => {
       const active = index === stageAt(time);
       if (active && !button.hasAttribute('aria-current')) button.setAttribute('aria-current', 'true');
@@ -39,6 +48,9 @@ function mount(root: HTMLElement) {
     });
     const action = wantsPlayback ? 'Pause' : time >= duration ? 'Replay' : 'Play';
     if (playback.textContent !== action) playback.textContent = action;
+    const hideRestart = time >= duration || (time === 0 && !wantsPlayback);
+    if (hideRestart && document.activeElement === restart) playback.focus({ preventScroll: true });
+    restart.hidden = hideRestart;
   }
 
   function resize(force = false) {
@@ -50,7 +62,7 @@ function mount(root: HTMLElement) {
   }
 
   function canPlay() {
-    return wantsPlayback && preview === null && inView && !document.hidden && !motion.matches;
+    return wantsPlayback && !seeking && preview === null && inView && !document.hidden && !motion.matches;
   }
 
   function syncFrame() {
@@ -100,7 +112,7 @@ function mount(root: HTMLElement) {
       status.textContent = `${stages[index].name}. ${stages[index].status}`;
     }, { signal });
     button.addEventListener('pointerenter', (event) => {
-      if (event.pointerType !== 'mouse' || !hover.matches || motion.matches || root.querySelector(':focus-visible')) return;
+      if (event.pointerType !== 'mouse' || seeking || !hover.matches || motion.matches || root.querySelector(':focus-visible')) return;
       preview = index;
       draw();
       syncFrame();
@@ -123,9 +135,47 @@ function mount(root: HTMLElement) {
     status.textContent = wantsPlayback ? 'Playback started.' : 'Playback paused.';
   }, { signal });
 
+  restart.addEventListener('click', () => {
+    autoEligible = false;
+    preview = null;
+    time = 0;
+    last = null;
+    wantsPlayback = true;
+    draw();
+    syncFrame();
+    status.textContent = 'Playback restarted.';
+  }, { signal });
+
+  progress.addEventListener('pointerdown', () => {
+    seeking = true;
+    syncFrame();
+  }, { signal });
+
+  progress.addEventListener('input', () => {
+    autoEligible = false;
+    preview = null;
+    time = Number(progress.value) * duration / 100;
+    last = null;
+    if (!seeking && time >= duration) wantsPlayback = false;
+    draw();
+    syncFrame();
+  }, { signal });
+
+  function endSeek() {
+    if (!seeking) return;
+    seeking = false;
+    if (time >= duration) wantsPlayback = false;
+    draw();
+    syncFrame();
+  }
+
+  window.addEventListener('pointerup', endSeek, { signal });
+  window.addEventListener('pointercancel', endSeek, { signal });
+  progress.addEventListener('blur', endSeek, { signal });
+
   document.addEventListener('visibilitychange', attemptAutoplay, { signal });
   motion.addEventListener('change', () => {
-    playback.hidden = motion.matches;
+    controls.hidden = motion.matches;
     if (motion.matches) {
       autoEligible = false;
       wantsPlayback = false;
@@ -137,8 +187,7 @@ function mount(root: HTMLElement) {
   }, { signal });
 
   enhanced.hidden = false;
-  controls.hidden = false;
-  playback.hidden = motion.matches;
+  controls.hidden = motion.matches;
   transcript.open = false;
   resize();
   document.fonts.ready.then(() => { if (!signal.aborted) resize(true); });

@@ -6,13 +6,23 @@ export const scenario = {
   closing: 'A clear path forward. Yours to keep.',
 } as const;
 
-export const duration = 38;
+export const duration = 40;
+export const headingHalfFade = 0.17;
+export const timeline = {
+  people: 0.9,
+  contributions: 3.05,
+  gatherHeading: 5.3,
+  mapHeading: 9.2,
+  connectHeading: 16.5,
+  planHeading: 25.8,
+  deliverHeading: 32.8,
+} as const;
 
 export const stages = [
-  { name: 'Listen', start: 0, hold: 7.8, headline: 'Start with people.', status: 'Staff knowledge, processes and systems gathered.' },
-  { name: 'Map', start: 8, hold: 14.6, headline: 'See how the organization works.', status: 'Four separate systems receive information from their existing processes.' },
-  { name: 'Connect', start: 15, hold: 24.8, headline: 'Reveal the connections worth making.', status: 'Three proposed connections are visible.' },
-  { name: 'Plan', start: 25, hold: duration, headline: 'Decide what to do first.', status: 'The ranked opportunities form a completed, client-owned data strategy.' },
+  { name: 'Listen', start: 0, hold: 8.5, headline: 'Start with people.', status: 'Staff knowledge, processes and systems gathered.' },
+  { name: 'Map', start: timeline.mapHeading, hold: 15.8, headline: 'See how the organization works.', status: 'Four separate systems receive information from their existing processes.' },
+  { name: 'Connect', start: timeline.connectHeading, hold: 25.1, headline: 'Reveal the connections worth making.', status: 'Three proposed connections are visible.' },
+  { name: 'Plan', start: timeline.planHeading, hold: duration, headline: 'Decide what to do first.', status: 'The ranked opportunities form a completed, client-owned data strategy.' },
 ] as const;
 
 export const items = [
@@ -67,8 +77,17 @@ export function stageAt(time: number): number {
   return stages.findLastIndex(stage => time >= stage.start);
 }
 
-export function headingAt(time: number): string {
-  if (time >= 4.9 && time < stages[1].start) return 'Bring their knowledge together.';
-  if (time >= 32) return 'Leave with a plan that belongs to you.';
-  return stages[stageAt(time)].headline;
+export const headings = [
+  ...stages.map(({ start, headline }) => ({ time: start, text: headline })),
+  { time: timeline.gatherHeading, text: 'Bring their knowledge together.' },
+  { time: timeline.deliverHeading, text: 'Leave with a plan that belongs to you.' },
+].sort((a, b) => a.time - b.time);
+
+export function headingAt(time: number) {
+  const index = headings.findLastIndex(heading => time >= heading.time);
+  const current = headings[index];
+  const upcoming = headings[index + 1];
+  const fadeIn = index === 0 ? 1 : (time - current.time) / headingHalfFade;
+  const fadeOut = upcoming ? (upcoming.time - time) / headingHalfFade : 1;
+  return { text: current.text, opacity: Math.min(1, fadeIn, fadeOut) };
 }

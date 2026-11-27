@@ -5,7 +5,7 @@ const button = (page: Page, label: string) => exhibit(page).getByRole('button', 
 const heading = (page: Page) => exhibit(page).locator('[data-map-heading]');
 const stage = (page: Page, name: string) => button(page, name);
 const svg = (page: Page) => exhibit(page).locator('[data-map-scene]');
-const progress = async (page: Page) => exhibit(page).locator('[data-map-progress]').evaluate(node => parseFloat(node.style.width) * 0.38);
+const progress = async (page: Page) => exhibit(page).locator('[data-map-progress]').evaluate(node => parseFloat(node.style.getPropertyValue('--position')) * 0.4);
 const visibility = (page: Page, selector: string) => svg(page).locator(selector).evaluateAll(nodes => nodes.map(node => Number(node.getAttribute('opacity'))));
 
 async function open(page: Page) {
@@ -48,66 +48,91 @@ test('Home links to the canonical offering and the old fragment still reaches it
 
 test('one continuous run takes staff knowledge through the map and into the report', async ({ page }) => {
   await start(page);
-  await advanceTo(page, 1.09);
+  await advanceTo(page, 0.7);
+  expect(await visibility(page, '[data-map-person]')).toEqual([0, 0, 0]);
+  await advanceTo(page, 1.15);
+  expect((await visibility(page, '[data-map-person]')).filter(alpha => alpha > 0)).toHaveLength(1);
+
+  await advanceTo(page, 2.35);
   expect(await visibility(page, '[data-map-person]')).toEqual([1, 1, 1]);
+  const people = await svg(page).innerHTML();
+  await advanceTo(page, 2.95);
+  expect(await svg(page).innerHTML()).toBe(people);
   expect((await visibility(page, '[data-map-item]')).every(alpha => alpha === 0)).toBe(true);
 
-  await advanceTo(page, 1.65);
+  const card = item(page, 'obs-demand');
+  await advanceTo(page, 3.25);
+  const arriving = await card.getAttribute('transform');
   expect((await visibility(page, '[data-map-item]')).filter(alpha => alpha > 0)).toHaveLength(3);
-  await advanceTo(page, 3.55);
-  expect((await visibility(page, '[data-map-item]')).filter(alpha => alpha > 0)).toHaveLength(9);
+  await advanceTo(page, 4.25);
+  expect(await card.getAttribute('transform')).not.toBe(arriving);
+  expect(await visibility(page, '[data-map-item]')).toEqual(Array(12).fill(1));
+  const gathered = await svg(page).innerHTML();
+  await advanceTo(page, 5.1);
+  expect(await svg(page).innerHTML()).toBe(gathered);
   const system = item(page, 'sys-inventory');
   const saved = await system.elementHandle();
-  await advanceTo(page, 7.9);
+  await advanceTo(page, 8.25);
   const grouped = await system.getAttribute('transform');
-  await advanceTo(page, 8.5);
+  const groupedScene = await svg(page).innerHTML();
+  const headingHeight = await heading(page).evaluate(node => node.getBoundingClientRect().height);
+  await advanceTo(page, 8.9);
+  expect(await svg(page).innerHTML()).toBe(groupedScene);
+  await advanceTo(page, 9.09);
+  await expect(heading(page)).toHaveText('Bring their knowledge together.');
+  expect(await heading(page).evaluate(node => Number(getComputedStyle(node).opacity))).toBeLessThan(0.9);
+  await advanceTo(page, 9.27);
   await expect(heading(page)).toHaveText('See how the organization works.');
+  await expect(stage(page, 'Map')).toHaveAttribute('aria-current', 'true');
+  expect(await heading(page).evaluate(node => Number(getComputedStyle(node).opacity))).toBeLessThan(0.9);
+  expect(await heading(page).evaluate(node => node.getBoundingClientRect().height)).toBe(headingHeight);
+  await advanceTo(page, 10.1);
   expect(await system.getAttribute('transform')).toBe(grouped);
-  await advanceTo(page, 14.5);
+  await advanceTo(page, 15.5);
   expect(await system.getAttribute('transform')).not.toBe(grouped);
   expect(await system.evaluate((node, original) => node === original, saved)).toBe(true);
   expect(await visibility(page, '[data-map-flow]')).toEqual([1, 1, 1, 1]);
   expect(await visibility(page, '[data-map-proposal]')).toEqual([0, 0, 0]);
 
-  await advanceTo(page, 15.5);
+  await advanceTo(page, 16.95);
   await expect(heading(page)).toHaveText('Reveal the connections worth making.');
   expect(await visibility(page, '[data-map-proposal]')).toEqual([0, 0, 0]);
-  await advanceTo(page, 18);
+  await advanceTo(page, 19);
   expect(await visibility(page, '[data-map-proposal]')).toEqual([1, 0, 0]);
   await expect(svg(page).locator('[data-map-callout]')).toHaveText('Match food to demand.');
-  await advanceTo(page, 21);
+  await advanceTo(page, 22);
   expect(await visibility(page, '[data-map-proposal]')).toEqual([1, 1, 0]);
   await expect(svg(page).locator('[data-map-callout]')).toHaveText('Schedule volunteers when needed.');
-  await advanceTo(page, 24.5);
+  await advanceTo(page, 25);
   expect(await visibility(page, '[data-map-proposal]')).toEqual([1, 1, 1]);
   expect(await visibility(page, '[data-map-marker]')).toEqual([1, 1, 1]);
   expect(await visibility(page, '[data-map-item^="obs-"]')).toEqual([0, 0, 0, 0]);
   await expect(svg(page).locator('[data-map-callout]')).toHaveText('Identify volunteers who also donate.');
 
-  await advanceTo(page, 25.55);
+  await advanceTo(page, 26.35);
   await expect(heading(page)).toHaveText('Decide what to do first.');
   await expect(svg(page).locator('[data-map-priorities]')).toHaveAttribute('opacity', '0');
-  await advanceTo(page, 31.25);
+  await advanceTo(page, 32.3);
   const ranked = svg(page).locator('[data-map-ranked="2"]');
   const originalRow = await ranked.elementHandle();
   const rowBesideMatrix = await ranked.getAttribute('transform');
   const matrix = svg(page).locator('[data-map-matrix]');
   const matrixBesideRanking = await matrix.getAttribute('transform');
   expect(await svg(page).locator('[data-map-ranked]').evaluateAll(rows => rows.map(row => row.getAttribute('data-map-ranked')))).toEqual(['2', '1', '3']);
-  await advanceTo(page, 32.65);
+  await advanceTo(page, 33.55);
   await expect(heading(page)).toHaveText('Leave with a plan that belongs to you.');
   expect(await ranked.getAttribute('transform')).toBe(rowBesideMatrix);
-  await advanceTo(page, 34.8);
+  await advanceTo(page, 35.55);
   expect(await matrix.getAttribute('transform')).not.toBe(matrixBesideRanking);
   expect(await ranked.getAttribute('transform')).not.toBe(rowBesideMatrix);
   expect(await ranked.evaluate((node, original) => node === original, originalRow)).toBe(true);
-  await advanceTo(page, 38.2);
+  await advanceTo(page, 40.25);
   await expect(button(page, 'Replay')).toBeVisible();
   await expect(svg(page).locator('[data-map-report]')).toHaveAttribute('opacity', '1');
   await expect(svg(page).locator('[data-map-report]')).toContainText('A clear path forward. Yours to keep.');
   await expect(exhibit(page).locator('[role="status"]')).toBeEmpty();
   await page.clock.runFor(4000);
-  expect(await progress(page)).toBe(38);
+  expect(await progress(page)).toBe(40);
   await button(page, 'Replay').evaluate(el => (el as HTMLButtonElement).click());
   await page.clock.runFor(200);
   expect(await progress(page)).toBeLessThan(0.3);
@@ -150,6 +175,61 @@ test('pause and resume preserve time, including offscreen and hidden intervals',
   await page.clock.runFor(600);
   expect(await progress(page)).toBeGreaterThan(hidden + 0.5);
   expect(await progress(page)).toBeLessThan(hidden + 0.8);
+});
+
+test('a tap or click seeks both ways while paused and rebuilds the scene', async ({ page, isMobile }) => {
+  await open(page);
+  await stage(page, 'Plan').click();
+  const slider = exhibit(page).getByRole('slider', { name: 'Animation progress' });
+  const box = await slider.boundingBox();
+  expect(box).not.toBeNull();
+
+  async function point(fraction: number) {
+    const position = { x: Math.round(box!.width * fraction), y: 22 };
+    if (isMobile) await slider.tap({ position });
+    else await slider.click({ position });
+  }
+
+  await point(0.53);
+  await expect(stage(page, 'Connect')).toHaveAttribute('aria-current', 'true');
+  await expect(button(page, 'Play')).toBeVisible();
+  expect((await visibility(page, '[data-map-proposal]')).filter(alpha => alpha > 0)).toHaveLength(2);
+  await expect(svg(page).locator('[data-map-report]')).toHaveAttribute('opacity', '0');
+
+  await slider.press('Home');
+  await expect(slider).toHaveAttribute('aria-valuetext', '0% of animation');
+  await expect(heading(page)).toHaveText('Start with people.');
+  expect(await visibility(page, '[data-map-proposal]')).toEqual([0, 0, 0]);
+  expect(await visibility(page, '[data-map-person]')).toEqual([0, 0, 0]);
+  await expect(svg(page).locator('[data-map-priorities]')).toHaveAttribute('opacity', '0');
+  await slider.press('ArrowRight');
+  await expect(slider).toHaveAttribute('aria-valuetext', '1% of animation');
+  await slider.press('End');
+  await expect(stage(page, 'Plan')).toHaveAttribute('aria-current', 'true');
+  await expect(svg(page).locator('[data-map-report]')).toHaveAttribute('opacity', '1');
+  await expect(button(page, 'Replay')).toBeVisible();
+  await expect(button(page, 'Restart animation')).toBeHidden();
+});
+
+test('seeking during playback keeps it running, and restart starts at the empty canvas', async ({ page }) => {
+  await start(page);
+  await advanceTo(page, 3.8);
+  const slider = exhibit(page).getByRole('slider', { name: 'Animation progress' });
+  await slider.evaluate(element => {
+    const input = element as HTMLInputElement;
+    input.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
+    input.value = '82';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    input.dispatchEvent(new PointerEvent('pointerup', { bubbles: true }));
+  });
+  await expect(button(page, 'Pause')).toBeVisible();
+  const sought = await progress(page);
+  await page.clock.runFor(620);
+  expect(await progress(page)).toBeGreaterThan(sought + 0.5);
+  await button(page, 'Restart animation').evaluate(el => (el as HTMLButtonElement).click());
+  await expect(button(page, 'Pause')).toBeVisible();
+  expect(await progress(page)).toBe(0);
+  expect(await visibility(page, '[data-map-person]')).toEqual([0, 0, 0]);
 });
 
 test('keyboard selection is persistent and a focused control suppresses hover previews', async ({ page, isMobile }) => {
@@ -222,11 +302,12 @@ test('reduced motion gets completed stages without autoplay or animated transiti
   await open(page);
   expect(await visibility(page, '[data-map-item]')).toEqual(Array(12).fill(1));
   await expect(button(page, 'Play')).toBeHidden();
+  await expect(exhibit(page).getByRole('slider')).toBeHidden();
   await stage(page, 'Plan').click();
   await expect(svg(page).locator('[data-map-report]')).toHaveAttribute('opacity', '1');
-  expect(await progress(page)).toBe(38);
+  expect(await progress(page)).toBe(40);
   await svg(page).scrollIntoViewIfNeeded();
-  expect(await progress(page)).toBe(38);
+  expect(await progress(page)).toBe(40);
 });
 
 test('without JavaScript the mission, all stages, opportunity order, and ownership remain readable', async ({ browser, baseURL }) => {

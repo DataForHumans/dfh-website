@@ -1,4 +1,4 @@
-import { categories, flows, items, opportunities, priorities, quadrants, rankedOpportunities, scenario } from '../data/connection-map';
+import { categories, flows, items, opportunities, priorities, quadrants, rankedOpportunities, scenario, timeline } from '../data/connection-map';
 
 type Point = readonly [number, number];
 type Bounds = readonly [number, number, number, number];
@@ -267,24 +267,33 @@ export function createScene(svg: SVGSVGElement) {
 
   function draw(time: number) {
     const { narrow, positions, markerPositions, view, matrix, sequenceTitle, rows, stack, cover, bounds } = composition;
-    const sort = phase(time, 5.9, 7.7);
-    const map = phase(time, 9, 12.8);
-    const present = 1 - phase(time, 26, 27.2);
+    // Offset the approved movement windows rather than shortening them for the new pauses.
+    const mapping = time - timeline.mapHeading;
+    const connecting = time - timeline.connectHeading;
+    const planning = time - timeline.planHeading;
+    const delivery = time - timeline.deliverHeading;
+    const sort = phase(time - timeline.gatherHeading, 1, 2.8);
+    const map = phase(mapping, 1, 4.8);
+    const present = 1 - phase(planning, 1, 2.2);
 
     // Keep the contribution elements intact as they move from staff to categories to the operational map.
-    people.forEach((person, index) => opacity(person.group, phase(time, 0.1 + index * 0.19, 0.65 + index * 0.19) * (1 - sort)));
+    people.forEach((person, index) => {
+      const start = timeline.people + index * 0.34;
+      opacity(person.group, phase(time, start, start + 0.68) * (1 - sort));
+    });
     categoryLabels.forEach(label => opacity(label, sort * (1 - map)));
     contributions.forEach((item, index) => {
       const { staff, group, map: point } = positions[index];
       const x = mix(mix(staff[0], group[0], sort), point[0], map);
       const y = mix(mix(staff[1], group[1], sort), point[1], map);
-      const start = [1.15, 2.35, 3.75][item.person] + item.ownedBefore * 0.22;
+      const start = timeline.contributions + item.person * 0.33 + item.ownedBefore * 0.075;
+      const arrival = phase(time, start, start + 0.31);
       const system = item.kind === 'sys';
       const width = narrow ? 108 : 222;
       const height = narrow ? 36 : 42;
       const observation = item.kind === 'obs';
-      opacity(item.group, phase(time, start, start + 0.32) * present * (observation ? 1 - phase(time, 16, 16.7) : 1));
-      set(item.group, { transform: translate(x, y) });
+      opacity(item.group, arrival * present * (observation ? 1 - phase(connecting, 1, 1.7) : 1));
+      set(item.group, { transform: translate(x, y - 12 * (1 - arrival)) });
       set(item.box, {
         x: -width / 2, y: -height / 2, width, height, rx: observation ? 2 : 0,
         fill: item.kind === 'proc' ? colors.sage : observation ? colors.paper : colors.cream,
@@ -294,39 +303,39 @@ export function createScene(svg: SVGSVGElement) {
       set(item.label, { y: mix(5, system ? (narrow ? 31 : 48) : 5, map), 'font-weight': observation ? 400 : 500 });
     });
 
-    flowLines.forEach(line => opacity(line, phase(time, 12, 14.2) * present));
+    flowLines.forEach(line => opacity(line, phase(mapping, 4, 6.2) * present));
     proposedLines.forEach((line, index) => {
-      const reveal = phase(time, 16 + index * 3, 17.2 + index * 3);
+      const reveal = phase(connecting, 1 + index * 3, 2.2 + index * 3);
       set(line, { 'stroke-dashoffset': 1 - reveal, opacity: (reveal > 0 ? 1 : 0) * present });
     });
 
-    const index = time < 19 ? 0 : time < 22 ? 1 : 2;
+    const index = connecting < 4 ? 0 : connecting < 7 ? 1 : 2;
     if (index !== calloutIndex) {
       set(callout, { x: view.width / 2, y: narrow ? 505 : 385, 'font-size': narrow ? 17 : 28 });
       wrap(callout, opportunities[index].label, view.width - 20, 18, view.width / 2);
       calloutIndex = index;
     }
-    opacity(callout, time >= 16 && time < 26 ? phase(time, 16.65 + index * 3, 17.15 + index * 3) * (1 - phase(time, 25.8, 26)) : 0);
+    opacity(callout, phase(connecting, 1.65 + index * 3, 2.15 + index * 3) * (1 - phase(planning, 1, 1.2)));
 
     // The matrix and the same ranked row elements travel into the layered report.
-    const prioritizing = phase(time, 26.3, 28.8);
-    const delivering = phase(time, 33, 35.5);
-    opacity(planLayer, phase(time, 26, 27.1));
+    const prioritizing = phase(planning, 1.3, 3.8);
+    const delivering = phase(delivery, 1, 3.5);
+    opacity(planLayer, phase(planning, 1, 2.1));
     const [px, py, pw, ph] = view.matrix;
     const [rx, ry, rw, rh] = bounds;
     const kx = mix(1, rw / pw, delivering), ky = mix(1, rh / ph, delivering);
     const mx = mix(px, rx + 20, delivering), my = mix(py, ry - 18, delivering);
     set(matrix, { transform: `${translate(mx, my)} scale(${kx} ${ky}) ${translate(-px, -py)}` });
-    opacity(matrix, 1 - phase(time, 33.9, 34.65));
-    Array.from(matrix.children).slice(1).forEach(child => opacity(child as SVGElement, 1 - phase(time, 33, 33.7)));
+    opacity(matrix, 1 - phase(delivery, 1.9, 2.65));
+    Array.from(matrix.children).slice(1).forEach(child => opacity(child as SVGElement, 1 - phase(delivery, 1, 1.7)));
 
-    opacity(sequenceTitle, phase(time, 28.8, 29.25) * (1 - phase(time, 33, 33.7)));
+    opacity(sequenceTitle, phase(planning, 3.8, 4.25) * (1 - phase(delivery, 1, 1.7)));
     rows.forEach(({ row, rule, from }, rank) => {
       const scale = mix(1, narrow ? 0.96 : 0.83, delivering);
       const x = mix(from[0], rx + 10, delivering), y = mix(from[1], ry + 147 + rank * 56, delivering);
       set(row, { transform: `${translate(x, y)} scale(${scale})` });
-      opacity(row, phase(time, 29 + rank * 0.7, 29.5 + rank * 0.7));
-      opacity(rule, 1 - phase(time, 33, 33.6));
+      opacity(row, phase(planning, 4 + rank * 0.7, 4.5 + rank * 0.7));
+      opacity(rule, 1 - phase(delivery, 1, 1.6));
     });
     markers.forEach((group, index) => {
       const [x, y] = markerPositions[index];
@@ -335,14 +344,14 @@ export function createScene(svg: SVGSVGElement) {
       // Give the two crossing numbered markers room to pass without swapping identities.
       const arc = !narrow && index < 2 ? Math.sin(Math.PI * prioritizing) * (index === 0 ? 22 : -22) : 0;
       set(group, { transform: translate(mix(x, endX, prioritizing), mix(y, endY, prioritizing) + arc) });
-      opacity(group, phase(time, 16.75 + index * 3, 17.2 + index * 3) * (1 - phase(time, 33, 33.7)));
+      opacity(group, phase(connecting, 1.75 + index * 3, 2.2 + index * 3) * (1 - phase(delivery, 1, 1.7)));
     });
-    opacity(reportLayer, phase(time, 33.8, 35.3));
-    opacity(cover, phase(time, 34.5, 35.15));
+    opacity(reportLayer, phase(delivery, 1.8, 3.3));
+    opacity(cover, phase(delivery, 2.5, 3.15));
     set(stack, { transform: translate(0, mix(12, 0, delivering)) });
 
     clearOverlaps(
-      (sort > 0 && sort < 1) || (map > 0 && map < 1) || (time >= 26 && time <= 28.8) ||
+      (sort > 0 && sort < 1) || (map > 0 && map < 1) || (planning >= 1 && planning <= 3.8) ||
       (delivering > 0 && delivering < 1),
     );
   }
