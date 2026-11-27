@@ -5,19 +5,18 @@ import CapabilityIcon from '../components/CapabilityIcon.astro';
 import Button from '../components/Button.astro';
 import PublicDashboard from '../components/PublicDashboard.astro';
 import VolunteerAgeChart from '../components/VolunteerAgeChart.astro';
-import SystemsGraphic from '../components/SystemsGraphic.astro';
 import { SERVICE_SLUGS } from '../content.config';
-import { BOOKING_URL, SERVICE_NAMES, TAGLINE, SITE_NAME } from '../data/site';
+import { BOOKING_URL, CONNECTION_MAP, SERVICE_NAMES, SERVICE_DESCRIPTION, SITE_NAME } from '../data/site';
 import { getUpcomingEvents, getWork, outcomeOf, workAnchor, workLink } from '../lib/content';
 import { formatDate, isoDate } from '../lib/dates';
 
 const [nextEvent] = await getUpcomingEvents();
-const [roadmapSlug, ...capabilities] = SERVICE_SLUGS;
+const [, ...capabilities] = SERVICE_SLUGS;
 
 const projectCopy: Record<string, { headline: string; summary: string }> = {
   'any-path-home': {
-    headline: 'One view of progress on homelessness',
-    summary: 'A public dashboard brings agency data together while keeping individual records out of public view.',
+    headline: 'A shared view of homelessness',
+    summary: 'The public dashboard helps Any Path Home, its partners, and the wider community see their shared progress toward a future in which homelessness is rare and brief. It keeps individual records private.',
   },
   'crowded-closet': {
     headline: 'Volunteer records sharpen recruitment',
@@ -36,42 +35,42 @@ const projects = await Promise.all(
 const figures = [
   { value: '85+', label: "Organizations' data brought together" },
   { value: '30+', label: 'Years of combined experience' },
-  { value: '4', unit: 'weeks', label: 'To a focused data roadmap' },
+  { value: '4', unit: 'weeks', label: 'To your data strategy' },
 ];
 ---
 
-<Base title={SITE_NAME} description={`${TAGLINE}. We help nonprofits, public agencies and cities make better decisions with the records they already keep.`}>
-  <header class="editorial-frame editorial-grid home-hero">
-    <div class="home-hero__copy">
-      <h1><span class="home-hero__statement">Your mission runs on data.</span> <em>Let's make it work for you.</em></h1>
-      <p class="lede">
-        We help nonprofits, public agencies and cities make better decisions with the records they already keep, without
-        hiring a full-time data team.
-      </p>
-      <p class="actions">
-        <Button href={BOOKING_URL} primary>Book a free call</Button>
-        <Button href="/work/">See our work</Button>
-      </p>
-    </div>
-    <SystemsGraphic />
-  </header>
+<Base title={SITE_NAME} description={`${SERVICE_DESCRIPTION}. We help nonprofits, public agencies and cities bring information together and make better decisions for the people they serve.`}>
+  <div class="home-field">
+    <header class="editorial-frame home-hero">
+      <div class="home-hero__copy">
+        <h1>We see the world <span>in connections.</span></h1>
+        <p class="home-hero__philosophy">Between people, between data points, and between organizations and their communities.</p>
+        <p class="home-hero__intro">We help nonprofits, public agencies and cities bring information together, see relationships more clearly, and make better decisions for the people they serve.</p>
+        <p class="home-hero__service">{SERVICE_DESCRIPTION}.</p>
+        <p class="actions">
+          <Button href={BOOKING_URL} primary>Book a free call</Button>
+          <Button href="/work/">See our work</Button>
+        </p>
+      </div>
+    </header>
 
-  <section class="figures" aria-label="Key figures">
-    <NetworkAccent variant="drift" placement="metrics" />
-    <dl class="editorial-frame figures__list">
-      {figures.map((figure) => (
-        <div class="figures__item">
-          <dt class="mono figures__value">{figure.value}{figure.unit && <> <span class="figures__unit">{figure.unit}</span></>}</dt>
-          <dd class="figures__label">{figure.label}</dd>
-        </div>
-      ))}
-    </dl>
-  </section>
+    <NetworkAccent variant="connected" placement="home-field" />
+
+    <section class="figures" aria-label="Key figures">
+      <dl class="editorial-frame figures__list">
+        {figures.map((figure) => (
+          <div class="figures__item">
+            <dt class="mono figures__value">{figure.value}{figure.unit && <> <span class="figures__unit">{figure.unit}</span></>}</dt>
+            <dd class="figures__label">{figure.label}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  </div>
 
   <section class="editorial-frame home-section selected-work" aria-labelledby="h-work">
-    <NetworkAccent variant="threads" placement="selected-work" />
     <div class="home-section__heading">
-      <h2 id="h-work">Selected work</h2>
+      <h2 id="h-work">What connected data makes possible</h2>
       <a href="/work/">View all work <span aria-hidden="true">↗</span></a>
     </div>
     <ul class="selected-work__list" role="list">
@@ -93,16 +92,25 @@ const figures = [
     </ul>
   </section>
 
+  <section class="home-feature" aria-labelledby="home-feature-heading">
+    <NetworkAccent variant="bridge" placement="feature" />
+    <div class="editorial-frame home-feature__inner">
+      <h2 id="home-feature-heading">No one sees the whole picture alone.</h2>
+      <div>
+        <p>Your records hold one part of the story. Your staff, partners and communities hold others. Bringing these perspectives together helps us understand more than any one could reveal alone.</p>
+        <a href="/about/#manifesto">Read our manifesto <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </section>
+
   <section class="editorial-frame editorial-grid home-section home-services" aria-labelledby="h-services">
-    <NetworkAccent variant="drift" placement="sage-panel" />
     <div>
-      <p class="home-services__label">The Data Roadmap</p>
-      <h2 id="h-services">Know what to fix first</h2>
+      <p class="home-services__label">{CONNECTION_MAP.name}</p>
+      <h2 id="h-services">Know where to begin</h2>
       <p>
-        In four weeks, for a fixed fee, we map your systems and give you a prioritized plan.
-        The plan is yours to use with any team.
+        Understand how your information fits together and where the gaps are. In four weeks, for a fixed fee, you get a practical data strategy you own and can use with any team.
       </p>
-      <Button href={`/services/#${roadmapSlug}`}>Explore the Roadmap</Button>
+      <Button href={`/services/#${CONNECTION_MAP.anchor}`}>Explore the Connection Map</Button>
     </div>
     <div class="home-services__capabilities">
       <h3>Our capabilities</h3>
@@ -124,11 +132,10 @@ const figures = [
     </aside>
   )}
 
-  <NetworkAccent variant="fragment" placement="closing" />
   <section class="editorial-frame home-section home-contact" aria-labelledby="h-closing">
     <div>
-      <h2 id="h-closing">Start with a free 30-minute call</h2>
-      <p>You'll leave with a suggested next step, whether or not you hire us.</p>
+      <h2 id="h-closing">Tell us what you’re working toward</h2>
+      <p>In a free 30-minute call, we’ll hear what you’re working on and suggest a next step you can take.</p>
     </div>
     <p class="actions">
       <Button href={BOOKING_URL} primary>Book a free call</Button>

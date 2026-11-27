@@ -13,12 +13,12 @@ logoAlt: Any Path Home
 
 ### The challenge
 
-Many agencies shared one goal, ending homelessness, but their data lived in separate spreadsheet exports, so no one could see community progress in one place.
+The agencies in Any Path Home work together so that homelessness in Olmsted County becomes rare and brief. Each agency kept its own spreadsheet exports, which made it hard for the coalition and its partners to see the work as a whole.
 
 ### The dashboard
 
-We built a public dashboard that combines information from five or more agencies, keeps individual records out of anything public, and follows the by-name list and functional zero approach the coalition already uses.
+We built a public dashboard that brings together data from five or more agencies. It builds on the coalition’s existing shared by-name list, which agencies use to track who needs housing. The dashboard keeps individual records private.
 
 ### What changed
 
-Partners and the public can now see collective progress in one view.
+The coalition, its partners, and the wider community can now see their shared progress toward making homelessness rare and brief. The dashboard shows entries into and exits from homelessness and housing outcomes for single adults.

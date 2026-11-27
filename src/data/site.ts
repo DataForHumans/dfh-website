@@ -1,7 +1,13 @@
 /** Site-wide constants. Change a link here and it changes everywhere. */
 
 export const SITE_NAME = 'Data for Humans';
-export const TAGLINE = 'Data and AI for mission-driven organizations';
+export const CONNECTION_MAP = {
+  anchor: 'connection-map',
+  name: 'The Connection Map',
+  subtitle: 'A four-week data strategy for your organization.',
+} as const;
+
+export const SERVICE_DESCRIPTION = 'Data, research and AI consulting for mission-driven organizations';
 
 export const BOOKING_URL = 'https://calendar.app.google/ohQmbuZoB2KJomYH7';
 
@@ -38,7 +44,7 @@ export const PRODUCTS = {
 };
 
 export const FOOTER_LINE =
-  'Based in Minnesota, working nationally with nonprofits, public agencies, and cities. Member, Minnesota Council of Nonprofits.';
+  'Based in Minnesota, working nationally. Member, Minnesota Council of Nonprofits.';
 
 /** Display labels for note types. */
 export const NOTE_TYPES = {
@@ -51,7 +57,7 @@ export type NoteType = keyof typeof NOTE_TYPES;
 
 /** Service names by slug, for the closing link on notes. Anchors on /services/. */
 export const SERVICE_NAMES: Record<string, string> = {
-  'data-roadmap': 'The Data Roadmap',
+  [CONNECTION_MAP.anchor]: CONNECTION_MAP.name,
   'collective-impact-dashboards': 'Collective impact dashboards',
   'records-integration': 'Records and integration',
   'research-evaluation': 'Research and evaluation',

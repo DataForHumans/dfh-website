@@ -1,0 +1,267 @@
+---
+import { exampleText, headings, items, opportunities, priorities, quadrant, rankedOpportunities, scenario, stages } from '../data/connection-map';
+---
+
+<connection-map class="connection-map" role="region" aria-label="Connection Map example">
+  <p class="connection-map__context">
+    <strong>{scenario.name}</strong>
+    <span>{scenario.description}</span>
+  </p>
+
+  <div data-map-enhanced hidden>
+    <div class="connection-map__stages" role="group" aria-label="Select a stage">
+      {stages.map(({ name }, index) => (
+        <button type="button" data-map-stage aria-current={index === 0 ? 'true' : undefined}>
+          <span aria-hidden="true" class="mono">0{index + 1}</span>{name}
+        </button>
+      ))}
+    </div>
+    <div class="connection-map__headline">
+      <h3 data-map-heading>{stages[0].headline}</h3>
+      {headings.map(({ text }) => <span aria-hidden="true">{text}</span>)}
+    </div>
+    <div class="connection-map__canvas">
+      <svg viewBox="0 0 1000 410" data-map-scene aria-hidden="true" focusable="false"></svg>
+    </div>
+  </div>
+
+  <p class="connection-map__mission"><strong>Mission</strong> {scenario.mission}</p>
+
+  <div class="connection-map__controls" data-map-controls hidden>
+    <button type="button" data-map-play>Play</button>
+    <input class="connection-map__track" type="range" min="0" max="100" step="1" value="0"
+      aria-label="Animation progress" aria-valuetext="0% of animation" data-map-progress />
+    <button class="connection-map__restart" type="button" aria-label="Restart animation" data-map-restart hidden>
+      <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+        <path d="M3 9a7 7 0 1 1 1.5 5.3M3 4v5h5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </button>
+  </div>
+  <p class="visually-hidden" role="status" data-map-status></p>
+  <p class="connection-map__note">Illustrative consulting process. These are proposed opportunities and priorities. The example contains no measured results.</p>
+
+  <details class="connection-map__transcript" data-map-transcript open>
+    <summary>Read the example</summary>
+    <ol>
+      <li><strong>Listen.</strong> {exampleText.listen}</li>
+      <li><strong>Map.</strong> {exampleText.map}</li>
+      <li>
+        <strong>Connect.</strong> Identify three opportunities to use information together.
+        <ol>
+          {opportunities.map(({ label, systems }) => (
+            <li>{label} ({systems.map(id => items.find(item => item.id === id)!.label).join(' and ')})</li>
+          ))}
+        </ol>
+      </li>
+      <li>
+        <strong>Plan.</strong> Rank each opportunity by expected benefit and implementation effort.
+        <ul>
+          {rankedOpportunities.map(({ label, id, rank, matrix }) => <li>{priorities[rank]}, opportunity {id}. {label} Matrix category: {quadrant(matrix)}.</li>)}
+        </ul>
+        {exampleText.plan} {scenario.closing}
+      </li>
+    </ol>
+  </details>
+</connection-map>
+
+<script>
+  import '../scripts/connection-map';
+</script>
+
+<style>
+  .connection-map {
+    --connection-paper: color-mix(in srgb, var(--cream) 30%, white);
+    --connection-sage: color-mix(in srgb, var(--sage-wash), var(--sage) 20%);
+    display: block;
+    container-type: inline-size;
+    position: relative;
+    margin-block: var(--space-5);
+    background: var(--cream);
+    padding: clamp(0.9rem, 3vw, 2rem);
+  }
+
+  .connection-map__context,
+  .connection-map__mission {
+    margin: 0 0 var(--space-3);
+  }
+
+  .connection-map__context span {
+    display: block;
+    color: var(--sage-text);
+    font-size: 0.9rem;
+  }
+
+  .connection-map__stages {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(0.25rem, 0.7vw, 0.6rem);
+  }
+
+  button {
+    min-height: var(--touch-target);
+    font: inherit;
+    cursor: pointer;
+    color: var(--sage-deep);
+    border: 1px solid var(--sage);
+    background: transparent;
+    padding: 0.5rem 0.8rem;
+  }
+
+  .connection-map__stages button {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.1rem 0.5rem;
+    border: 0;
+    border-bottom: 3px solid transparent;
+    background: var(--sage-wash);
+    text-align: left;
+    padding-inline: clamp(0.3rem, 1vw, 0.85rem);
+    font-weight: 600;
+  }
+
+  .connection-map__stages .mono {
+    font-size: 0.72rem;
+    font-weight: 400;
+  }
+
+  .connection-map__stages button[aria-current='true'] {
+    color: var(--cream);
+    background: var(--sage-deep);
+    border-bottom-color: var(--ochre);
+  }
+
+  .connection-map__headline {
+    display: grid;
+    margin: var(--space-3) 0 var(--space-2);
+    font: 400 clamp(1.4rem, 2.85vw, 2.05rem) / var(--leading-display) var(--font-display);
+    letter-spacing: -0.025em;
+  }
+
+  .connection-map__headline > * {
+    grid-area: 1 / 1;
+    margin: 0;
+    font: inherit;
+  }
+
+  .connection-map__headline > span { visibility: hidden; }
+
+  .connection-map__canvas {
+    border-block: 1px solid var(--rule);
+    aspect-ratio: 1000 / 410;
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: var(--font-body);
+  }
+
+  svg :global(.connection-map__report-title) { font-family: var(--font-display); }
+
+  .connection-map__mission { margin-top: var(--space-2); }
+  .connection-map__mission strong { margin-inline-end: 0.2em; }
+
+  .connection-map__controls:not([hidden]) {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .connection-map__controls button {
+    min-width: 4.6rem;
+    font-size: var(--text-small);
+  }
+
+  .connection-map__controls button:hover { background: var(--sage-wash); }
+  .connection-map__track {
+    --position: 0%;
+    appearance: none;
+    flex: 1;
+    min-width: 0;
+    height: var(--touch-target);
+    margin: 0;
+    background: linear-gradient(to right, var(--ochre-text) var(--position), var(--sage-wash) var(--position)) center / 100% 4px no-repeat;
+    cursor: pointer;
+  }
+
+  .connection-map__track::-webkit-slider-thumb {
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--ochre-text);
+  }
+
+  .connection-map__track::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--ochre-text);
+  }
+
+  .connection-map__controls .connection-map__restart {
+    min-width: var(--touch-target);
+    padding: 0;
+    border-color: transparent;
+    display: grid;
+    place-items: center;
+  }
+
+  .connection-map__restart[hidden] { visibility: hidden; }
+  .connection-map__restart svg { width: 18px; height: 18px; }
+
+  .connection-map__note {
+    margin: var(--space-2) 0 0;
+    color: var(--sage-text);
+    font-size: 0.9rem;
+  }
+
+  .connection-map__transcript {
+    margin-top: var(--space-3);
+    border-top: 1px solid var(--rule);
+  }
+
+  summary {
+    width: fit-content;
+    min-height: var(--touch-target);
+    padding-block: 0.55rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .connection-map__transcript :is(ol, ul) { padding-inline-start: 1.5rem; }
+  .connection-map__transcript li { margin-block: 0.4rem; }
+
+  @container (max-width: 650px) {
+    .connection-map__canvas {
+      aspect-ratio: 360 / 520;
+      max-inline-size: 28rem;
+      margin-inline: auto;
+    }
+    .connection-map__stages button {
+      flex-direction: column;
+      font-size: clamp(0.83rem, 3.6cqi, 1rem);
+    }
+  }
+
+  @media (max-width: 42rem) {
+    .connection-map {
+      margin-inline: calc(-1 * var(--roadmap-padding));
+      padding-inline: 0.25rem;
+    }
+
+    .connection-map__context,
+    .connection-map__headline,
+    .connection-map__mission,
+    .connection-map__note,
+    .connection-map__controls,
+    .connection-map__transcript {
+      margin-inline: 0.4rem;
+    }
+  }
+</style>

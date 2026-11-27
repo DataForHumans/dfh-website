@@ -1,15 +1,14 @@
 ---
 import NetworkAccent from './NetworkAccent.astro';
-import { FOOTER_LINE, LINKEDIN_URL, PRODUCTS, RELAYERED, SITE_NAME, TAGLINE } from '../data/site';
+import { FOOTER_LINE, LINKEDIN_URL, PRODUCTS, RELAYERED, SITE_NAME, SERVICE_DESCRIPTION } from '../data/site';
 ---
 
 <footer class="site-footer">
-  <NetworkAccent variant="fragment" placement="footer" />
+  <NetworkAccent variant="drift" placement="footer" />
   <div class="site-footer__inner">
     <div class="site-footer__identity">
       <p class="site-footer__name">{SITE_NAME}</p>
-      <p class="site-footer__tagline">{TAGLINE}.</p>
-      <p class="site-footer__line">{FOOTER_LINE}</p>
+      <p class="site-footer__line">{SERVICE_DESCRIPTION}. {FOOTER_LINE}</p>
     </div>
     <nav class="site-footer__links" aria-label="Footer">
       <ul role="list">

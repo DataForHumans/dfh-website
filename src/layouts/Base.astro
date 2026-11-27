@@ -12,7 +12,7 @@ interface Props {
   noindex?: boolean;
   /** Open Graph type: "article" for notes. */
   ogType?: 'website' | 'article';
-  accent?: 'threads' | 'fragment';
+  accent?: 'threads' | 'fragment' | 'drift';
 }
 
 const { title, description, noindex = false, ogType = 'website', accent } = Astro.props;
@@ -44,7 +44,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <a class="skip-link" href="#main">Skip to content</a>
     <Header />
     <main id="main" tabindex="-1">
-      {accent && <NetworkAccent variant={accent} placement="heading" />}
+      {accent && <NetworkAccent variant={accent} placement={ogType === 'article' ? 'article' : 'heading'} />}
       <slot />
     </main>
     <Footer />

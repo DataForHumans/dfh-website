@@ -9,4 +9,4 @@ url: https://rochesternonprofitconsortium.org/event/nonprofit-ai-policy-session/
 recap:
 ---
 
-A one-hour working session: attendees leave with a draft AI policy for their leadership, board and attorney to review. Free for Consortium members; registration required.
+In this one-hour working session, you’ll draft an AI policy that your leadership, board and attorney can review. Free for Consortium members; registration required.

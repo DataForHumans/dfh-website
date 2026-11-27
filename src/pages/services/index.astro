@@ -1,56 +1,56 @@
 ---
 import NetworkAccent from '../../components/NetworkAccent.astro';
 import Base from '../../layouts/Base.astro';
-import RoadmapSample from '../../components/RoadmapSample.astro';
+import ConnectionMapSample from '../../components/ConnectionMapSample.astro';
 import Button from '../../components/Button.astro';
 import { SERVICE_SLUGS } from '../../content.config';
-import { BOOKING_URL, PRODUCTS, SERVICE_NAMES } from '../../data/site';
+import { BOOKING_URL, CONNECTION_MAP, PRODUCTS, SERVICE_NAMES } from '../../data/site';
 import '../../styles/core.css';
 
 const { donorOverlap, footprintReview } = PRODUCTS;
 const [, ...capabilities] = SERVICE_SLUGS;
 
 const weeks = [
-  { title: 'Inventory', text: 'Interview four to six people and catalog the systems, exports and spreadsheets they use.' },
-  { title: 'Diagnosis', text: 'Find where data breaks down, where reporting takes manual work and which questions the data cannot yet answer.' },
-  { title: 'Opportunity mapping', text: 'Sort quick wins, build-outs and foundational work by effort and expected value.' },
-  { title: 'The handoff', text: 'Deliver the written roadmap and walk through it with leadership or the board.' },
+  { title: 'Listen', text: 'We talk with four to six people about your mission, what staff know, and the processes and systems they use.' },
+  { title: 'Map', text: 'We trace how information moves and where systems or processes remain disconnected.' },
+  { title: 'Connect', text: 'We identify ways to bring information together, answer important questions, and reduce extra work.' },
+  { title: 'Plan', text: 'We prioritize improvements and walk leadership or the board through a practical data strategy you own.' },
 ];
 
 const offerings = {
   'collective-impact-dashboards': {
-    text: 'When several agencies work toward one goal, we build a live dashboard their partners and the public can read. We help establish agreements and a governed way for each agency to contribute and keep it current.',
+    text: 'When several agencies share a goal, they should be able to see their progress together. We build live dashboards that partners and the public can understand, and help agencies agree on what to share and how to keep it current.',
     link: { href: '/work/#any-path-home', label: 'See the Any Path Home project' },
   },
   'records-integration': {
-    text: 'When the same person shows up in several systems or staff copy records by hand, we match and clean records, connect systems where we can, and automate recurring reports.',
+    text: 'If your staff have to make the same records agree across several systems, we clean and match those records, connect systems where we can, and automate recurring reports.',
     link: { href: '/work/#crowded-closet', label: 'See the Crowded Closet project' },
   },
   'research-evaluation': {
-    text: 'When funders or boards need answers, we analyze program records, run interviews and surveys, and map how a coalition or team works. We write the findings and methods for the people who will use them.',
+    text: 'Find out who your program is reaching and where it could serve people better. We analyze records, use interviews and surveys, and map how teams or coalitions work. We explain what we found, how we found it and where the evidence is limited.',
     link: undefined,
   },
   'ai-policy-training': {
-    text: 'When staff already use AI and need guidance on what data is safe to share, we help decide where AI fits, write a plain-language use policy, train the team, and set up one tool at a time for a slow process.',
+    text: 'If your team is trying AI, we help you decide where it can save time, what information should stay private, and where staff judgment matters. We help write a plain-language policy, train staff and set up one tool at a time.',
     link: { href: '/events/', label: 'See talks and events' },
   },
   'data-leadership': {
-    text: "When data should guide how you operate but a full-time senior hire isn't realistic, we can serve as your data lead a few days a month.",
+    text: "When decisions about data keep coming up and a full-time senior hire is out of reach, we can serve as your data lead a few days a month.",
     link: undefined,
   },
 } satisfies Record<(typeof capabilities)[number], { text: string; link?: { href: string; label: string } }>;
 ---
 
-<Base title="Services" description="Every engagement starts with a plan: a four-week Data Roadmap. Then dashboards, records and integration, research and evaluation, AI policy and training, and part-time data leadership.">
+<Base title="Services" description="Get help with reporting, dashboards, records, evaluation and AI. Start with the Connection Map, our four-week data strategy engagement, or bring us a specific project.">
   <header class="editorial-frame core-intro services-intro">
     <div>
-      <h1>From better questions to better systems</h1>
-      <p class="lede">Nearly every engagement begins with a four-week Data Roadmap. We tailor the work to your budget, tools and team.</p>
+      <h1>Data help for the work you do</h1>
+      <p class="lede">Maybe reporting takes too much staff time, or your partners can’t see their progress together. Bring us the problem you’re trying to solve. Most engagements start with a four-week data strategy.</p>
     </div>
     <NetworkAccent variant="threads" placement="services-intro" />
     <nav class="core-index" aria-label="On this page">
       <ul role="list">
-        <li><a class="services-intro__flagship" href="#data-roadmap">The Data Roadmap <span aria-hidden="true">↓</span></a></li>
+        <li><a class="services-intro__flagship" href={`#${CONNECTION_MAP.anchor}`}>{CONNECTION_MAP.name} <span aria-hidden="true">↓</span></a></li>
         {capabilities.map((slug) => (
           <li><a href={`#${slug}`}>{SERVICE_NAMES[slug]} <span aria-hidden="true">↓</span></a></li>
         ))}
@@ -58,36 +58,37 @@ const offerings = {
     </nav>
   </header>
 
-  <section class="editorial-frame core-section roadmap" id="data-roadmap" aria-labelledby="h-roadmap">
+  <section class="editorial-frame core-section roadmap" id={CONNECTION_MAP.anchor} aria-labelledby="h-connection-map">
+    <span id="data-roadmap" class="legacy-service-anchor" aria-hidden="true"></span>
     <NetworkAccent variant="drift" placement="roadmap" />
     <div class="roadmap__heading">
-      <h2 id="h-roadmap">The Data Roadmap</h2>
-      <p>Four weeks, fixed fee and scope. You own the plan and can hand it to your team or any vendor, with no obligation to continue.</p>
+      <h2 id="h-connection-map">{CONNECTION_MAP.name}</h2>
+      <p class="lede">{CONNECTION_MAP.subtitle}</p>
+      <p>Find where your systems create extra work and decide what’s worth fixing first. The engagement has a fixed fee and scope. You own the strategy and can hand it to your team or any vendor, with no obligation to continue.</p>
     </div>
-    <ol class="roadmap__weeks" role="list">
-      {weeks.map((week, index) => (
-        <li>
-          <p class="mono">Week {index + 1}</p>
-          <h3>{week.title}</h3>
-          <p>{week.text}</p>
-        </li>
-      ))}
-    </ol>
-    <RoadmapSample />
+    <ConnectionMapSample />
+    <div class="roadmap__method">
+      <h3>How the four weeks work</h3>
+      <ol class="roadmap__weeks">
+        {weeks.map(({ title, text }, index) => (
+          <li><span class="mono">Week {index + 1}</span> <strong>{title}.</strong> {text}</li>
+        ))}
+      </ol>
+    </div>
     <div class="roadmap__readout">
       <div>
         <h3>What you receive</h3>
         <ul>
           <li>A map of how your data systems work today</li>
-          <li>A list of opportunities sized by effort and value</li>
-          <li>A written roadmap explaining what to do first and why</li>
+          <li>A list of possible improvements ranked by effort and expected benefit</li>
+          <li>A written implementation sequence explaining what to do first and why</li>
           <li>A walkthrough for leadership or the board</li>
         </ul>
       </div>
       <div>
         <h3>Scope</h3>
         <p>One organization, up to six interviews, and up to three source systems examined in depth. We quote larger engagements separately.</p>
-        <Button href={BOOKING_URL} primary>Talk through a roadmap</Button>
+        <Button href={BOOKING_URL} primary>Talk through your data strategy</Button>
       </div>
     </div>
   </section>

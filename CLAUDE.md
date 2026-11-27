@@ -33,7 +33,13 @@ The build fails if a note, event or work entry has bad frontmatter, an unknown a
 
 ## Voice rules (apply to every word on the site)
 
-The site should read like a well-made field report from people who did the work, not a template.
+The [approved Connectedness manifesto](BRAND-MANIFESTO.md) sets the direction for the brand. Our work brings together information and knowledge so organizations can better understand and support the people they serve.
+
+- Start with what the reader or client is trying to accomplish. Give clients credit for the decisions they make and the work they do.
+- Say what the technical work makes possible. Name the method or deliverable when that helps the reader judge what we can do. Explain unfamiliar terms in context.
+- Treat the people represented in records with dignity. Be specific about privacy, what the records can tell us, and what staff know from doing the work.
+- Use plain headings and clear action labels. Use Data for Humans as the closing signature.
+- Preserve approved client copy and the substance of published work. Ask the owner or author to review proposed changes to claims, findings, testimonials, or substantive biography details.
 
 - No dashes of any kind except hyphens in compound words. Use colons, commas, periods or parentheses. That means no em dash, no en dash, and no spaced hyphen standing in for either. Ranges are written out: "12:00 to 1:00 pm", "Items 1 to 5".
 - Write for a program manager or an executive director, not a data person. Name the problem in their words before the method.
@@ -66,7 +72,7 @@ Every page has a skip link, a visible focus ring, landmarks (`header`, `nav`, `m
 
 | Route | Page | Built from |
 | --- | --- | --- |
-| `/` | Home | `src/pages/index.astro`, selected work, services and the Roadmap, and the next event when scheduled |
+| `/` | Home | `src/pages/index.astro`, selected work, services and the Connection Map, and the next event when scheduled |
 | `/services/` | Services | `src/pages/services/index.astro`. Each service has an anchor, e.g. `/services/#records-integration`; products are at `#products` |
 | `/work/` | Our work | `work` collection, in `order` |
 | `/notes/` | Notes | `notes` collection, newest first, with links to the type pages |
@@ -172,6 +178,14 @@ People are referenced by their `id` in `team.yaml` (for example `chris-roberts`,
 3. Use short level-three headings for the challenge, the work and the outcome. Label ongoing work as such and describe what is underway. Featured entries without a bespoke home summary use the last paragraph, so make it stand on its own.
 4. Anonymized entries carry no client name or identifying details, in the frontmatter or in the body.
 5. Only publish a client's name, logo or quote once they have approved it.
+
+## The Connection Map
+
+The flagship engagement is a four-week data strategy. Use `/services/#connection-map` for new links. The earlier `#data-roadmap` fragment remains an alias.
+
+`src/components/ConnectionMapSample.astro` embeds the fictional Community Food Network example and its complete text alternative. `src/data/connection-map.ts` defines the scenario, stage boundaries, numbered opportunities and their illustrative ranking. The scene in `src/scripts/connection-map-scene.ts` uses one SVG canvas and carries the same objects directly from staff contributions to the systems map, then carries the matrix and ranked rows into the client-owned report, whose layers emerge just before the movement settles. Blue-gray circles represent staff. Sage boxes and outlined circles show processes and systems. Ochre lines and numbered markers identify proposed connections. Decorative network art belongs outside the canvas.
+
+The approved reference is `docs/connection-map-animation-v4.html` in the local documentation folder. Preserve the refined 37.5-second pacing, settling pauses and one-second lead-ins, separate narrow composition and final hold. Keep the primary Play, Pause and Replay actions in one control. The progress slider seeks without changing the playing or paused state, and a restart icon is available during playback. Autoplay runs once and yields to manual stage selection. Offscreen and hidden documents suspend the frame clock. Reduced motion gets completed stages, and the transcript works without JavaScript. The example’s priorities are hypothetical and carry no measured results.
 
 ## Redirects
 

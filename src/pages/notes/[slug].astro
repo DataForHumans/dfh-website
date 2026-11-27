@@ -15,7 +15,7 @@ import '../../styles/support.css';
 import NotesIndex from '../../components/NotesIndex.astro';
 import { getNotes, getPerson, type Note } from '../../lib/content';
 import { formatDate, isoDate } from '../../lib/dates';
-import { NOTE_TYPES, SERVICE_NAMES, type NoteType } from '../../data/site';
+import { CONNECTION_MAP, NOTE_TYPES, SERVICE_NAMES, type NoteType } from '../../data/site';
 
 type Props = { kind: 'note'; note: Note } | { kind: 'type'; type: NoteType; notes: Note[]; types: NoteType[] };
 
@@ -43,6 +43,8 @@ export const getStaticPaths = (async () => {
 const props = Astro.props as Props;
 let rendered: Awaited<ReturnType<typeof render>> | undefined;
 let authorName = '';
+const noteService = props.kind === 'note' && props.note.data.service;
+const serviceAnchor = noteService === 'data-roadmap' ? CONNECTION_MAP.anchor : noteService;
 if (props.kind === 'note') {
   rendered = await render(props.note);
   const author = await getPerson(props.note.data.author);
@@ -60,7 +62,7 @@ if (props.kind === 'note') {
       <NotesIndex title={NOTE_TYPES[props.type].plural} notes={props.notes} types={props.types} current={props.type} />
     </Base>
   ) : (
-    <Base title={props.note.data.title} description={props.note.data.summary} ogType="article">
+    <Base accent="drift" title={props.note.data.title} description={props.note.data.summary} ogType="article">
       <article class="editorial-frame note-article">
         <header class="note-article__header">
           <a class="note-article__back" href="/notes/"><span aria-hidden="true">←</span> All notes</a>
@@ -76,10 +78,10 @@ if (props.kind === 'note') {
           <Image class="note__image" src={props.note.data.image} alt={props.note.data.imageAlt} width={960} />
         )}
         <div class="prose note-article__prose">{rendered && <rendered.Content />}</div>
-        {props.note.data.service && (
+        {serviceAnchor && (
           <p class="note__service">
             Related service:{' '}
-            <a href={`/services/#${props.note.data.service}`}>{SERVICE_NAMES[props.note.data.service]}</a>
+            <a href={`/services/#${serviceAnchor}`}>{SERVICE_NAMES[serviceAnchor]}</a>
           </p>
         )}
       </article>
