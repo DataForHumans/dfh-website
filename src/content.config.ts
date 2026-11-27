@@ -1,13 +1,14 @@
 import { defineCollection, reference } from 'astro:content';
 import { glob, file } from 'astro/loaders';
 import { z } from 'astro/zod';
+import { CONNECTION_MAP } from './data/site';
 
 /**
  * Service slugs. These match the anchors on /services/ and are used by
  * notes (`service`) to build the closing "related service" link.
  */
 export const SERVICE_SLUGS = [
-  'data-roadmap',
+  CONNECTION_MAP.anchor,
   'collective-impact-dashboards',
   'records-integration',
   'research-evaluation',
@@ -51,7 +52,7 @@ const notes = defineCollection({
         type: z.enum(['project', 'article', 'news']),
         tags: z.array(z.string()).default([]),
         summary: z.string().max(300),
-        service: z.enum(SERVICE_SLUGS).optional(),
+        service: z.enum([...SERVICE_SLUGS, 'data-roadmap']).optional(),
         /** Optional outside page the note is about, such as a press article. */
         url: z.url().optional(),
         image: image().optional(),

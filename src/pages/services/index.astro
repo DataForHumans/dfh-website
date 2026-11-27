@@ -4,17 +4,17 @@ import Base from '../../layouts/Base.astro';
 import RoadmapSample from '../../components/RoadmapSample.astro';
 import Button from '../../components/Button.astro';
 import { SERVICE_SLUGS } from '../../content.config';
-import { BOOKING_URL, PRODUCTS, SERVICE_NAMES } from '../../data/site';
+import { BOOKING_URL, CONNECTION_MAP, PRODUCTS, SERVICE_NAMES } from '../../data/site';
 import '../../styles/core.css';
 
 const { donorOverlap, footprintReview } = PRODUCTS;
 const [, ...capabilities] = SERVICE_SLUGS;
 
 const weeks = [
-  { title: 'Inventory', text: 'We talk with four to six people about how they work and list the systems, exports and spreadsheets they use.' },
-  { title: 'Diagnosis', text: 'We find where records go missing or disagree, where reports take extra work, and which questions your records can’t yet answer.' },
-  { title: 'Opportunity mapping', text: 'We weigh the benefit of each change against the work it would take, then recommend where to start.' },
-  { title: 'The handoff', text: 'We share the written plan and walk through the priorities with your leadership or board.' },
+  { title: 'Listen', text: 'We talk with four to six people about your mission, what staff know, and the processes and systems they use.' },
+  { title: 'Map', text: 'We trace how information moves and where systems or processes remain disconnected.' },
+  { title: 'Connect', text: 'We identify ways to bring information together, answer important questions, and reduce extra work.' },
+  { title: 'Plan', text: 'We prioritize improvements and walk leadership or the board through a practical data strategy you own.' },
 ];
 
 const offerings = {
@@ -41,16 +41,16 @@ const offerings = {
 } satisfies Record<(typeof capabilities)[number], { text: string; link?: { href: string; label: string } }>;
 ---
 
-<Base title="Services" description="Get help with reporting, dashboards, records, evaluation and AI. Start with a four-week Data Roadmap or bring us a specific project.">
+<Base title="Services" description="Get help with reporting, dashboards, records, evaluation and AI. Start with the Connection Map, our four-week data strategy engagement, or bring us a specific project.">
   <header class="editorial-frame core-intro services-intro">
     <div>
       <h1>Data help for the work you do</h1>
-      <p class="lede">Maybe reporting takes too much staff time, or your partners can’t see their progress together. Bring us the problem you’re trying to solve. Most engagements start with a four-week Data Roadmap.</p>
+      <p class="lede">Maybe reporting takes too much staff time, or your partners can’t see their progress together. Bring us the problem you’re trying to solve. Most engagements start with a four-week data strategy.</p>
     </div>
     <NetworkAccent variant="threads" placement="services-intro" />
     <nav class="core-index" aria-label="On this page">
       <ul role="list">
-        <li><a class="services-intro__flagship" href="#data-roadmap">The Data Roadmap <span aria-hidden="true">↓</span></a></li>
+        <li><a class="services-intro__flagship" href={`#${CONNECTION_MAP.anchor}`}>{CONNECTION_MAP.name} <span aria-hidden="true">↓</span></a></li>
         {capabilities.map((slug) => (
           <li><a href={`#${slug}`}>{SERVICE_NAMES[slug]} <span aria-hidden="true">↓</span></a></li>
         ))}
@@ -58,11 +58,13 @@ const offerings = {
     </nav>
   </header>
 
-  <section class="editorial-frame core-section roadmap" id="data-roadmap" aria-labelledby="h-roadmap">
+  <section class="editorial-frame core-section roadmap" id={CONNECTION_MAP.anchor} aria-labelledby="h-connection-map">
+    <span id="data-roadmap" class="legacy-service-anchor" aria-hidden="true"></span>
     <NetworkAccent variant="drift" placement="roadmap" />
     <div class="roadmap__heading">
-      <h2 id="h-roadmap">The Data Roadmap</h2>
-      <p>Find where your systems create extra work and decide what’s worth fixing first. The Roadmap takes four weeks and has a fixed fee and scope. You own the plan and can hand it to your team or any vendor, with no obligation to continue.</p>
+      <h2 id="h-connection-map">{CONNECTION_MAP.name}</h2>
+      <p class="lede">{CONNECTION_MAP.subtitle}</p>
+      <p>Find where your systems create extra work and decide what’s worth fixing first. The engagement has a fixed fee and scope. You own the strategy and can hand it to your team or any vendor, with no obligation to continue.</p>
     </div>
     <ol class="roadmap__weeks" role="list">
       {weeks.map((week, index) => (
@@ -80,14 +82,14 @@ const offerings = {
         <ul>
           <li>A map of how your data systems work today</li>
           <li>A list of possible improvements ranked by effort and expected benefit</li>
-          <li>A written roadmap explaining what to do first and why</li>
+          <li>A written implementation sequence explaining what to do first and why</li>
           <li>A walkthrough for leadership or the board</li>
         </ul>
       </div>
       <div>
         <h3>Scope</h3>
         <p>One organization, up to six interviews, and up to three source systems examined in depth. We quote larger engagements separately.</p>
-        <Button href={BOOKING_URL} primary>Talk through a roadmap</Button>
+        <Button href={BOOKING_URL} primary>Talk through your data strategy</Button>
       </div>
     </div>
   </section>

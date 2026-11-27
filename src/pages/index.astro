@@ -6,12 +6,12 @@ import Button from '../components/Button.astro';
 import PublicDashboard from '../components/PublicDashboard.astro';
 import VolunteerAgeChart from '../components/VolunteerAgeChart.astro';
 import { SERVICE_SLUGS } from '../content.config';
-import { BOOKING_URL, SERVICE_NAMES, SERVICE_DESCRIPTION, SITE_NAME } from '../data/site';
+import { BOOKING_URL, CONNECTION_MAP, SERVICE_NAMES, SERVICE_DESCRIPTION, SITE_NAME } from '../data/site';
 import { getUpcomingEvents, getWork, outcomeOf, workAnchor, workLink } from '../lib/content';
 import { formatDate, isoDate } from '../lib/dates';
 
 const [nextEvent] = await getUpcomingEvents();
-const [roadmapSlug, ...capabilities] = SERVICE_SLUGS;
+const [, ...capabilities] = SERVICE_SLUGS;
 
 const projectCopy: Record<string, { headline: string; summary: string }> = {
   'any-path-home': {
@@ -35,7 +35,7 @@ const projects = await Promise.all(
 const figures = [
   { value: '85+', label: "Organizations' data brought together" },
   { value: '30+', label: 'Years of combined experience' },
-  { value: '4', unit: 'weeks', label: 'To a focused data roadmap' },
+  { value: '4', unit: 'weeks', label: 'To your data strategy' },
 ];
 ---
 
@@ -105,12 +105,12 @@ const figures = [
 
   <section class="editorial-frame editorial-grid home-section home-services" aria-labelledby="h-services">
     <div>
-      <p class="home-services__label">The Data Roadmap</p>
+      <p class="home-services__label">{CONNECTION_MAP.name}</p>
       <h2 id="h-services">Know where to begin</h2>
       <p>
-        If reporting takes too much staff time, start here. In four weeks, for a fixed fee, we map how your records move and give you a plan for what to fix first. You own the plan and can use it with any team.
+        Understand how your information fits together and where the gaps are. In four weeks, for a fixed fee, you get a practical data strategy you own and can use with any team.
       </p>
-      <Button href={`/services/#${roadmapSlug}`}>Explore the Roadmap</Button>
+      <Button href={`/services/#${CONNECTION_MAP.anchor}`}>Explore the Connection Map</Button>
     </div>
     <div class="home-services__capabilities">
       <h3>Our capabilities</h3>

@@ -439,6 +439,8 @@
 
 .roadmap { position: relative; }
 
+.legacy-service-anchor { position: absolute; inset-block-start: 0; }
+
 @media (min-width: 62rem) {
   .work-intro {
     grid-template-columns: minmax(0, 1fr);
